@@ -1,0 +1,11 @@
+{
+  "name": "icalendar",
+  "version": "1.0.0",
+  "description": "Convert a JavaScript object to an iCalendar file.",
+  "main": "icalendar.js",
+  "scripts": {
+    "test": "node test"
+  },
+  "author": "lewisc64",
+  "license": "ISC"
+}
