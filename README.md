@@ -2,4 +2,8 @@
 INSE project designing student aimed Event website/ web app
 
 
-Can everyone please create their OWN BRANCH to work on. Use this to help you work out the use cases and other design requirements while making a start on our first prototype.
+Own branches were only mde for the pre protoyping stage to allow everyone to play around without affecting each other. Now everything should go in master. 
+
+Everyone should alert the whole group when a commit is made to avoid any overwrites or errors. 
+
+Every commit should add the whole team as contributors to avoid diffent marks. 
