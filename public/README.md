@@ -12,11 +12,14 @@ The common.js javascript file must be linked in a script tag at the bottom of ea
 ### Lewis
 
  - index.html
+ - timetable.html
 
 ### Nathan
 
  - manage-events.html
+ - messaging.html
 
 ### Matt
 
  - create-event.html
+ - settings.html
