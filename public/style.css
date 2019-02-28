@@ -1,0 +1,45 @@
+:root {
+  --background-color: #D1BCD2;
+  --text-color: #FFFFFF;
+  --theme-color: #834187;
+  --theme-color-dark: #623165;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin-top: 0;
+  font-family: sans-serif;
+}
+
+nav {
+  position: fixed;
+  left: 0;
+  height: 100vh;
+}
+
+nav > ol {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  height: 100%;
+}
+
+nav > ol > a > li, #hidenav {
+  background-color: var(--theme-color-dark);
+  list-style-type: none;
+  padding: 1rem;
+  text-align: center;
+  height: 100%;
+}
+
+nav > ol > a > li:hover, #hidenav:hover {
+  background-color: var(--theme-color);
+}
+
+nav > ol > a {
+  text-decoration: none;
+  color: var(--text-color);
+}
