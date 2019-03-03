@@ -10,6 +10,17 @@ body {
   color: var(--text-color);
   margin-top: 0;
   font-family: sans-serif;
+  padding-left: 12rem; /* bodge */
+}
+
+#logo {
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+main, #logo {
+  padding: 1rem;
 }
 
 nav {
