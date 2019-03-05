@@ -41,6 +41,7 @@ function insert_logo() {
   
   let img = document.createElement("img");
   img.src = logo_path;
+  img.alt = "EventZ logo";
   
   let paragraph = document.createElement("p");
   paragraph.textContent = "EventZ";
