@@ -3,6 +3,12 @@
 There is a shared css file that everyone can edit.
 The common.js javascript file must be linked in a script tag at the bottom of each document for common functionality, like google auth (???).
 
+## CSS Toolkit
+
+In style.css, the following properties are defined for common use:
+ - `button` class - green button
+ - `warn-button` class - red button
+
 ## Tasks
 
 ### Lavan

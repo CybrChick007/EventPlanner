@@ -5,6 +5,7 @@
   <title>EventZ</title>
   
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="index.css">
   
 </head>
 
@@ -12,10 +13,31 @@
   
   <main>
     
-    <input type="text"></input>
+    <form>
+      <input type="text" id=search placeholder="Search Events"></input>
+      <select>
+        <!-- options generated here -->
+      </select>
+      <input type="submit" value="SEARCH" class=button>
+    </form>
+    
+    <ol id=results>
+      
+      <!-- result structure
+      <li>
+        <img src="https://via.placeholder.com/200x100">
+        <p>
+          Sample Event
+        </p>
+        <button class=button>VIEW</button>
+      </li>
+      -->
+      
+    </ol>
     
   </main>
-	
+  
+  <script src="common.js"></script>
+  <script src="index.js"></script>
+  
 </body>
-
-<script src="common.js"></script>

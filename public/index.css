@@ -1,0 +1,38 @@
+#results {
+  background-color: var(--theme-color);
+  height: 100%;
+  display: grid;
+  justify-content: space-around;
+  grid-template-columns: auto auto auto;
+  padding: 0;
+}
+
+#results > li {
+  margin: 1rem;
+  position: relative;
+  text-align: center;
+  list-style-type: none;
+}
+
+#results > li > * {
+  position: absolute;
+  margin: 0;
+  vertical-align: middle;
+}
+
+#results > li > img {
+  position: static;
+}
+
+#results > li > p {
+  width: 100%;
+  top: 0;
+  vertical-align: middle;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#results > li > button {
+  margin: 0.5rem;
+  bottom: 0;
+  right: 0;
+}
