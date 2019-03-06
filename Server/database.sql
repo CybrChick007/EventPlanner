@@ -1,9 +1,17 @@
 create database if not exists eventPlanner;
 
+use eventPlanner;
+
 create table user(
   userID int auto_increment,
   email varchar (255) not null unique,
   PRIMARY KEY (userID)
+);
+
+create table typeEvent(
+  typeID int auto_increment,
+  typeName varchar(255) not null,
+  PRIMARY KEY(typeID)
 );
 
 create table event(
@@ -19,12 +27,6 @@ create table event(
   PRIMARY KEY (eventID),
   FOREIGN KEY (eventType) REFERENCES typeEvent (typeID),
   FOREIGN KEY (eventHost) REFERENCES user (userID)
-);
-
-create table typeEvent(
-  typeID int auto_increment,
-  typeName varchar(255) not null,
-  PRIMARY KEY(typeID)
 );
 
 create table guestEvent(
