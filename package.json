@@ -20,6 +20,7 @@
   "homepage": "https://github.com/CybrChick007/EventPlanner#readme",
   "dependencies": {
     "cors": "^2.8.5",
+    "ejs": "^2.6.1",
     "express": "^4.16.4",
     "mysql2": "^1.6.5",
     "nodemon": "^1.18.9",

@@ -22,13 +22,13 @@ async function authorizeUser(req, res, next) {
     const email = req.params.email;
 
     const sql = await sqlPromise;
-    const query = `SELECT id, name FROM user WHERE email = '${email}'`;
+    const query = `SELECT userID, email FROM user WHERE email = '${email}'`;
     const [rows] = await sql.execute(query);
 
     const user = rows.map(row => {
         return {
-          id: row.id,
-          name: row.name
+          userID: row.userID,
+          email: row.email
         };
       });
 
@@ -52,13 +52,18 @@ async function authorizeUser(req, res, next) {
 async function createEvent(req, res){
   //if (!util.checkBodyIsValid(req, res)) return;
   try {
-    const userid = req.params.userID;
-    const evName = req.params.evName;
-    const evLocation = req.params.evLocation;
-    const evType = req.params.evType;
-    const shopList = req.params.shopList; ////TODO: be converted in list
-    const dressCode = req.params.dressCode;
+    //const userid = req.params.userID; --> auto_increment
+    const eventName = req.params.eventName;
+    const eventAddress = req.params.eventAddress;
+    const eventPostcode = req.params.eventPostcode;
+    const eventPublic = req.params.eventPublic; //Boolean
+    const eventURLImage = req.params.eventURLImage;
+    const eventDressCode = req.params.eventDressCode;
+    const eventType = req.params.eventType; //Foreign key --> int
+    const eventHost = req.params.eventHost; //Foreign key --> int
 
+    //INSERT INTO shoppingListItem TABLE! USING THE EVENTID JUST CREATED
+    const shopList = req.params.shopList; ////TODO: be converted in list
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
