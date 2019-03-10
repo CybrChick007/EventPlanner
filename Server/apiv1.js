@@ -12,10 +12,23 @@ const config = require('./config');
 const sqlPromise = mysql.createConnection(config.mysql);
 
 //get request
+
+//localhost:8080/auth + param
 router.get('/auth/:email', authorizeUser);
 
 //post request
-router.post('/createEvent', GoogleAuth.guardMiddleware(), createEvent);
+//localhost:8080/createEvent + params [see below in the function]
+router.post('/createEvent/:', GoogleAuth.guardMiddleware(), createEvent);
+
+//localhost:8080/editEvent + params [same params as createEvent]
+router.post('/editEvent/:', GoogleAuth.guardMiddleware(), editEvent);
+
+//localhost:8080/joinEvent + params [userID, eventID]
+router.post('/joinEvent/:', GoogleAuth.guardMiddleware(), joinEvent);
+
+//localhost:8080/deleteEvent + params [eventID]
+router.post('/deleteEvent', GoogleAuth.guardMiddleware(), deleteEvent);
+
 
 async function authorizeUser(req, res, next) {
   try{
@@ -50,7 +63,6 @@ async function authorizeUser(req, res, next) {
 
 
 async function createEvent(req, res){
-  //if (!util.checkBodyIsValid(req, res)) return;
   try {
     //const userid = req.params.userID; --> auto_increment
     const eventName = req.params.eventName;
@@ -68,6 +80,18 @@ async function createEvent(req, res){
     console.error(e);
     res.sendStatus(500);
 }
+}
+
+async function editEvent(req, res){
+
+}
+
+async function joinEvent(req, res){
+
+}
+
+async function deleteEvent(req, res){
+
 }
 
 
