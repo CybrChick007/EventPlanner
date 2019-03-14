@@ -19,27 +19,27 @@ app.set('view engine', 'html');
 
 //VIEWS REQUESTS
 app.get('/timetable', function(req, res, next) {
-  res.render('timetable');
+//  res.render('timetable');
 });
 
 app.get('/settings', function(req, res, next) {
-  res.render('settings');
+//  res.render('settings');
 });
 
 app.get('/messaging', function(req, res, next) {
-  res.render('messaging');
+//  res.render('messaging');
 });
 
 app.get('/manage-events', function(req, res, next) {
-  res.render('manage-events');
+//  res.render('manage-events');
 });
 
 app.get('/create-event', function(req, res, next) {
-  res.render('create-event');
+//  res.render('create-event');
 });
 
 app.get('/login', function(req, res, next) {
-  res.render('login');
+//  res.render('login');
 });
 
 app.listen(PORT, error => {
