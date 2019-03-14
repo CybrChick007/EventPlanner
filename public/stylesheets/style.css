@@ -80,9 +80,14 @@ nav > ol > a {
 
 #formgrid{
   background-color: var(--theme-color-dark);
-  display: grid | inline-grid;
+  display: grid;
+  padding: 1rem;
+  grid-row-gap: 0.5rem;
+  grid-column-gap: 0.5rem;
+  align-items: center;
+  justify-items: start;
   grid-template-columns: 10rem 5rem 5rem 15rem 5rem;
-  grid-template-rows: repeat(8, 5rem);
+  grid-template-rows: repeat(8, auto);
   grid-template-areas:
     "en en . sltxt addsl"
     "datetxt datebtn datebtn stdd removesl"
