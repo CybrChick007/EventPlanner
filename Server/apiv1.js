@@ -30,6 +30,7 @@ router.post('/joinEvent/:', GoogleAuth.guardMiddleware(), joinEvent);
 //localhost:8080/deleteEvent + params [eventID]
 router.post('/deleteEvent', GoogleAuth.guardMiddleware(), deleteEvent);
 
+// add display event
 
 async function authorizeUser(req, res, next) {
   try{
@@ -62,7 +63,7 @@ async function authorizeUser(req, res, next) {
   }
 }
 
-
+//finlay
 async function createEvent(req, res){
   try {
     //const userid = req.params.userID; --> auto_increment
@@ -94,6 +95,8 @@ async function createEvent(req, res){
 }
 }
 
+//user specific events
+
 async function editEvent(req, res){
 
 }
@@ -103,6 +106,11 @@ async function joinEvent(req, res){
 }
 
 async function deleteEvent(req, res){
+
+}
+
+//Eze
+async function displayEvent(req, res){
 
 }
 
