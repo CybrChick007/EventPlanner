@@ -1,6 +1,6 @@
-create database if not exists eventPlanner;
+create database if not exists EventPlanner;
 
-use eventPlanner;
+use EventPlanner;
 
 create table user(
   userID int auto_increment,
