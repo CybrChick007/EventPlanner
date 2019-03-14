@@ -24,6 +24,7 @@ create table event(
   eventURLImage varchar(255),
   eventType int not null,
   eventHost int not null,
+  eventDate DATE not null,
   PRIMARY KEY (eventID),
   FOREIGN KEY (eventType) REFERENCES typeEvent (typeID),
   FOREIGN KEY (eventHost) REFERENCES user (userID)
@@ -45,3 +46,6 @@ create table shoppingListItem(
   FOREIGN KEY (eventID) REFERENCES event (eventID),
   FOREIGN KEY (userBringerID) REFERENCES user (userID)
 );
+
+INSERT INTO type VALUES (1, "Club");
+INSERT INTO type VALUES (2, "House Party");

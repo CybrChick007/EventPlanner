@@ -15,6 +15,7 @@ const sqlPromise = mysql.createConnection(config.mysql);
 
 //localhost:8080/auth + param
 router.get('/auth/:email', authorizeUser);
+router.get('/details/')
 
 //post request
 //localhost:8080/createEvent + params [see below in the function]
@@ -65,17 +66,28 @@ async function authorizeUser(req, res, next) {
 async function createEvent(req, res){
   try {
     //const userid = req.params.userID; --> auto_increment
-    const eventName = req.params.eventName;
-    const eventAddress = req.params.eventAddress;
-    const eventPostcode = req.params.eventPostcode;
-    const eventPublic = req.params.eventPublic; //Boolean
-    const eventURLImage = req.params.eventURLImage;
-    const eventDressCode = req.params.eventDressCode;
-    const eventType = req.params.eventType; //Foreign key --> int
-    const eventHost = req.params.eventHost; //Foreign key --> int
+    // const eventName = req.params.eventName;
+    // const eventAddress = req.params.eventAddress;
+    // const eventPostcode = req.params.eventPostcode;
+    // const eventPublic = req.params.eventPublic; //Boolean
+    // const eventURLImage = req.params.eventURLImage;
+    // const eventDressCode = req.params.eventDressCode;
+    // const eventType = req.params.eventType; //Foreign key --> int
+    // const eventHost = req.params.eventHost; //Foreign key --> int
 
     //INSERT INTO shoppingListItem TABLE! USING THE EVENTID JUST CREATED
-    const shopList = req.params.shopList; ////TODO: be converted in list
+    //const shopList = req.params.shopList; ////TODO: be converted in list
+
+    const userid = 99;
+    const eventName = "Eskimo";
+    const eventAddress = "Astoria";
+    const eventPostcode = "PO1 1AA";
+    const eventPublic = true;
+    const eventURLImage = "";
+    const eventDressCode = "Any";
+    const eventType = 1;
+    const eventHost = 1;
+
   } catch (e) {
     console.error(e);
     res.sendStatus(500);

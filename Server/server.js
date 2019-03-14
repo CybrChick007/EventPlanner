@@ -18,6 +18,10 @@ app.set('view engine', 'html');
 
 
 //VIEWS REQUESTS
+app.get('/apiv1/type', function(req, res, next){
+
+});
+
 app.get('/timetable', function(req, res, next) {
 //  res.render('timetable');
 });
