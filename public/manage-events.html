@@ -5,17 +5,21 @@
   <title>EventZ</title>
 
   <link rel="stylesheet" href="stylesheets/style.css">
-
+  <link rel="stylesheet" href="stylesheets/event_form.css">
 </head>
 
 <body>
 
   <main>
-
-    <div id="formgrid">
-      <input type="text" id="eventName">
-      <input type="text" id="date">
-      <button type="button" id="dbtn">?</button>
+    <ul id="myEvents">
+    </ul>
+    <form id="formGrid">
+      <label id="eventName">Event Name*
+        <input type="text" required>
+      </label>
+      <label id="date">Date of Event*
+        <input type="date" required>
+      </label>
       <input type="text" id="address1">
       <input type="text" id="address2">
       <input type="text" id="address3">
@@ -24,7 +28,7 @@
         <option value="Pop Music">Pop Music</option>
         <option value="House Party">House Party</option>
       </select>
-      <button type="button" id="savebtn" class="button">SAVE CHANGES</button>
+      <button type="submit" id="savebtn" class="button">SAVE CHANGES</button>
       <button type="button" id="delbtn" class="warn-button">DELETE EVENT</button>
       <button type="button" id="sladd" class="button">ADD</button>
       <button type="button" id="sldel" class="warn-button">DELETE ITEM</button>
@@ -37,7 +41,7 @@
       </select>
       <img src="/images/logo.png" alt="Your thumbnail image" id="thumbnail">
       <button type="button" id="upload" class="button">UPLOAD THUMBNAIL IMAGE</button>
-    </div>
+    </form>
 
   </main>
 
