@@ -23,9 +23,9 @@ In style.css, the following properties are defined for common use:
 ### Nathan
 
  - manage-events.html
- - messaging.html
+ - create-event.html
 
 ### Matt
 
- - create-event.html
+ - messaging.html
  - settings.html
