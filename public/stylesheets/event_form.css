@@ -1,0 +1,88 @@
+#formGrid{
+  background-color: var(--theme-color-dark);
+  display: grid;
+  padding: 1rem;
+  grid-row-gap: 0.5rem;
+  grid-column-gap: 0.5rem;
+  align-items: center;
+  justify-items: start;/*remove to strech across*/
+  grid-template-columns: 10rem 5rem 5rem 15rem 5rem;
+  grid-template-rows: repeat(8, auto);
+  grid-template-areas:
+    "en en . sltxt addsl"
+    "datetxt . . stdd removesl"
+    "a1 a1 . dress ."
+    "a2 a2 . ppdd ."
+    "a3 a3 . thumb ."
+    "post post . thumb ."
+    "tp tp . thumb ."
+    ". save del up .";
+}
+
+#sladd{
+  grid-area: addsl;
+}
+
+#sldel{
+  grid-area: removesl;
+}
+
+#shoppingtxt{
+  grid-area: sltxt;
+}
+
+#shoppinglist{
+  grid-area: stdd;
+}
+
+#dressCode{
+  grid-area: dress;
+}
+
+#pp{
+  grid-area: ppdd;
+}
+
+#thumbnail{
+  grid-area: thumb;
+}
+
+#upload{
+  grid-area: up;
+}
+
+#eventName{
+  grid-area: en;
+}
+
+#date{
+  grid-area: datetxt;
+}
+
+#address1{
+  grid-area: a1;
+}
+
+#address2{
+  grid-area: a2;
+}
+
+#address3{
+  grid-area: a3;
+}
+
+#postcode{
+  grid-area: post;
+}
+
+#type{
+  grid-area: tp;
+}
+
+#savebtn{
+  grid-area: save;
+}
+
+#delbtn{
+  grid-area: del;
+}
