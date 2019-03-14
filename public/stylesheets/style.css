@@ -78,7 +78,7 @@ nav > ol > a {
   color: var(--text-color);
 }
 
-div{
+#formgrid{
   background-color: var(--theme-color-dark);
   display: grid | inline-grid;
   grid-template-columns: 10rem 5rem 5rem 15rem 5rem;
