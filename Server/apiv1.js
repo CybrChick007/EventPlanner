@@ -18,16 +18,16 @@ router.get('/auth', authorizeUser);
 router.get('/displayEvents', displayEvent);
 
 //post request
-//localhost:8080/createEvent + params [see below in the function]
+//localhost:8080/createEvent + body [see below in the function]
 router.post('/createEvent', GoogleAuth.guardMiddleware(), createEvent);
 
-//localhost:8080/editEvent + params [same params as createEvent]
+//localhost:8080/editEvent + body [same body as createEvent]
 router.post('/editEvent', GoogleAuth.guardMiddleware(), editEvent);
 
-//localhost:8080/joinEvent + params [userID, eventID]
+//localhost:8080/joinEvent + body [userID, eventID]
 router.post('/joinEvent', GoogleAuth.guardMiddleware(), joinEvent);
 
-//localhost:8080/deleteEvent + params [eventID]
+//localhost:8080/deleteEvent + body [eventID]
 router.post('/deleteEvent', GoogleAuth.guardMiddleware(), deleteEvent);
 
 // add display event
@@ -66,18 +66,18 @@ async function authorizeUser(req, res, next) {
 //finlay
 async function createEvent(req, res){
   try {
-    //const userid = req.params.userID; --> auto_increment
-    // const eventName = req.params.eventName;
-    // const eventAddress = req.params.eventAddress;
-    // const eventPostcode = req.params.eventPostcode;
-    // const eventPublic = req.params.eventPublic; //Boolean
-    // const eventURLImage = req.params.eventURLImage;
-    // const eventDressCode = req.params.eventDressCode;
-    // const eventType = req.params.eventType; //Foreign key --> int
-    // const eventHost = req.params.eventHost; //Foreign key --> int
+    //const userid = req.body.userID; --> auto_increment
+    // const eventName = req.body.eventName;
+    // const eventAddress = req.body.eventAddress;
+    // const eventPostcode = req.body.eventPostcode;
+    // const eventPublic = req.body.eventPublic; //Boolean
+    // const eventURLImage = req.body.eventURLImage;
+    // const eventDressCode = req.body.eventDressCode;
+    // const eventType = req.body.eventType; //Foreign key --> int
+    // const eventHost = req.body.eventHost; //Foreign key --> int
 
     //INSERT INTO shoppingListItem TABLE! USING THE EVENTID JUST CREATED
-    //const shopList = req.params.shopList; ////TODO: be converted in list
+    //const shopList = req.body.shopList; ////TODO: be converted in list
 
     const userid = 99;
     const eventName = "Eskimo";
@@ -119,10 +119,11 @@ async function deleteEvent(req, res){
 }
 
 //Eze
+//displaying the first 10 upcoming event
 async function displayEvent(req, res, next){
   try{
     const sql = await sqlPromise;
-    const query = `SELECT * FROM event`;
+    const query = `SELECT * FROM event ORDER BY eventDate DESC LIMIT 10`;
     const [rows] = await sql.execute(query);
 
     const eventList = rows.map(row => {
