@@ -14,18 +14,18 @@ const sqlPromise = mysql.createConnection(config.mysql);
 //get request
 
 //localhost:8080/auth + param
-router.get('/auth/:email', authorizeUser);
-router.get('/details/')
+router.get('/auth', authorizeUser);
+router.get('/displayEvents', displayEvent);
 
 //post request
 //localhost:8080/createEvent + params [see below in the function]
-router.post('/createEvent/:', GoogleAuth.guardMiddleware(), createEvent);
+router.post('/createEvent', GoogleAuth.guardMiddleware(), createEvent);
 
 //localhost:8080/editEvent + params [same params as createEvent]
-router.post('/editEvent/:', GoogleAuth.guardMiddleware(), editEvent);
+router.post('/editEvent', GoogleAuth.guardMiddleware(), editEvent);
 
 //localhost:8080/joinEvent + params [userID, eventID]
-router.post('/joinEvent/:', GoogleAuth.guardMiddleware(), joinEvent);
+router.post('/joinEvent', GoogleAuth.guardMiddleware(), joinEvent);
 
 //localhost:8080/deleteEvent + params [eventID]
 router.post('/deleteEvent', GoogleAuth.guardMiddleware(), deleteEvent);
@@ -34,7 +34,7 @@ router.post('/deleteEvent', GoogleAuth.guardMiddleware(), deleteEvent);
 
 async function authorizeUser(req, res, next) {
   try{
-    const email = req.params.email;
+    const email = req.body.email;
 
     const sql = await sqlPromise;
     const query = `SELECT userID, email FROM user WHERE email = '${email}'`;
@@ -98,6 +98,15 @@ async function createEvent(req, res){
 //user specific events
 
 async function editEvent(req, res){
+  try{
+    //eventHostID does not change
+      const sql = await sqlPromise;
+      const query = `UPDATE event SET eventName = '${req.body.eventName}', eventAddress = '${req.body.eventAddress}', eventPostcode = '${req.body.eventPostcode}', eventDressCode = '${req.body.eventDressCode}', eventPublic = '${req.body.eventPublic}', eventURLImage = '${req.body.eventURLImage}', eventType = '${req.body.eventType}', eventDate = '${req.body.eventDate}' where eventID = '${req.body.eventID}'`;
+
+      return sql.execute(query);
+
+  }
+  catch (e) {next(e); }
 
 }
 
@@ -110,9 +119,44 @@ async function deleteEvent(req, res){
 }
 
 //Eze
-async function displayEvent(req, res){
+async function displayEvent(req, res, next){
+  try{
+    const sql = await sqlPromise;
+    const query = `SELECT * FROM event`;
+    const [rows] = await sql.execute(query);
 
+    const eventList = rows.map(row => {
+        return {
+          eventID: row.eventID,
+          eventName: row.eventName,
+          eventAddress: row.eventAddress,
+          eventPostcode: row.eventPostcode,
+          eventDressCode: row.eventDressCode,
+          eventPublic: row.eventPublic, //IF FALSE, DISPLAY ONLY IF USER IS INVITED
+          eventURLImage: row.eventURLImage,
+          eventType: row.eventType,
+          eventHost: row.eventHost,
+          eventDate: row.eventDate
+        };
+      });
+
+      const query2 = `SELECT * FROM shoppingListItem`;
+      const [rows2] = await sql.execute(query);
+
+      const allItemShoppingList = rows2.map(row => {
+          return {
+            eventItemName: row.eventItemName,
+            eventID: row.eventID,
+            userBringerID: row.userBringerID
+          };
+        });
+
+      res.send({eventList, allItemShoppingList});
+    }catch (e) {
+      next(e);
+    }
 }
+
 
 
 module.exports = router;
