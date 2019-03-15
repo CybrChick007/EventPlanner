@@ -21,53 +21,60 @@
       <input type="submit" value="SEARCH" class=button>
     </form>
     
-    <div id=details>
+    <div id=container>
     
-      <img src="" alt="An image depicting the event.">
+      <button class="warn-button popup-details" id=close>Close</button>
+    
+      <div id=details class="popup-details">
       
-      <article>
-        <h1 id=title>
-          EVENT TITLE - DATE
-        </h1>
+        <img src="" alt="An image depicting the event.">
         
-        <p id=address>
-          ADDRESS: 
-        </p>
+        <section>
+          <h1 id=title>
+            EVENT TITLE - DATE
+          </h1>
+          
+          <p id=address>
+            ADDRESS: 
+          </p>
+          
+          <p id=description>
+            DESCRIPTION
+          </p>
+        </section>
         
-        <p id=description>
-          DESCRIPTION
-        </p>
-      </article>
+        <iframe width="200" height="200" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/undefined?origin=...&q=...&destination=...&center=...&zoom=...&key=..." allowfullscreen></iframe>
       
-      <iframe width="200" height="200" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/undefined?origin=...&q=...&destination=...&center=...&zoom=...&key=..." allowfullscreen></iframe>
-    
-      <p>
-        SHOPPING LIST:
-      </p>
+        <section>
+          <p>
+            SHOPPING LIST:
+          </p>
+          
+          <ul id=shoppinglist>
+            <li>ITEM</li>
+            <li>ITEM</li>
+            <li>ITEM</li>
+            <li>ITEM</li>
+            <li>ITEM</li>
+          </ul>
+        </section>
       
-      <ul id=shoppinglist>
-        <li>ITEM</li>
-        <li>ITEM</li>
-        <li>ITEM</li>
-        <li>ITEM</li>
-        <li>ITEM</li>
-      </ul>
-    
+      </div>
+      
+      <ol id=results>
+        
+        <!-- result structure
+        <li>
+          <img src="https://via.placeholder.com/200x100">
+          <p>
+            Sample Event
+          </p>
+          <button class=button>VIEW</button>
+        </li>
+        -->
+        
+      </ol>
     </div>
-    
-    <ol id=results>
-      
-      <!-- result structure
-      <li>
-        <img src="https://via.placeholder.com/200x100">
-        <p>
-          Sample Event
-        </p>
-        <button class=button>VIEW</button>
-      </li>
-      -->
-      
-    </ol>
     
   </main>
   

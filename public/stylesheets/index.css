@@ -1,16 +1,47 @@
+#container {
+  position: relative;
+  margin-top: 1rem;
+}
+
+#container > #details, #container > #results {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  margin: 0;
+  height: 32rem; /* find out how to stretch to bottom of page */
+}
+
+.popup-details {
+  transition: opacity 0.2s;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#close {
+  position: absolute;
+  z-index: 2;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
 #details {
+  z-index: 1;
   background-color: var(--theme-color-dark);
   display: grid;
   grid-template-columns: auto auto auto;
   grid-template-rows: auto auto;
   justify-items: start;
+  align-items: start;
 }
 
 #results {
+  overflow-y: scroll;
+  overflow-x: hidden;
   background-color: var(--theme-color);
-  height: 100%;
   display: grid;
   justify-content: space-around;
+  align-items: start;
   grid-template-columns: auto auto auto;
   padding: 0;
 }

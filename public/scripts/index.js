@@ -14,6 +14,12 @@ function addEventToResults(title, eventid, imageurl) {
   viewButton.classList.add("button");
   viewButton.textContent = "VIEW";
   
+  let eventID = parseInt(Math.random() * 10000);
+  
+  viewButton.addEventListener("click", function (e) {
+    viewEvent(eventID);
+  })
+  
   item.appendChild(img);
   item.appendChild(txt);
   item.appendChild(viewButton);
@@ -21,6 +27,27 @@ function addEventToResults(title, eventid, imageurl) {
   results.appendChild(item);
   
 }
+
+function setPopupVisibility(visible) {
+  for (let elem of document.querySelectorAll(".popup-details")) {
+    if (visible) {
+      elem.style.opacity = "1";
+      elem.style["pointer-events"] = "auto";
+    } else {
+      elem.style.opacity = "0";
+      elem.style["pointer-events"] = "none";
+    }
+  }
+}
+
+function viewEvent(eventID) {
+  setPopupVisibility(true);
+  document.getElementById("title").textContent = eventID;
+}
+
+document.getElementById("close").addEventListener("click", function (e) {
+  setPopupVisibility(false);
+})
 
 // testing
 for (let i = 0; i < 33; i++) {
