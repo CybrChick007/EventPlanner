@@ -38,9 +38,25 @@ function setPopupVisibility(visible) {
   }
 }
 
-function viewEvent(eventID) {
-  setPopupVisibility(true);
-  document.getElementById("title").textContent = "ID OF EVENT TO DISPLAY: " + eventID;
+async function viewEvent(eventID) {
+  
+  let response = await fetch("/getEvent?eventID=" + eventID); // not sure what the api is yet, change!
+  
+  if (response.ok) {
+    
+    setPopupVisibility(true);
+    
+    data = await response.json();
+    
+    document.getElementById("title").textContent = data.eventName + " - " + data.eventDate;
+    document.getElementById("address").textContent = "Address: " + data.eventAddress;
+    document.getElementById("description").textContent = data.eventDescription;
+    document.querySelector("#details > img").src = data.eventURLImage;
+    
+  } else {
+    alert("Failed to get event from server: " + response.status);
+  }
+  
 }
 
 async function populateResults() {
