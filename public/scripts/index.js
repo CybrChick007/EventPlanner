@@ -14,10 +14,8 @@ function addEventToResults(title, eventid, imageurl) {
   viewButton.classList.add("button");
   viewButton.textContent = "VIEW";
   
-  let eventID = parseInt(Math.random() * 10000);
-  
   viewButton.addEventListener("click", function (e) {
-    viewEvent(eventID);
+    viewEvent(eventid);
   })
   
   item.appendChild(img);
@@ -42,14 +40,19 @@ function setPopupVisibility(visible) {
 
 function viewEvent(eventID) {
   setPopupVisibility(true);
-  document.getElementById("title").textContent = eventID;
+  document.getElementById("title").textContent = "ID OF EVENT TO DISPLAY: " + eventID;
+}
+
+async function populateResults() {
+  let response = await fetch("/displayEvents");
+  let events = (await response.json()).eventList;
+  for (let event of events) {
+    addEventToResults(event.eventName, event.eventID, event.eventURLImage);
+  }
 }
 
 document.getElementById("close").addEventListener("click", function (e) {
   setPopupVisibility(false);
 })
 
-// testing
-for (let i = 0; i < 33; i++) {
-  addEventToResults("Sample Event", null, "https://via.placeholder.com/300x200");
-}
+populateResults();
