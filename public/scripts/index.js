@@ -46,7 +46,7 @@ async function viewEvent(eventID) {
     
     setPopupVisibility(true);
     
-    data = await response.json();
+    let data = await response.json();
     
     document.getElementById("title").textContent = data.eventName + " - " + data.eventDate;
     document.getElementById("address").textContent = "Address: " + data.eventAddress;
@@ -67,8 +67,29 @@ async function populateResults() {
   }
 }
 
+async function populateTags() {
+  
+  let response = await fetch("/getTags"); // change
+  
+  if (response.ok) {
+    
+    let tags = await response.json();
+    
+    let combo = document.getElementById("tag");
+    for (let tag of tags) {
+      let item = document.createElement("option");
+      item.textContent = tag;
+      combo.appendChild(item);
+    }
+    
+  }
+  
+}
+
 document.getElementById("close").addEventListener("click", function (e) {
   setPopupVisibility(false);
 })
 
 populateResults();
+populateTags();
+
