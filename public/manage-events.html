@@ -15,31 +15,49 @@
     </ul>
     <form id="formGrid">
       <label id="eventName">Event Name*
-        <input type="text" required>
+        <input type="text" id="eventNameBox" required>
       </label>
       <label id="date">Date of Event*
-        <input type="date" required>
+        <input type="date" id="dateBox" required>
       </label>
-      <input type="text" id="address1">
-      <input type="text" id="address2">
-      <input type="text" id="address3">
-      <input type="text" id="postcode">
-      <select id="type">
-        <option value="Pop Music">Pop Music</option>
-        <option value="House Party">House Party</option>
-      </select>
+      <label id="address1">Address Line 1*
+        <input type="text" id="address1Box" required>
+      </label>
+      <label id="address2">Address Line 2
+        <input type="text" id="address2Box">
+      </label>
+      <label id="address3">Address Line 3*
+        <input type="text" id="address3Box" required>
+      </label>
+      <label id="postcode">Postcode*
+        <input type="text" id="postcodeBox" required>
+      </label>
+      <label id="type">Type of Event
+        <select id="typeSelect">
+          <option value="Pop Music">Pop Music</option>
+          <option value="House Party">House Party</option>
+        </select>
+      </label>
       <button type="submit" id="savebtn" class="button">SAVE CHANGES</button>
       <button type="button" id="delbtn" class="warn-button">DELETE EVENT</button>
       <button type="button" id="sladd" class="button">ADD</button>
       <button type="button" id="sldel" class="warn-button">DELETE ITEM</button>
-      <input type="text" id="shoppingtxt">
-      <select id="shoppinglist"></select>
-      <input type="text" id="dressCode">
-      <select id="pp">
-        <option value="Public">Public</option>
-        <option value="Private">Private</option>
-      </select>
-      <img src="/images/logo.png" alt="Your thumbnail image" id="thumbnail">
+      <label id="shoppingtxt">Add to Shopping List
+        <input type="text" id="shoppingBox">
+      </label>
+      <label id="shoppinglist">Shopping List
+        <select id="shoppingSelect"></select>
+      </label>
+      <label id="dressCode">Dress Code
+        <input type="text" id="dressCodeBox">
+      </label>
+      <label id="pp">Event Status
+        <select id="StatusSelect">
+          <option value="Public">Public</option>
+          <option value="Private">Private</option>
+        </select>
+      </label>
+      <img src="images/logo.png" alt="Your thumbnail image" id="thumbnail">
       <button type="button" id="upload" class="button">UPLOAD THUMBNAIL IMAGE</button>
     </form>
 
