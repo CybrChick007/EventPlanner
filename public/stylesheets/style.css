@@ -12,7 +12,7 @@ body {
   color: var(--text-color);
   margin-top: 0;
   font-family: sans-serif;
-  padding-left: 12rem; /* bodge */
+  padding-left: 12rem;
 }
 
 #logo {
@@ -50,6 +50,16 @@ nav {
   position: fixed;
   left: 0;
   height: 100vh;
+}
+
+#shownav {
+  display: none;
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  background-color: var(--theme-color-dark);
+  width: 2rem;
+  height: 2rem;
 }
 
 nav > ol {

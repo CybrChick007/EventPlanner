@@ -26,12 +26,19 @@ function insert_navbar() {
   }
   
   let arrow = document.createElement("li");
-  arrow.textContent = "<---";
+  arrow.textContent = "<";
   arrow.id = "hidenav";
   
   list.appendChild(arrow);
   container.appendChild(list);
   document.body.insertBefore(container, document.body.childNodes[0]);
+  
+  let showbutton = document.createElement("button");
+  showbutton.id = "shownav";
+  showbutton.textContent = ">";
+  showbutton.classList.add("button");
+  document.body.appendChild(showbutton);
+  
 }
 
 function insert_logo() {
@@ -51,9 +58,31 @@ function insert_logo() {
   document.body.insertBefore(container, document.body.childNodes[0]);
 }
 
+function setNavbarVisibility(visible) {
+  let nav = document.querySelector("nav");
+  let showbutton = document.getElementById("shownav");
+  if (visible) {
+    nav.style.display = null;
+    document.body.style["padding-left"] = null;
+    showbutton.style.display = "none";
+  } else {
+    nav.style.display = "none";
+    document.body.style["padding-left"] = "0";
+    showbutton.style.display = "initial";
+  }
+}
+
 function setup() {
   insert_logo();
   insert_navbar();
+
+  document.getElementById("hidenav").addEventListener("click", function () {
+    setNavbarVisibility(false);
+  });
+  
+  document.getElementById("shownav").addEventListener("click", function () {
+    setNavbarVisibility(true);
+  });
 }
 
 setup();
