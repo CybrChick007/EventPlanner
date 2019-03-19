@@ -101,6 +101,16 @@ function renderButton() {
   });
 }
 
+function signOut()
+{
+  var auth2 = gapi.auth2.getauthinstance();
+  auth2.signOut().then(funtion(){
+
+    alert("You have been logged out");
+    
+  }
+}
+
 function setup() {
   insert_logo();
   insert_navbar();
