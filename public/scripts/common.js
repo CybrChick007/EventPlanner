@@ -10,7 +10,7 @@ const navbar = [
 
 const logo_path = "images/logo.png";
 
-function insert_navbar() {
+function insertNavbar() {
 
   let container = document.createElement("nav");
   let list = document.createElement("ol");
@@ -49,10 +49,12 @@ function insert_navbar() {
 
 }
 
-function insert_logo() {
+function insertHeader() {
 
-  let container = document.createElement("section");
-  container.id = "logo";
+  let header = document.createElement("header");
+  
+  let logoSection = document.createElement("section");
+  logoSection.id = "logo";
 
   let img = document.createElement("img");
   img.src = logo_path;
@@ -61,9 +63,14 @@ function insert_logo() {
   let paragraph = document.createElement("p");
   paragraph.textContent = "EventZ";
 
-  container.appendChild(img);
-  container.appendChild(paragraph);
-  document.body.insertBefore(container, document.body.childNodes[0]);
+  logoSection.appendChild(img);
+  logoSection.appendChild(paragraph);
+  
+  header.appendChild(logoSection);
+  
+  // logged in stuff here
+  
+  document.body.insertBefore(header, document.body.childNodes[0]);
 }
 
 function setNavbarVisibility(visible) {
@@ -111,8 +118,8 @@ function signOut()
 
 
 function setup() {
-  insert_logo();
-  insert_navbar();
+  insertHeader();
+  insertNavbar();
 }
 
 setup();

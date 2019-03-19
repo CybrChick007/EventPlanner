@@ -15,13 +15,18 @@ body {
   padding-left: 12rem;
 }
 
+header {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+}
+
 #logo {
   font-size: 2rem;
   display: flex;
   align-items: center;
 }
 
-main, #logo {
+main, header {
   padding: 1rem;
 }
 
