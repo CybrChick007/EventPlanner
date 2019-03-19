@@ -93,3 +93,12 @@ document.getElementById("close").addEventListener("click", function (e) {
 populateResults();
 populateTags();
 
+// temporary map
+window.addEventListener("load", function() {
+  setPopupVisibility(true);
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: {lat: 0, lng: 0},
+    zoom: 8,
+    disableDefaultUI: true
+  });
+});

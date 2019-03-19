@@ -18,6 +18,11 @@
   pointer-events: none;
 }
 
+.popup-details > #map {
+  width: 300px;
+  height: 200px;
+}
+
 #close {
   position: absolute;
   z-index: 2;

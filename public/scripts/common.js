@@ -39,6 +39,14 @@ function insert_navbar() {
   showbutton.classList.add("button");
   document.body.appendChild(showbutton);
   
+  document.getElementById("hidenav").addEventListener("click", function () {
+    setNavbarVisibility(false);
+  });
+  
+  document.getElementById("shownav").addEventListener("click", function () {
+    setNavbarVisibility(true);
+  });
+  
 }
 
 function insert_logo() {
@@ -75,14 +83,6 @@ function setNavbarVisibility(visible) {
 function setup() {
   insert_logo();
   insert_navbar();
-
-  document.getElementById("hidenav").addEventListener("click", function () {
-    setNavbarVisibility(false);
-  });
-  
-  document.getElementById("shownav").addEventListener("click", function () {
-    setNavbarVisibility(true);
-  });
 }
 
 setup();
