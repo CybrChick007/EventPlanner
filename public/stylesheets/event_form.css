@@ -19,6 +19,10 @@
     ". save del up .";
 }
 
+form > label > input {
+  width: 100%;
+}
+
 #sladd{
   grid-area: addsl;
 }
