@@ -3,6 +3,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const GoogleAuth = require('simple-google-openid');
 
 const PORT = 8080;
 
@@ -16,7 +17,9 @@ app.set('views', 'public');
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
-app.use(GoogleAuth('672312620946-li717m3kudkacjetd6h5tckumvl22qbk.apps.googleusercontent.com'));
+const clientId = '1010342411950-ulstr9hnl2uqrlth7pu94ic0h9eqlfb9.apps.googleusercontent.com';
+app.use(GoogleAuth(clientId));
+//672312620946-li717m3kudkacjetd6h5tckumvl22qbk.apps.googleusercontent.com
 
 //VIEWS REQUESTS
 app.get('/apiv1/type', function(req, res, next){

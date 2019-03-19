@@ -82,7 +82,7 @@ function setNavbarVisibility(visible) {
 
 
 
-function onSuccess(googleUser) {
+function onSignIn(googleUser) {
   console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
 }
 
