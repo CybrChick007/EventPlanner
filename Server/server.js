@@ -16,6 +16,7 @@ app.set('views', 'public');
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
+app.use(GoogleAuth('672312620946-li717m3kudkacjetd6h5tckumvl22qbk.apps.googleusercontent.com'));
 
 //VIEWS REQUESTS
 app.get('/apiv1/type', function(req, res, next){

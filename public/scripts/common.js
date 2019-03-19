@@ -11,56 +11,56 @@ const navbar = [
 const logo_path = "images/logo.png";
 
 function insert_navbar() {
-  
+
   let container = document.createElement("nav");
   let list = document.createElement("ol");
-  
+
   for (let data of navbar) {
     let item = document.createElement("li");
     let lnk = document.createElement("a");
-    
+
     [item.textContent, lnk.href] = data;
-    
+
     lnk.appendChild(item);
     list.appendChild(lnk);
   }
-  
+
   let arrow = document.createElement("li");
   arrow.textContent = "<";
   arrow.id = "hidenav";
-  
+
   list.appendChild(arrow);
   container.appendChild(list);
   document.body.insertBefore(container, document.body.childNodes[0]);
-  
+
   let showbutton = document.createElement("button");
   showbutton.id = "shownav";
   showbutton.textContent = ">";
   showbutton.classList.add("button");
   document.body.appendChild(showbutton);
-  
+
   document.getElementById("hidenav").addEventListener("click", function () {
     setNavbarVisibility(false);
   });
-  
+
   document.getElementById("shownav").addEventListener("click", function () {
     setNavbarVisibility(true);
   });
-  
+
 }
 
 function insert_logo() {
-  
+
   let container = document.createElement("section");
   container.id = "logo";
-  
+
   let img = document.createElement("img");
   img.src = logo_path;
   img.alt = "EventZ logo";
-  
+
   let paragraph = document.createElement("p");
   paragraph.textContent = "EventZ";
-  
+
   container.appendChild(img);
   container.appendChild(paragraph);
   document.body.insertBefore(container, document.body.childNodes[0]);
@@ -78,6 +78,27 @@ function setNavbarVisibility(visible) {
     document.body.style["padding-left"] = "0";
     showbutton.style.display = "initial";
   }
+}
+
+
+
+function onSuccess(googleUser) {
+  console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+}
+
+function onFailure(error) {
+  console.log(error);
+}
+function renderButton() {
+  gapi.signin2.render('my-signin2', {
+    'scope': 'profile email',
+    'width': 240,
+    'height': 50,
+    'longtitle': true,
+    'theme': 'dark',
+    'onsuccess': onSuccess,
+    'onfailure': onFailure
+  });
 }
 
 function setup() {

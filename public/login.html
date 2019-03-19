@@ -3,19 +3,23 @@
 <head>
   <meta charset="utf-8">
   <title>EventZ</title>
-  
   <link rel="stylesheet" href="stylesheets/style.css">
-  
+  <meta name="google-signin-client_id" content="672312620946-li717m3kudkacjetd6h5tckumvl22qbk.apps.googleusercontent.com">
+
 </head>
 
 <body>
-  
+
   <main>
-    
-    
-    
+    <section>
+      <h1 id=login>
+        Please login with your university Google account
+      </h1>
+      <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    </section>
   </main>
-	
+
   <script src="scripts/common.js"></script>
-  
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+
 </body>
