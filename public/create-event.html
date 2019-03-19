@@ -3,19 +3,70 @@
 <head>
   <meta charset="utf-8">
   <title>EventZ</title>
-  
+
   <link rel="stylesheet" href="stylesheets/style.css">
-  
+  <link rel="stylesheet" href="stylesheets/event_form.css">
+
 </head>
 
 <body>
-  
+
   <main>
-    
-    
-    
+    <form id="formGrid">
+      <label id="eventName">Event Name*
+        <input type="text" id="eventNameBox" required>
+      </label>
+      <label id="date">Date of Event*
+        <input type="date" id="dateBox" required>
+      </label>
+      <label id="address1">Address Line 1*
+        <input type="text" id="address1Box" required>
+      </label>
+      <label id="address2">Address Line 2
+        <input type="text" id="address2Box">
+      </label>
+      <label id="address3">Address Line 3*
+        <input type="text" id="address3Box" required>
+      </label>
+      <label id="postcode">Postcode*
+        <input type="text" id="postcodeBox" required>
+      </label>
+      <label id="type">Type of Event
+        <select id="typeSelect">
+          <option value="Pop Music">Pop Music</option>
+          <option value="House Party">House Party</option>
+        </select>
+      </label>
+      <button type="submit" id="savebtn" class="button">SAVE EVENT</button>
+      <button type="reset" id="delbtn" class="warn-button">RESET</button>
+      <button type="button" id="sladd" class="button">ADD</button>
+      <button type="button" id="sldel" class="warn-button">DELETE ITEM</button>
+      <label id="shoppingtxt">Add to Shopping List
+        <input type="text" id="shoppingBox">
+      </label>
+      <label id="shoppinglist">Shopping List
+        <select id="shoppingSelect"></select>
+      </label>
+      <label id="dressCode">Dress Code
+        <input type="text" id="dressCodeBox">
+      </label>
+      <label id="pp">Event Status
+        <select id="StatusSelect">
+          <option value="Public">Public</option>
+          <option value="Private">Private</option>
+        </select>
+      </label>
+      <img src="images/placeholderThumb.png" alt="Your thumbnail image" id="thumbnail">
+      <label id="upload" class="button">UPLOAD THUMBNAIL IMAGE
+        <input type="file" id="uploadButton" accept="image/*"></input>
+      </label>
+    </form>
+
+
+
   </main>
-	
+
   <script src="scripts/common.js"></script>
-  
+  <script src="scripts/eventsForm.js"></script>
+  <script src="scripts/createEvent.js"></script>
 </body>
