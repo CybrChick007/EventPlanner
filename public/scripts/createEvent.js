@@ -1,9 +1,12 @@
-let saveButton = document.getElementById("savebtn");
-saveButton.addEventListener("click", addEvent);
+/*let saveButton = document.getElementById("savebtn");
+saveButton.addEventListener("click", addEvent);*/
+let formSubmit = document.getElementById("formGrid");
+formSubmit.addEventListener("onsubmit", addEvent);
 let resetButton = document.getElementById("delbtn");
 resetButton.addEventListener("click", resetPress);
 
 function addEvent(e){
+  console.log("hi");
   e.preventDefault();
 }
 
