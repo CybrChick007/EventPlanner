@@ -46,7 +46,7 @@ async function viewEvent(eventID) {
     
     setPopupVisibility(true);
     
-    let data = await response.json();
+    let data = (await response.json()).event;
     
     document.getElementById("title").textContent = data.eventName + " - " + data.eventDate;
     document.getElementById("address").textContent = "Address: " + data.eventAddress;
