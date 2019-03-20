@@ -10,6 +10,8 @@ const navbar = [
 
 const logo_path = "images/logo.png";
 
+const googleClientId = "1010342411950-ulstr9hnl2uqrlth7pu94ic0h9eqlfb9"
+
 function insertNavbar() {
 
   let container = document.createElement("nav");
@@ -128,6 +130,12 @@ function renderButton() {
 function setup() {
   insertHeader();
   insertNavbar();
+  
+  let meta = document.createElement("meta");
+  meta.name = "google-signin-client_id";
+  meta.content = googleClientId + ".apps.googleusercontent.com";
+  document.head.appendChild(meta);
+  
 }
 
 setup();
