@@ -52,7 +52,7 @@ function insertNavbar() {
 function insertHeader() {
 
   let header = document.createElement("header");
-  
+
   let logoSection = document.createElement("section");
   logoSection.id = "logo";
 
@@ -65,11 +65,11 @@ function insertHeader() {
 
   logoSection.appendChild(img);
   logoSection.appendChild(paragraph);
-  
+
   header.appendChild(logoSection);
-  
+
   // logged in stuff here
-  
+
   document.body.insertBefore(header, document.body.childNodes[0]);
 }
 
@@ -87,15 +87,31 @@ function setNavbarVisibility(visible) {
   }
 }
 
+//FUNCTION FETCHING TO THE SERVER
 
+async function onSignIn(googleUser) {
+  //console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+  idToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token;
+  const profile = googleUser.getBasicProfile();
+  console.log(profile.U3);
 
-function onSignIn(googleUser) {
-  console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+  const response = await fetch('http://localhost:8080/auth/' + profile.U3);
+  const data = await response.json();
+  //console.log(data);
+  if(data.message == 'Not authorized'){
+    alert('Not authorized');
+    signOut();
+  }
 }
 
-function onFailure(error) {
-  console.log(error);
+function signOut()
+{
+  const auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function() {
+    alert("You have been logged out");
+  });
 }
+//display only for google button
 function renderButton() {
   gapi.signin2.render('my-signin2', {
     'scope': 'profile email',
@@ -105,14 +121,6 @@ function renderButton() {
     'theme': 'dark',
     'onsuccess': onSuccess,
     'onfailure': onFailure
-  });
-}
-
-function signOut()
-{
-
-  auth2.signOut().then(function(){
-    alert("You have been logged out")
   });
 }
 

@@ -14,7 +14,7 @@ const sqlPromise = mysql.createConnection(config.mysql);
 //get request
 
 //localhost:8080/auth + param
-router.get('/auth', authorizeUser);
+router.get('/auth/:email', authorizeUser);
 router.get('/displayEvents', displayEvent);
 
 //post request
@@ -34,12 +34,12 @@ router.post('/deleteEvent', GoogleAuth.guardMiddleware(), deleteEvent);
 
 async function authorizeUser(req, res, next) {
   try{
-    const email = req.body.email;
+    const email = req.params.email;
 
     const sql = await sqlPromise;
     const query = `SELECT userID, email FROM user WHERE email = '${email}'`;
     const [rows] = await sql.execute(query);
-
+    console.log(email);
     const user = rows.map(row => {
         return {
           userID: row.userID,
