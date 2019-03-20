@@ -2,6 +2,8 @@ let addButton = document.getElementById("sladd");
 let delButton = document.getElementById("sldel");
 addButton.addEventListener("click", addToShopping);
 delButton.addEventListener("click", removeFromShopping);
+let uploadButton = document.getElementById("uploadButton");
+uploadButton.addEventListener("change", upload);
 
 function addToShopping(e){
   let shopping = document.getElementById("shoppingBox");
@@ -25,4 +27,9 @@ function removeFromShopping(e){
   }else {
     alert("Please enter a shopping item");
   }
+}
+
+function upload(e){
+  const MYIMAGE = e.target.files[0];
+  document.getElementById("thumbnail").src=URL.createObjectURL(MYIMAGE);
 }
