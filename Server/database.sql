@@ -24,7 +24,7 @@ create table event(
   eventURLImage varchar(255),
   eventType int not null,
   eventHost int not null,
-  eventDate DATE not null,
+  eventDate datetime not null,
   PRIMARY KEY (eventID),
   FOREIGN KEY (eventType) REFERENCES typeEvent (typeID),
   FOREIGN KEY (eventHost) REFERENCES user (userID)

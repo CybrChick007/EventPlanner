@@ -48,7 +48,7 @@ async function viewEvent(eventID) {
     
     let data = (await response.json()).event;
     
-    document.getElementById("title").textContent = data.eventName + " - " + data.eventDate;
+    document.getElementById("title").textContent = data.eventName + " - " + new Date(data.eventDate).toString();
     document.getElementById("address").textContent = "Address: " + data.eventAddress;
     document.getElementById("description").textContent = data.eventDescription;
     document.querySelector("#details > img").src = data.eventURLImage;
