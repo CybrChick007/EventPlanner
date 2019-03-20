@@ -183,7 +183,7 @@ async function getSingleEvent(req, res, next){
     const sql = await sqlPromise;
     const query = `SELECT * FROM event WHERE eventID = ${req.query.eventID}`;
     const event = (await sql.execute(query))[0][0];
-    const query2 = `SELECT eventItemName FROM shoppinglistitem WHERE eventID = ${event.eventID}`;
+    const query2 = `SELECT * FROM shoppinglistitem WHERE eventID = ${event.eventID}`;
     const shoppingList = (await sql.execute(query2))[0];
     res.send({event, shoppingList});
   }catch (e) {

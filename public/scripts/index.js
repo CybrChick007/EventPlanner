@@ -44,14 +44,26 @@ async function viewEvent(eventID) {
   
   if (response.ok) {
     
+    let data = (await response.json());
+    let event = data.event;
+    let shoppingList = data.shoppingList;
+    
+    document.getElementById("title").textContent = event.eventName + " - " + new Date(event.eventDate).toString();
+    document.getElementById("address").textContent = "Address: " + event.eventAddress;
+    document.getElementById("description").textContent = event.eventDescription;
+    document.querySelector("#details > img").src = event.eventURLImage;
+    
+    let list = document.getElementById("shoppinglist");
+    while (list.firstChild) {
+      list.removeChild(list.firstChild);
+    }
+    for (let item of shoppingList) {
+      let elem = document.createElement("li");
+      elem.textContent = item.eventItemName;
+      list.appendChild(elem);
+    }
+    
     setPopupVisibility(true);
-    
-    let data = (await response.json()).event;
-    
-    document.getElementById("title").textContent = data.eventName + " - " + new Date(data.eventDate).toString();
-    document.getElementById("address").textContent = "Address: " + data.eventAddress;
-    document.getElementById("description").textContent = data.eventDescription;
-    document.querySelector("#details > img").src = data.eventURLImage;
     
   } else {
     alert("Failed to get event from server: " + response.status);
