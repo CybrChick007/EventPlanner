@@ -67,18 +67,18 @@ async function populateResults() {
   }
 }
 
-async function populateTags() {
+async function populateTypes() {
   
-  let response = await fetch("/getTags"); // change
+  let response = await fetch("/getTypes");
   
   if (response.ok) {
     
-    let tags = await response.json();
+    let types = await response.json();
     
-    let combo = document.getElementById("tag");
-    for (let tag of tags) {
+    let combo = document.getElementById("type");
+    for (let type of types) {
       let item = document.createElement("option");
-      item.textContent = tag;
+      item.textContent = type.typeName;
       combo.appendChild(item);
     }
     
@@ -91,7 +91,7 @@ document.getElementById("close").addEventListener("click", function (e) {
 })
 
 populateResults();
-populateTags();
+populateTypes();
 
 // temporary map
 window.addEventListener("load", function() {

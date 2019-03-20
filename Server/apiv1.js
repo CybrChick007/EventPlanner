@@ -17,6 +17,7 @@ const sqlPromise = mysql.createConnection(config.mysql);
 router.get('/auth/:email', authorizeUser);
 router.get('/displayEvents', displayEvent);
 router.get('/getSingleEvent', getSingleEvent);
+router.get('/getTypes', getTypes);
 router.get('/filterEvent', filterEvent);
 
 //post request
@@ -165,15 +166,25 @@ async function displayEvent(req, res, next){
     }
 }
 
+async function getTypes(req, res, next){
+  try{
+    const sql = await sqlPromise;
+    const query = `SELECT * FROM typeEvent`;
+    const types = (await sql.execute(query))[0];
+    res.send(types);
+  }catch (e) {
+    console.error(e);
+    next(e);
+  }
+}
+
 async function getSingleEvent(req, res, next){
   try{
     const sql = await sqlPromise;
     const query = `SELECT * FROM event WHERE eventID = ${req.query.eventID}`;
     const event = (await sql.execute(query))[0][0];
-    console.log(event);
     const query2 = `SELECT eventItemName FROM shoppinglistitem WHERE eventID = ${event.eventID}`;
     const shoppingList = (await sql.execute(query2))[0];
-    console.log(shoppingList);
     res.send({event, shoppingList});
   }catch (e) {
     console.error(e);
