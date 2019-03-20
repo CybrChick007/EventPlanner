@@ -124,7 +124,7 @@ async function deleteEvent(req, res){
 async function displayEvent(req, res, next){
   try{
     const sql = await sqlPromise;
-    const query = `SELECT * FROM event ORDER BY eventDate DESC LIMIT 10`;
+    const query = `SELECT * FROM event LIMIT 10`;
     const [rows] = await sql.execute(query);
 
     const eventList = rows.map(row => {
@@ -168,7 +168,7 @@ async function getSingleEvent(req, res, next){
     const query2 = `SELECT eventItemName FROM shoppingListItem WHERE eventID = ${event.eventID}`;
     const shoppingList = (await sql.execute(query));
     res.send({event, shoppingList});
-    
+
   }catch (e) {
     console.error(e);
     next(e);
