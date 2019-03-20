@@ -40,7 +40,7 @@ function setPopupVisibility(visible) {
 
 async function viewEvent(eventID) {
   
-  let response = await fetch("/getEvent?eventID=" + eventID); // not sure what the api is yet, change!
+  let response = await fetch("/getSingleEvent?eventID=" + eventID);
   
   if (response.ok) {
     

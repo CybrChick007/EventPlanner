@@ -16,6 +16,7 @@ const sqlPromise = mysql.createConnection(config.mysql);
 //localhost:8080/auth + param
 router.get('/auth/:email', authorizeUser);
 router.get('/displayEvents', displayEvent);
+router.get('/getSingleEvent', getSingleEvent);
 
 //post request
 //localhost:8080/createEvent + body [see below in the function]
@@ -158,6 +159,20 @@ async function displayEvent(req, res, next){
     }
 }
 
+async function getSingleEvent(req, res, next){
+  try{
+    const sql = await sqlPromise;
+    const query = `SELECT * FROM event WHERE eventID = ${req.query.eventID}`;
+    const event = (await sql.execute(query))[0];
 
+    const query2 = `SELECT eventItemName FROM shoppingListItem WHERE eventID = ${event.eventID}`;
+    const shoppingList = (await sql.execute(query));
+    res.send({event, shoppingList});
+    
+  }catch (e) {
+    console.error(e);
+    next(e);
+  }
+}
 
 module.exports = router;
