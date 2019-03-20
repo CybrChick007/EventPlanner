@@ -6,7 +6,9 @@ function addEventToResults(title, eventid, imageurl) {
   let item = document.createElement("li");
   
   let img = document.createElement("img");
-  img.src = imageurl;
+  if (imageurl) {
+    img.src = imageurl;
+  }
   
   let txt = document.createElement("p");
   txt.textContent = title;
