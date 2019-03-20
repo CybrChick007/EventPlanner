@@ -13,6 +13,7 @@ const apiv1 = require('./apiv1')
 app.use(cors());
 app.use('/', apiv1);
 app.use(express.static('public'));
+app.use(express.static('public', { extensions: 'html' }));
 app.set('views', 'public');
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');

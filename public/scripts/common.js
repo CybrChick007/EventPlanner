@@ -90,11 +90,11 @@ function setNavbarVisibility(visible) {
 }
 
 //FUNCTION FETCHING TO THE SERVER
-
+let profile = "";
 async function onSignIn(googleUser) {
   //console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
   idToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token;
-  const profile = googleUser.getBasicProfile();
+  profile = googleUser.getBasicProfile();
   console.log(profile.U3);
 
   const response = await fetch('http://localhost:8080/auth/' + profile.U3);
@@ -130,12 +130,12 @@ function renderButton() {
 function setup() {
   insertHeader();
   insertNavbar();
-  
+
   let meta = document.createElement("meta");
   meta.name = "google-signin-client_id";
   meta.content = googleClientId + ".apps.googleusercontent.com";
   document.head.appendChild(meta);
-  
+
 }
 
 setup();
