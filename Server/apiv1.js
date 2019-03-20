@@ -17,6 +17,7 @@ const sqlPromise = mysql.createConnection(config.mysql);
 router.get('/auth/:email', authorizeUser);
 router.get('/displayEvents', displayEvent);
 router.get('/getSingleEvent', getSingleEvent);
+router.get('/filterEvent', filterEvent);
 
 //post request
 //localhost:8080/createEvent + body [see below in the function]
@@ -30,7 +31,6 @@ router.post('/joinEvent', GoogleAuth.guardMiddleware(), joinEvent);
 
 //localhost:8080/deleteEvent + body [eventID]
 router.post('/deleteEvent', GoogleAuth.guardMiddleware(), deleteEvent);
-
 // add display event
 
 async function authorizeUser(req, res, next) {
@@ -117,6 +117,12 @@ async function joinEvent(req, res){
 
 async function deleteEvent(req, res){
 
+}
+
+//LAVAN
+//event name, type, date
+async function filterEvent(req, res){
+  
 }
 
 //Eze
