@@ -1,6 +1,6 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
-const bodyParser = require('body-parser'); //to install
+const bodyParser = require('body-parser');
 const GoogleAuth = require('simple-google-openid');
 
 const { Router } = require('express');
@@ -21,6 +21,9 @@ router.get('/getTypes', getTypes);
 router.get('/filterEvent', filterEvent);
 
 //post request
+
+router.use(bodyParser.json());
+
 //localhost:8080/createEvent + body [see below in the function]
 router.post('/createEvent', GoogleAuth.guardMiddleware(), createEvent);
 
@@ -42,12 +45,6 @@ async function authorizeUser(req, res, next) {
     const query = `SELECT userID, email FROM user WHERE email = '${email}'`;
     const [rows] = await sql.execute(query);
     console.log(email);
-    const user = rows.map(row => {
-        return {
-          userID: row.userID,
-          email: row.email
-        };
-      });
 
     if (rows.length == 0){
       const name   = email.substring(0, email.lastIndexOf("@"));
@@ -58,8 +55,10 @@ async function authorizeUser(req, res, next) {
         const query = `INSERT INTO user VALUES (NULL, '${email}')`;
         const [rows] = await sql.execute(query);
       }
+    } else {
+      const user = rows[0];
+      res.send({ user }); //LOG IN
     }
-    else res.send({ user }); //LOG IN
   }catch (e) {
     next(e);
   }
@@ -113,7 +112,7 @@ async function editEvent(req, res){
 }
 
 async function joinEvent(req, res){
-
+  console.log(req.body);
 }
 
 async function deleteEvent(req, res){

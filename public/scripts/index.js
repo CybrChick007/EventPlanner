@@ -42,15 +42,18 @@ function setPopupVisibility(visible) {
 }
 
 async function joinEvent() {
-  if (currentData) {
+  if (currentData && currentUser) {
     let response = await fetch("/joinEvent", {
       method: "POST",
+      mode: "cors",
+      credentials: "same-origin",
       body: JSON.stringify({
-        "userID": null, // complete when login functionality is in this page
+        "userID": currentUser.user.userID,
         "eventID": currentData.event.eventID,
       }),
       headers: {
-      "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + currentUser.token,
       },
     });
     if (!response.ok) {

@@ -90,7 +90,7 @@ function setNavbarVisibility(visible) {
 }
 
 //FUNCTION FETCHING TO THE SERVER
-let profile = "";
+let currentUser;
 async function onSignIn(googleUser) {
   //console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
   idToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token;
@@ -103,6 +103,12 @@ async function onSignIn(googleUser) {
   if(data.message == 'Not authorized'){
     alert('Not authorized');
     signOut();
+  } else {
+    currentUser = {
+      "user": data.user,
+      "token": idToken,
+      "profile": profile,
+    };
   }
 }
 
