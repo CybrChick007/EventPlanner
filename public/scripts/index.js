@@ -1,5 +1,6 @@
 
 let results = document.getElementById("results");
+let currentData;
 
 function addEventToResults(title, eventid, imageurl) {
   let item = document.createElement("li");
@@ -38,6 +39,24 @@ function setPopupVisibility(visible) {
   }
 }
 
+async function joinEvent() {
+  if (currentData) {
+    let response = await fetch("/joinEvent", {
+      method: "POST",
+      body: JSON.stringify({
+        "userID": null, // complete when login functionality is in this page
+        "eventID": currentData.event.eventID,
+      }),
+      headers: {
+      "Content-Type": "application/json"
+      },
+    });
+    if (!response.ok) {
+      alert("Failed to join event: " + response.status);
+    }
+  }
+}
+
 async function viewEvent(eventID) {
   
   let response = await fetch("/getSingleEvent?eventID=" + eventID);
@@ -45,11 +64,12 @@ async function viewEvent(eventID) {
   if (response.ok) {
     
     let data = (await response.json());
+    currentData = data;
     let event = data.event;
     let shoppingList = data.shoppingList;
     
     document.getElementById("title").textContent = event.eventName + " - " + new Date(event.eventDate).toString();
-    document.getElementById("address").textContent = "Address: " + event.eventAddress;
+    document.getElementById("address").textContent = "Address: " + event.eventAddress + ", " + event.eventPostcode;
     document.getElementById("description").textContent = event.eventDescription;
     document.querySelector("#details > img").src = event.eventURLImage;
     
@@ -98,6 +118,7 @@ async function populateTypes() {
   
 }
 
+document.getElementById("join").addEventListener("click", joinEvent);
 document.getElementById("close").addEventListener("click", function (e) {
   setPopupVisibility(false);
 })

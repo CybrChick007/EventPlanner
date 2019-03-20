@@ -1,6 +1,7 @@
 #container {
   position: relative;
   margin-top: 1rem;
+  height: 32rem; /* find out how to stretch to bottom of page */
 }
 
 #container > #details, #container > #results {
@@ -8,8 +9,8 @@
   left: 0;
   top: 0;
   width: 100%;
+  height: 100%;
   margin: 0;
-  height: 32rem; /* find out how to stretch to bottom of page */
 }
 
 .popup-details {
@@ -23,11 +24,18 @@
   height: 200px;
 }
 
-#close {
+#close, #join {
   position: absolute;
   z-index: 2;
-  top: 0.5rem;
   right: 0.5rem;
+}
+
+#close {
+  top: 0.5rem;
+}
+
+#join {
+  bottom: 0.5rem;
 }
 
 #details {
