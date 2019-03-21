@@ -18,7 +18,7 @@ app.set('views', 'public');
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
-const clientId = '1010342411950-ulstr9hnl2uqrlth7pu94ic0h9eqlfb9.apps.googleusercontent.com';
+const clientId = '934035794483-hheclnb5qoh28b4n0ktilgm35160ue4u';
 app.use(GoogleAuth(clientId));
 //672312620946-li717m3kudkacjetd6h5tckumvl22qbk.apps.googleusercontent.com
 

@@ -82,12 +82,11 @@ async function createEvent(req, res){
         return sql.execute(query);
 
 
-    catch (e) {next(e); }
 
-    INSERT INTO shoppingListItem TABLE! USING THE EVENTID JUST CREATED
+    //INSERT INTO shoppingListItem TABLE! USING THE EVENTID JUST CREATED
     const shopList = req.body.shopList; ////TODO: be converted in list
 
-    catch (e) {
+  }catch (e) {
     console.error(e);
     res.sendStatus(500);
 }

@@ -10,7 +10,7 @@ const navbar = [
 
 const logo_path = "images/logo.png";
 
-const googleClientId = "1010342411950-ulstr9hnl2uqrlth7pu94ic0h9eqlfb9"
+const googleClientId = "934035794483-hheclnb5qoh28b4n0ktilgm35160ue4u"
 
 function insertNavbar() {
 
@@ -72,17 +72,17 @@ function insertHeader() {
 
   let loggedinSection = document.createElement("section");
   loggedinSection.id = "loggedin";
-  
+
   let profileImg = document.createElement("img");
   profileImg.src = "images/logo.png";
-  
+
   let button = document.createElement("div");
   button.classList.add("g-signin2");
   button.setAttribute("data-onsuccess", "onSignIn");
-  
+
   loggedinSection.appendChild(button);
   loggedinSection.appendChild(profileImg);
-  
+
   header.appendChild(loggedinSection);
 
   document.body.insertBefore(header, document.body.childNodes[0]);
