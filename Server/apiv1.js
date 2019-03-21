@@ -66,37 +66,33 @@ async function authorizeUser(req, res, next) {
   }
 }
 
-//finlay
 async function createEvent(req, res){
   try {
-    //const userid = req.body.userID; --> auto_increment
-    // const eventName = req.body.eventName;
-    // const eventAddress = req.body.eventAddress;
-    // const eventPostcode = req.body.eventPostcode;
-    // const eventPublic = req.body.eventPublic; //Boolean
-    // const eventURLImage = req.body.eventURLImage;
-    // const eventDressCode = req.body.eventDressCode;
-    // const eventType = req.body.eventType; //Foreign key --> int
-    // const eventHost = req.body.eventHost; //Foreign key --> int
+        const sql = await sqlPromise;
+        const query = `INSERT event SET
+         eventName = '${req.body.eventName}',
+         eventAddress = '${req.body.eventAddress}',
+         eventPostcode = '${req.body.eventPostcode}',
+         eventDressCode = '${req.body.eventDressCode}',
+         eventPublic = '${req.body.eventPublic}',
+         eventURLImage = '${req.body.eventURLImage}',
+         eventType = '${req.body.eventType}',
+         eventDate = '${req.body.eventDate}'`;
 
-    //INSERT INTO shoppingListItem TABLE! USING THE EVENTID JUST CREATED
-    //const shopList = req.body.shopList; ////TODO: be converted in list
+        return sql.execute(query);
 
-    const userid = 99;
-    const eventName = "Eskimo";
-    const eventAddress = "Astoria";
-    const eventPostcode = "PO1 1AA";
-    const eventPublic = true;
-    const eventURLImage = "";
-    const eventDressCode = "Any";
-    const eventType = 1;
-    const eventHost = 1;
 
-  } catch (e) {
+    catch (e) {next(e); }
+
+    INSERT INTO shoppingListItem TABLE! USING THE EVENTID JUST CREATED
+    const shopList = req.body.shopList; ////TODO: be converted in list
+
+    catch (e) {
     console.error(e);
     res.sendStatus(500);
 }
 }
+
 
 //user specific events
 
@@ -120,7 +116,10 @@ async function joinEvent(req, res){
 }
 
 async function deleteEvent(req, res){
+  const sql = await sqlPromise;
+  const drop = `DELETE FROM event WHERE eventID = ${req.query.eventID}`;
 
+  return sql.execute(drop);
 }
 
 //LAVAN
