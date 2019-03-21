@@ -5,8 +5,10 @@ use EventPlanner;
 create table user(
   userID int auto_increment,
   email varchar (50) not null unique,
-  Fname varchar (15) 
-  Lname varchar (15)
+  Fname varchar (15),
+  Lname varchar (15),
+  Age int not null,
+  ContactNumber varchar (10),
   PRIMARY KEY (userID)
 );
 
