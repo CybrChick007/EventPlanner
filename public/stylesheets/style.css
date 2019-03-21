@@ -26,6 +26,20 @@ header {
   align-items: center;
 }
 
+#loggedin {
+  justify-self: end;
+}
+
+#loggedin > * {
+  display: inline-block;
+}
+
+#loggedin > img {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+}
+
 main, header {
   padding: 1rem;
 }

@@ -70,7 +70,20 @@ function insertHeader() {
 
   header.appendChild(logoSection);
 
-  // logged in stuff here
+  let loggedinSection = document.createElement("section");
+  loggedinSection.id = "loggedin";
+  
+  let profileImg = document.createElement("img");
+  profileImg.src = "images/logo.png";
+  
+  let button = document.createElement("div");
+  button.classList.add("g-signin2");
+  button.setAttribute("data-onsuccess", "onSignIn");
+  
+  loggedinSection.appendChild(button);
+  loggedinSection.appendChild(profileImg);
+  
+  header.appendChild(loggedinSection);
 
   document.body.insertBefore(header, document.body.childNodes[0]);
 }
@@ -109,6 +122,7 @@ async function onSignIn(googleUser) {
       "token": idToken,
       "profile": profile,
     };
+    document.querySelector("#loggedin > img").src = profile.Paa;
   }
 }
 
