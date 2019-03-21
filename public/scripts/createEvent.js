@@ -6,7 +6,6 @@ let resetButton = document.getElementById("delbtn");
 resetButton.addEventListener("click", resetPress);
 
 function addEvent(e){
-  console.log("Hello");
   const NAME = document.getElementById("eventNameBox").value;
   const DATE = document.getElementById("dateBox").value;
   const ADDONE = document.getElementById("address1Box").value;
@@ -37,9 +36,17 @@ function addEvent(e){
     "eventType" : TYPE,
     "shopList" : items};
     //missing eventHost userID and something to send the date to
-    console.log(myEvent);
-    console.log(JSON.stringify(myEvent));
-    console.log("hello");
+    //console.log(myEvent);
+    //console.log(JSON.stringify(myEvent));
+    fetch("/createEvent", {
+        method: "POST",
+        //credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(myEvent), // body data type must match "Content-Type" header
+    })
+    //.then(response => response.json()); // parses JSON response into native Javascript objects
     sessionStorage.removeItem('thumb');
   }
   //e.preventDefault();

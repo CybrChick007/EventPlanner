@@ -32,16 +32,15 @@ function removeFromShopping(e){
 function upload(e){
   const MYIMAGE = e.target.files[0];
   const MYURL = URL.createObjectURL(MYIMAGE);
-  console.log(MYURL);
+  //console.log(MYURL);
   document.getElementById("thumbnail").src=MYURL;
   let file = MYIMAGE;
   let reader = new FileReader();
   reader.onloadend = function() {
     let result = reader.result;
     sessionStorage.setItem('thumb', result);
-    console.log('RESULT', result);
-    console.log('RESULT2', sessionStorage.getItem('thumb'));
+    //console.log('RESULT', result);
+    //console.log('RESULT2', sessionStorage.getItem('thumb'));
   }
   reader.readAsDataURL(file);
-  console.log("hi");
 }
