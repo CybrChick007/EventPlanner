@@ -1,7 +1,13 @@
-
 let results = document.getElementById("results");
 let currentData;
 
+/**
+ * Adds a `li` representing an event to the list of results.
+ * This includes a button that will call viewEvent with the given eventid.
+ * @param {string} title - Title to be displayed on the thumbnail.
+ * @param {integer} eventid - The id of the event this item is representing.
+ * @param {string} imageurl - The URL of the thumbnail image.
+ */
 function addEventToResults(title, eventid, imageurl) {
   let item = document.createElement("li");
   
@@ -29,6 +35,10 @@ function addEventToResults(title, eventid, imageurl) {
   
 }
 
+/**
+ * Sets the opacity and interactivity based on the visible param.
+ * @param {boolean} visible - Whether to show/hide the details popup.
+ */
 function setPopupVisibility(visible) {
   for (let elem of document.querySelectorAll(".popup-details")) {
     if (visible) {
@@ -41,6 +51,11 @@ function setPopupVisibility(visible) {
   }
 }
 
+/**
+ * If the user is logged in, and the details popup is populated with an event,
+ * a request is sent to the server with the google auth token to make the user
+ * join the event.
+ */
 async function joinEvent() {
   if (currentData && currentUser) {
     let response = await fetch("/joinEvent", {
@@ -62,6 +77,11 @@ async function joinEvent() {
   }
 }
 
+/**
+ * Will show and populate the event details popup with data returned from the server
+ * about the event with the given eventID.
+ * @param {integer} eventID - The id of the event to be detailed.
+ */
 async function viewEvent(eventID) {
   
   let response = await fetch("/getSingleEvent?eventID=" + eventID);
@@ -96,6 +116,9 @@ async function viewEvent(eventID) {
   
 }
 
+/**
+ * Gets the default events from the server and populates the search results.
+ */
 async function populateResults() {
   let response = await fetch("/displayEvents");
   let events = (await response.json()).eventList;
@@ -104,6 +127,9 @@ async function populateResults() {
   }
 }
 
+/**
+ * Gets all the types from the server and populates the type combo box.
+ */
 async function populateTypes() {
   
   let response = await fetch("/getTypes");

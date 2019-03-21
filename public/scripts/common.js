@@ -12,6 +12,9 @@ const logo_path = "images/logo.png";
 
 const googleClientId = "934035794483-hheclnb5qoh28b4n0ktilgm35160ue4u"
 
+/**
+ * Inserts elements into body to create the navbar.
+ */
 function insertNavbar() {
 
   let container = document.createElement("nav");
@@ -51,6 +54,9 @@ function insertNavbar() {
 
 }
 
+/**
+ * Inserts elements into body to create the header, consisting of the logo and google login button.
+ */
 function insertHeader() {
 
   let header = document.createElement("header");
@@ -88,6 +94,10 @@ function insertHeader() {
   document.body.insertBefore(header, document.body.childNodes[0]);
 }
 
+/**
+ * Shows/hides the navbar based on the visible boolean parameter.
+ * @param {boolean} visible - Whether the navbar should be visible or not.
+ */
 function setNavbarVisibility(visible) {
   let nav = document.querySelector("nav");
   let showbutton = document.getElementById("shownav");
@@ -104,6 +114,12 @@ function setNavbarVisibility(visible) {
 
 //FUNCTION FETCHING TO THE SERVER
 let currentUser;
+
+/**
+ * As specified by the google login button, the google platform api
+ * will call this function when the user logs in.
+ * @param {object} googleUser - User information provided by the google platform api.
+ */
 async function onSignIn(googleUser) {
   //console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
   idToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token;
@@ -126,6 +142,9 @@ async function onSignIn(googleUser) {
   }
 }
 
+/**
+ * Will sign the user out of the website.
+ */
 function signOut()
 {
   const auth2 = gapi.auth2.getAuthInstance();
@@ -146,7 +165,9 @@ function renderButton() {
   });
 }
 
-
+/**
+ * Sets up the common structure and functionality of the page.
+ */
 function setup() {
   insertHeader();
   insertNavbar();
