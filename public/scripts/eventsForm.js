@@ -34,10 +34,13 @@ function upload(e){
   const MYURL = URL.createObjectURL(MYIMAGE);
   console.log(MYURL);
   document.getElementById("thumbnail").src=MYURL;
-  var file = MYIMAGE;
-  var reader = new FileReader();
+  let file = MYIMAGE;
+  let reader = new FileReader();
   reader.onloadend = function() {
-    console.log('RESULT', reader.result)
+    let result = reader.result;
+    sessionStorage.setItem('thumb', result);
+    console.log('RESULT', result);
+    console.log('RESULT2', sessionStorage.getItem('thumb'));
   }
   reader.readAsDataURL(file);
   console.log("hi");
