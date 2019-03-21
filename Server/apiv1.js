@@ -2,6 +2,7 @@ const express = require('express');
 const mysql = require('mysql2/promise');
 const bodyParser = require('body-parser');
 const GoogleAuth = require('simple-google-openid');
+const cors = require('cors');
 
 const { Router } = require('express');
 const router = new Router();
@@ -23,6 +24,7 @@ router.get('/filterEvent', filterEvent);
 //post request
 
 router.use(bodyParser.json());
+router.use(cors());
 
 //localhost:8080/createEvent + body [see below in the function]
 router.post('/createEvent', GoogleAuth.guardMiddleware(), createEvent);
@@ -44,7 +46,7 @@ async function authorizeUser(req, res, next) {
     const sql = await sqlPromise;
     const query = `SELECT userID, email FROM user WHERE email = '${email}'`;
     const [rows] = await sql.execute(query);
-    console.log(email);
+    //console.log(email);
 
     if (rows.length == 0){
       const name   = email.substring(0, email.lastIndexOf("@"));
@@ -112,7 +114,9 @@ async function editEvent(req, res){
 }
 
 async function joinEvent(req, res){
-  console.log(req.body);
+  const sql = await sqlPromise;
+  const query = `INSERT INTO guestEvent VALUES('${req.body.userID}', '${req.body.eventID}')`;
+  return sql.execute(query);
 }
 
 async function deleteEvent(req, res){
@@ -122,7 +126,7 @@ async function deleteEvent(req, res){
 //LAVAN
 //event name, type, date
 async function filterEvent(req, res){
-  
+
 }
 
 //Eze
