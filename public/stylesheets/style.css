@@ -3,8 +3,9 @@
   --text-color: #FFFFFF;
   --theme-color: #834187;
   --theme-color-dark: #623165;
-  --button-color: #00CC00;
-  --warn-button-color: #CC0000;
+  --button-color: #00BB00;
+  --warn-button-color: #BB0000;
+  --disabled-button-color: #888888;
 }
 
 body {
@@ -49,7 +50,7 @@ main, header {
   padding: 1rem;
 }
 
-.button, .warn-button {
+.button, .warn-button, .disabled-button {
   background-color: var(--button-color);
   border-radius: 0.5rem;
   color: var(--text-color);
@@ -60,6 +61,11 @@ main, header {
 
 .warn-button {
   background-color: var(--warn-button-color);
+}
+
+.disabled-button {
+  background-color: var(--disabled-button-color);
+  cursor: auto;
 }
 
 .button:hover, .warn-button:hover {

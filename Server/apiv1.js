@@ -24,6 +24,7 @@ router.get('/auth/:email', authorizeUser);
 router.get('/displayEvents', displayEvent);
 router.get('/getSingleEvent', getSingleEvent);
 router.get('/getTypes', getTypes);
+router.get('/joinedEvent', joinedEvent);
 router.get('/filterEvent', filterEvent);
 
 //post request
@@ -115,11 +116,28 @@ async function editEvent(req, res){
 
 }
 
+async function joinedEvent(req, res){
+  const sql = await sqlPromise;
+  const query = `SELECT * FROM guestEvent WHERE guestUserID = ${req.query.userID} AND guestEventID = ${req.query.eventID}`;
+  const rows = await sql.execute(query);
+  console.log(rows);
+  res.json(rows[0].length > 0);
+}
+
 async function joinEvent(req, res){
-  console.log("AAAAAAAAAAAAA");
   const sql = await sqlPromise;
   const query = `INSERT INTO guestEvent VALUES('${req.body.userID}', '${req.body.eventID}')`;
-  return sql.execute(query);
+  try {
+    await sql.execute(query);
+  } catch (e) {
+    if (e.errno === 1062) {
+      res.sendStatus(403);
+    } else {
+      res.sendStatus(500);
+    }
+    return;
+  }
+  res.sendStatus(200);
 }
 
 async function deleteEvent(req, res){

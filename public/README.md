@@ -8,6 +8,7 @@ The common.js javascript file must be linked in a script tag at the bottom of ea
 In style.css, the following properties are defined for common use:
  - `button` class - green button
  - `warn-button` class - red button
+ - `disabled-button` class - grey button
 
 ## Tasks
 

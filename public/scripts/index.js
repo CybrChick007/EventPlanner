@@ -57,17 +57,46 @@ function setPopupVisibility(visible) {
 }
 
 /**
+ * Changes the attributes of a specific button given by an id using the parameters.
+ * @param {string} id - The id attribute of the HTML element to configure.
+ * @param {string} text - The string to set the textContent of the element to.
+ * @param {string} oldclass - The class name to be removed.
+ * @param {string} newclass - The class name to be added.
+ */
+function configureButton(id, text, oldclass, newclass) {
+  button = document.getElementById(id)
+  button.textContent = text;
+  if (oldclass !== undefined && newclass !== undefined) {
+    if (button.classList.contains(oldclass)) {
+      button.classList.remove(oldclass);
+    }
+    button.classList.add(newclass);
+  }
+}
+
+/**
+ * Sets the class of the join button to `button`, and the text to "JOIN" using configureButton.
+ */
+function enableJoinButton() {
+  configureButton("join", "JOIN", "disabled-button", "button");
+}
+
+/**
+ * Sets the class of the join button to `disable-button`, and the text to "JOINED" using configureButton.
+ */
+function disableJoinButton() {
+  configureButton("join", "JOINED", "button", "disabled-button");
+}
+
+/**
  * If the user is logged in, and the details popup is populated with an event,
  * a request is sent to the server with the google auth token to make the user
  * join the event.
  */
-async function joinEvent() {
-  if (currentData && currentUser) {
-    console.log("INSTANCE TOKEN VARIABLE: " + instanceToken.getAuthResponse().id_token);
+async function joinEvent(e) {
+  if (e.target.classList.contains("button") && currentData && currentUser) {
     let response = await fetch("/joinEvent", {
       method: "POST",
-      // mode: "cors",
-      // credentials: "same-origin",
       body: JSON.stringify({
         "userID": currentUser.user.userID,
         "eventID": currentData.event.eventID,
@@ -77,7 +106,9 @@ async function joinEvent() {
         "Authorization": "Bearer " + instanceToken.getAuthResponse().id_token,
       },
     });
-    if (!response.ok) {
+    if (response.ok) {
+      disableJoinButton();
+    } else {
       alert("Failed to join event: " + response.status);
     }
   }
@@ -113,6 +144,14 @@ async function viewEvent(eventID) {
       let elem = document.createElement("li");
       elem.textContent = item.eventItemName;
       list.appendChild(elem);
+    }
+    
+    let joinedResponse = await fetch(`/joinedEvent?userID=${currentUser.user.userID}&eventID=${event.eventID}`);
+    let joined = await joinedResponse.json();
+    if (joined) {
+      disableJoinButton();
+    } else {
+      enableJoinButton();
     }
 
     setPopupVisibility(true);
