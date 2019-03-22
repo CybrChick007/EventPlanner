@@ -15,29 +15,29 @@ let currentData;
  */
 function addEventToResults(title, eventid, imageurl) {
   let item = document.createElement("li");
-  
+
   let img = document.createElement("img");
   if (imageurl) {
     img.src = imageurl;
   }
-  
+
   let txt = document.createElement("p");
   txt.textContent = title;
-  
+
   let viewButton = document.createElement("button");
   viewButton.classList.add("button");
   viewButton.textContent = "VIEW";
-  
+
   viewButton.addEventListener("click", function (e) {
     viewEvent(eventid);
   })
-  
+
   item.appendChild(img);
   item.appendChild(txt);
   item.appendChild(viewButton);
-  
+
   results.appendChild(item);
-  
+
 }
 
 /**
@@ -63,17 +63,18 @@ function setPopupVisibility(visible) {
  */
 async function joinEvent() {
   if (currentData && currentUser) {
+    console.log("INSTANCE TOKEN VARIABLE: " + instanceToken.getAuthResponse().id_token);
     let response = await fetch("/joinEvent", {
       method: "POST",
-      mode: "cors",
-      credentials: "same-origin",
+      // mode: "cors",
+      // credentials: "same-origin",
       body: JSON.stringify({
         "userID": currentUser.user.userID,
         "eventID": currentData.event.eventID,
       }),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer " + currentUser.token,
+        "Authorization": "Bearer " + instanceToken.getAuthResponse().id_token,
       },
     });
     if (!response.ok) {
@@ -82,27 +83,28 @@ async function joinEvent() {
   }
 }
 
+
 /**
  * Will show and populate the event details popup with data returned from the server
  * about the event with the given eventID.
  * @param {integer} eventID - The id of the event to be detailed.
  */
 async function viewEvent(eventID) {
-  
+
   let response = await fetch("/getSingleEvent?eventID=" + eventID);
-  
+
   if (response.ok) {
-    
+
     let data = (await response.json());
     currentData = data;
     let event = data.event;
     let shoppingList = data.shoppingList;
-    
+
     document.getElementById("title").textContent = event.eventName + " - " + new Date(event.eventDate).toString();
     document.getElementById("address").textContent = "Address: " + event.eventAddress + ", " + event.eventPostcode;
     document.getElementById("description").textContent = event.eventDescription;
     document.querySelector("#details > img").src = event.eventURLImage;
-    
+
     let list = document.getElementById("shoppinglist");
     while (list.firstChild) {
       list.removeChild(list.firstChild);
@@ -112,13 +114,13 @@ async function viewEvent(eventID) {
       elem.textContent = item.eventItemName;
       list.appendChild(elem);
     }
-    
+
     setPopupVisibility(true);
-    
+
   } else {
     alert("Failed to get event from server: " + response.status);
   }
-  
+
 }
 
 /**
@@ -136,22 +138,22 @@ async function populateResults() {
  * Gets all the types from the server and populates the type combo box.
  */
 async function populateTypes() {
-  
+
   let response = await fetch("/getTypes");
-  
+
   if (response.ok) {
-    
+
     let types = await response.json();
-    
+
     let combo = document.getElementById("type");
     for (let type of types) {
       let item = document.createElement("option");
       item.textContent = type.typeName;
       combo.appendChild(item);
     }
-    
+
   }
-  
+
 }
 
 document.getElementById("join").addEventListener("click", joinEvent);

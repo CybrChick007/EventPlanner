@@ -14,7 +14,7 @@ const navbar = [
 
 const logo_path = "images/logo.png";
 
-const googleClientId = "934035794483-hheclnb5qoh28b4n0ktilgm35160ue4u"
+const googleClientId = "934035794483-hheclnb5qoh28b4n0ktilgm35160ue4u.apps.googleusercontent.com"
 
 /**
  * Inserts elements into body to create the navbar.
@@ -116,35 +116,36 @@ function setNavbarVisibility(visible) {
   }
 }
 
-//FUNCTION FETCHING TO THE SERVER
 let currentUser;
-
+let instanceToken;
 /**
  * As specified by the google login button, the google platform api
  * will call this function when the user logs in.
  * @param {object} googleUser - User information provided by the google platform api.
  */
-async function onSignIn(googleUser) {
-  //console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
-  idToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token;
-  profile = googleUser.getBasicProfile();
-  console.log(profile.U3);
+ //FUNCTION FETCHING TO THE SERVER
 
-  const response = await fetch('http://localhost:8080/auth/' + profile.U3);
-  const data = await response.json();
-  //console.log(data);
-  if(data.message == 'Not authorized'){
-    alert('Not authorized');
-    signOut();
-  } else {
-    currentUser = {
-      "user": data.user,
-      "token": idToken,
-      "profile": profile,
-    };
-    document.querySelector("#loggedin > img").src = profile.Paa;
-  }
-}
+ async function onSignIn(googleUser) {
+   //console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+   instanceToken = googleUser;
+   profile = googleUser.getBasicProfile();
+   console.log(profile.U3);
+
+   const response = await fetch('http://localhost:8080/auth/' + profile.U3);
+   const data = await response.json();
+   //console.log(data);
+   if(data.message == 'Not authorized'){
+     alert('Not authorized');
+     signOut();
+   } else {
+     currentUser = {
+       "user": data.user,
+       //"token": idToken,
+       "profile": profile
+     };
+     document.querySelector("#loggedin > img").src = profile.Paa;
+   }
+ }
 
 /**
  * Will sign the user out of the website.
@@ -178,7 +179,7 @@ function setup() {
 
   let meta = document.createElement("meta");
   meta.name = "google-signin-client_id";
-  meta.content = googleClientId + ".apps.googleusercontent.com";
+  meta.content = googleClientId;
   document.head.appendChild(meta);
 
 }

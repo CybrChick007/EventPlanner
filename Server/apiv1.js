@@ -8,13 +8,18 @@ const { Router } = require('express');
 const router = new Router();
 
 const config = require('./config');
-//const util = require('./util');
-
 const sqlPromise = mysql.createConnection(config.mysql);
 
-//get request
+// router.use((req,res,next) => {
+//   console.log("headers", req.headers);
+//   next();
+// });
 
-//localhost:8080/auth + param
+//middleware
+router.use(bodyParser.json());
+router.use(cors());
+
+//get request
 router.get('/auth/:email', authorizeUser);
 router.get('/displayEvents', displayEvent);
 router.get('/getSingleEvent', getSingleEvent);
@@ -22,10 +27,6 @@ router.get('/getTypes', getTypes);
 router.get('/filterEvent', filterEvent);
 
 //post request
-
-router.use(bodyParser.json());
-router.use(cors());
-
 //localhost:8080/createEvent + body [see below in the function]
 router.post('/createEvent', GoogleAuth.guardMiddleware(), createEvent);
 
@@ -38,6 +39,8 @@ router.post('/joinEvent', GoogleAuth.guardMiddleware(), joinEvent);
 //localhost:8080/deleteEvent + body [eventID]
 router.post('/deleteEvent', GoogleAuth.guardMiddleware(), deleteEvent);
 // add display event
+
+//functions
 
 async function authorizeUser(req, res, next) {
   try{
@@ -54,8 +57,10 @@ async function authorizeUser(req, res, next) {
       if(domain != 'myport.ac.uk')
         res.send({ message: 'Not authorized' }); //NOT AUTHORIZED
       else { //REGISTER
-        const query = `INSERT INTO user VALUES (NULL, '${email}')`;
+        console.log("registering");
+        const query = `INSERT INTO user VALUES (NULL, '${email}', NULL, NULL, 21, NULL)`;
         const [rows] = await sql.execute(query);
+        //res.send({ message: 'Registration successful!' });
       }
     } else {
       const user = rows[0];
@@ -68,8 +73,10 @@ async function authorizeUser(req, res, next) {
 
 async function createEvent(req, res){
   try {
+    console.log(req.body);
         const sql = await sqlPromise;
-        const query = `INSERT event SET
+        const query = `INSERT INTO event VALUES(
+         eventID = NULL,
          eventName = '${req.body.eventName}',
          eventAddress = '${req.body.eventAddress}',
          eventPostcode = '${req.body.eventPostcode}',
@@ -77,7 +84,7 @@ async function createEvent(req, res){
          eventPublic = '${req.body.eventPublic}',
          eventURLImage = '${req.body.eventURLImage}',
          eventType = '${req.body.eventType}',
-         eventDate = '${req.body.eventDate}'`;
+         eventDate = '${req.body.eventDate}')`;
 
         return sql.execute(query);
 
@@ -109,6 +116,7 @@ async function editEvent(req, res){
 }
 
 async function joinEvent(req, res){
+  console.log("AAAAAAAAAAAAA");
   const sql = await sqlPromise;
   const query = `INSERT INTO guestEvent VALUES('${req.body.userID}', '${req.body.eventID}')`;
   return sql.execute(query);

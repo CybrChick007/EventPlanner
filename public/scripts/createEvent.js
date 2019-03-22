@@ -28,13 +28,15 @@ function addEvent(e){
     //local to the machine it is on so the server wouldn't be able to access it
     let myEvent = {"eventName" : NAME,
     //"eventDate" : DATE,
-    "eventAddress" : ADDONE + "," + ADDTWO + "," + ADDTHREE,
+    "eventAddress" : ADDONE, //+ "," + ADDTWO + "," + ADDTHREE,
     "eventPostcode" : POST,
     "eventPublic" : STATUS,
     "eventURLImage" : THUMB,
     "eventDressCode" : DRESS,
     "eventType" : TYPE,
-    "shopList" : items};
+    "shopList" : items,
+    "eventDate": DATE
+  };
     //missing eventHost userID and something to send the date to
     //console.log(myEvent);
     //console.log(JSON.stringify(myEvent));
