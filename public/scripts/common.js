@@ -84,7 +84,7 @@ function insertHeader() {
   loggedinSection.id = "loggedin";
 
   let profileImg = document.createElement("img");
-  profileImg.src = "images/logo.png";
+  profileImg.src = "images/unknown.png";
 
   let button = document.createElement("div");
   button.classList.add("g-signin2");
