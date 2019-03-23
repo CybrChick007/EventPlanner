@@ -74,27 +74,28 @@ async function authorizeUser(req, res, next) {
 
 async function createEvent(req, res){
   try {
-    console.log(req.body);
-    console.log(req.body.eventType);
+    const RND = Math.random() * (999999 - 100000) + 100000;
+    console.log(RND);
         const sql = await sqlPromise;
         const query = `INSERT INTO event VALUES(
-         NULL,
+          ${RND},
          '${req.body.eventName}',
          '${req.body.eventAddress}',
          '${req.body.eventPostcode}',
          '${req.body.eventDressCode}',
          '${req.body.eventPublic}',
          '${req.body.eventURLImage}',
-         ${req.body.eventType},
-         ${req.body.eventHostID},
+          ${req.body.eventType},
+          ${req.body.eventHostID},
          '${req.body.eventDate}')`;
 
+    sql.execute(query);
 
-      //const query =  `INSERT INTO event VALUES( eventID = NULL, eventName = 'yoooo', eventAddress = 'yoooo', eventPostcode = 'yoooo', eventDressCode = 'yoooo', eventPublic = 0, eventURLImage = 'yoooo', eventType = 2, eventHost = 1, eventDate = '2019-05-01')`;
-
-                 return sql.execute(query);
-    //INSERT INTO shoppingListItem TABLE! USING THE EVENTID JUST CREATED
     const shopList = req.body.shopList; ////TODO: be converted in list
+    shopList.forEach(function (item) {
+      const query = `INSERT INTO shoppinglistitem VALUES('${item}', ${RND}, NULL)`;
+      sql.execute(query);
+    });
 
   }catch (e) {
     console.error(e);
