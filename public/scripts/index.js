@@ -192,6 +192,7 @@ async function populateTypes() {
     for (let type of types) {
       let item = document.createElement("option");
       item.textContent = type.typeName;
+      item.value = type.typeID;
       combo.appendChild(item);
     }
 
