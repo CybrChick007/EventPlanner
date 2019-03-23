@@ -158,7 +158,12 @@ async function filterEvent(req, res){
   try{
     console.log(req.query.eventName + " " + req.query.eventType);
     const sql = await sqlPromise;
-    const query = `SELECT * FROM event WHERE eventName = '${req.query.eventName}' OR eventType = ${req.query.eventType} GROUP BY eventID`;
+    let query;
+    if (req.query.eventType) {
+      query = `SELECT * FROM event WHERE eventName LIKE '%${req.query.eventName}%' AND eventType = ${req.query.eventType} GROUP BY eventID ORDER BY eventDate ASC LIMIT 33`;
+    } else {
+      query = `SELECT * FROM event WHERE eventName LIKE '%${req.query.eventName}%' GROUP BY eventID ORDER BY eventDate ASC LIMIT 33`;
+    }
     const [rows] = await sql.execute(query);
     console.log([rows]);
     const eventList = rows.map(row => {
@@ -178,6 +183,7 @@ async function filterEvent(req, res){
       res.send({eventList});
     }
     catch (e) {
+      console.error(e);
       res.sendStatus(500);
       return;
     }

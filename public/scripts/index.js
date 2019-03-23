@@ -168,6 +168,15 @@ async function viewEvent(eventID) {
 }
 
 /**
+ * Removes all the search results 
+ */
+function clearResults() {
+  while (results.firstChild) {
+    results.removeChild(results.firstChild);
+  };
+}
+
+/**
  * Gets the default events from the server and populates the search results.
  */
 async function populateResults() {
@@ -179,20 +188,24 @@ async function populateResults() {
 }
 
 /**
- * Gets the events with specific name or specific type, based on user choice
+ * Gets the events with specific name and specific type, based on user choice
  */
 async function populateFilteredResults() {
-  document.getElementById("results").innerHTML = '';
-  const NAME = document.getElementById("search").value;
-  let type = document.getElementById("type");
-  type = document.getElementById("type").options[type.selectedIndex].value;
-  let response = await fetch("/filterEvent?eventName=" + NAME + "&eventType=" + type);
-
+  const searchbox = document.getElementById("search");
+  const combo = document.getElementById("type");
+  
+  let request = "/filterEvent?eventName=" + searchbox.value;
+  if (combo.value != -1) {
+    request += "&eventType=" + combo.value;
+  }
+  
+  let response = await fetch(request);
   let filteredEvents = (await response.json()).eventList;
+  
+  clearResults();
   for (let event of filteredEvents) {
     addEventToResults(event.eventName, event.eventID, event.eventURLImage);
   }
-  return false;
 }
 
 /**
@@ -207,6 +220,11 @@ async function populateTypes() {
     let types = await response.json();
 
     let combo = document.getElementById("type");
+    let item = document.createElement("option");
+    item.textContent = "Any";
+    item.value = -1;
+    combo.appendChild(item);
+    
     for (let type of types) {
       let item = document.createElement("option");
       item.textContent = type.typeName;
@@ -218,10 +236,16 @@ async function populateTypes() {
 
 }
 
+document.getElementById("searchbutton").addEventListener("click", populateFilteredResults);
+document.getElementById("search").addEventListener("keyup", function (e) {
+  if (e.keyCode === 13) {
+    populateFilteredResults();
+  }
+});
 document.getElementById("join").addEventListener("click", joinEvent);
 document.getElementById("close").addEventListener("click", function (e) {
   setPopupVisibility(false);
-})
+});
 
 populateResults();
 populateTypes();
