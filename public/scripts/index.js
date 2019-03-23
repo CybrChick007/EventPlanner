@@ -138,6 +138,7 @@ async function viewEvent(eventID) {
     document.getElementById("title").textContent = event.eventName + " - " + new Date(event.eventDate).toString();
     document.getElementById("address").textContent = "Address: " + event.eventAddress + ", " + event.eventPostcode;
     document.getElementById("description").textContent = event.eventDescription;
+    document.getElementById("dresscode").textContent = event.eventDressCode;
     document.querySelector("#details > img").src = event.eventURLImage;
 
     let list = document.getElementById("shoppinglist");

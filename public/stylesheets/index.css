@@ -59,6 +59,14 @@
   max-height: 200px;
 }
 
+#details > #smalldetails {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: repeat(2, auto);
+  justify-items: start;
+}
+
 #results {
   overflow-y: scroll;
   overflow-x: hidden;
