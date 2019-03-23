@@ -122,6 +122,10 @@ async function joinEvent(e) {
  */
 async function viewEvent(eventID) {
 
+  if(currentUser === undefined){
+    alert("Not signed in!");
+    return;
+  }
   let response = await fetch("/getSingleEvent?eventID=" + eventID);
 
   if (response.ok) {
@@ -145,7 +149,7 @@ async function viewEvent(eventID) {
       elem.textContent = item.eventItemName;
       list.appendChild(elem);
     }
-    
+
     let joinedResponse = await fetch(`/joinedEvent?userID=${currentUser.user.userID}&eventID=${event.eventID}`);
     let joined = await joinedResponse.json();
     if (joined) {
