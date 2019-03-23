@@ -50,6 +50,7 @@ function addEvent(e){
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + instanceToken.getAuthResponse().id_token,
         },
         body: JSON.stringify(myEvent), // body data type must match "Content-Type" header
     })

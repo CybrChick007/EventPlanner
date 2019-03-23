@@ -54,8 +54,7 @@ async function authorizeUser(req, res, next) {
       res.send({ user }); //LOG IN
     }
   }catch (e) {
-    if (e.errno === 1062) res.sendStatus(403);
-    else res.sendStatus(500);
+    res.sendStatus(500);
     return;
   }
 }
@@ -86,8 +85,7 @@ async function createEvent(req, res){
     });
 
   }catch (e) {
-    if (e.errno === 1062) res.sendStatus(403);
-    else res.sendStatus(500);
+    res.sendStatus(500);
     return;
 }
 }
@@ -111,8 +109,7 @@ async function editEvent(req, res){
       return sql.execute(query);
   }
   catch (e) {
-    if (e.errno === 1062) res.sendStatus(403);
-    else res.sendStatus(500);
+    res.sendStatus(500);
     return;
   }
 
@@ -127,8 +124,7 @@ async function joinedEvent(req, res){
     res.json(rows[0].length > 0);
   }
   catch(e){
-    if (e.errno === 1062) res.sendStatus(403);
-    else res.sendStatus(500);
+    res.sendStatus(500);
     return;
   }
 }
@@ -152,7 +148,6 @@ async function deleteEvent(req, res){
     const drop = `DELETE FROM event WHERE eventID = ${req.query.eventID}`;
     await sql.execute(drop);
   }catch(e){
-    if (e.errno === 1062) res.sendStatus(403);
     else res.sendStatus(500);
     return;
   }
@@ -202,8 +197,7 @@ async function displayEvent(req, res, next){
     res.send({eventList, allItemShoppingList});
     }
     catch (e) {
-      if (e.errno === 1062) res.sendStatus(403);
-      else res.sendStatus(500);
+      res.sendStatus(500);
       return;
     }
 }
@@ -215,8 +209,7 @@ async function getTypes(req, res, next){
     const types = (await sql.execute(query))[0];
     res.send(types);
   }catch (e) {
-    if (e.errno === 1062) res.sendStatus(403);
-    else res.sendStatus(500);
+    res.sendStatus(500);
     return;
   }
 }
@@ -230,8 +223,7 @@ async function getSingleEvent(req, res, next){
     const shoppingList = (await sql.execute(query2))[0];
     res.send({event, shoppingList});
   }catch (e) {
-    if (e.errno === 1062) res.sendStatus(403);
-    else res.sendStatus(500);
+    res.sendStatus(500);
     return;
   }
 }
