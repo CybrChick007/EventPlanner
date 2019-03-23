@@ -10,11 +10,6 @@ const router = new Router();
 const config = require('./config');
 const sqlPromise = mysql.createConnection(config.mysql);
 
-// router.use((req,res,next) => {
-//   console.log("headers", req.headers);
-//   next();
-// });
-
 //middleware
 router.use(bodyParser.json());
 router.use(cors());
@@ -28,21 +23,12 @@ router.get('/joinedEvent', joinedEvent);
 router.get('/filterEvent', filterEvent);
 
 //post request
-//localhost:8080/createEvent + body [see below in the function]
 router.post('/createEvent', GoogleAuth.guardMiddleware(), createEvent);
-
-//localhost:8080/editEvent + body [same body as createEvent]
 router.post('/editEvent', GoogleAuth.guardMiddleware(), editEvent);
-
-//localhost:8080/joinEvent + body [userID, eventID]
 router.post('/joinEvent', GoogleAuth.guardMiddleware(), joinEvent);
-
-//localhost:8080/deleteEvent + body [eventID]
 router.post('/deleteEvent', GoogleAuth.guardMiddleware(), deleteEvent);
-// add display event
 
 //functions
-
 async function authorizeUser(req, res, next) {
   try{
     const email = req.params.email;
