@@ -29,7 +29,7 @@ router.get('/filterEvent', filterEvent);
 
 //post request
 //localhost:8080/createEvent + body [see below in the function]
-router.post('/createEvent', GoogleAuth.guardMiddleware(), createEvent);
+router.post('/createEvent',  createEvent);
 
 //localhost:8080/editEvent + body [same body as createEvent]
 router.post('/editEvent', GoogleAuth.guardMiddleware(), editEvent);
@@ -75,22 +75,24 @@ async function authorizeUser(req, res, next) {
 async function createEvent(req, res){
   try {
     console.log(req.body);
+    console.log(req.body.eventType);
         const sql = await sqlPromise;
         const query = `INSERT INTO event VALUES(
-         eventID = NULL,
-         eventName = '${req.body.eventName}',
-         eventAddress = '${req.body.eventAddress}',
-         eventPostcode = '${req.body.eventPostcode}',
-         eventDressCode = '${req.body.eventDressCode}',
-         eventPublic = '${req.body.eventPublic}',
-         eventURLImage = '${req.body.eventURLImage}',
-         eventType = '${req.body.eventType}',
-         eventDate = '${req.body.eventDate}')`;
-
-        return sql.execute(query);
-
+         NULL,
+         '${req.body.eventName}',
+         '${req.body.eventAddress}',
+         '${req.body.eventPostcode}',
+         '${req.body.eventDressCode}',
+         '${req.body.eventPublic}',
+         '${req.body.eventURLImage}',
+         ${req.body.eventType},
+         ${req.body.eventHostID},
+         '${req.body.eventDate}')`;
 
 
+      //const query =  `INSERT INTO event VALUES( eventID = NULL, eventName = 'yoooo', eventAddress = 'yoooo', eventPostcode = 'yoooo', eventDressCode = 'yoooo', eventPublic = 0, eventURLImage = 'yoooo', eventType = 2, eventHost = 1, eventDate = '2019-05-01')`;
+
+                 return sql.execute(query);
     //INSERT INTO shoppingListItem TABLE! USING THE EVENTID JUST CREATED
     const shopList = req.body.shopList; ////TODO: be converted in list
 

@@ -6,22 +6,30 @@ let resetButton = document.getElementById("delbtn");
 resetButton.addEventListener("click", resetPress);
 
 function addEvent(e){
+  if(currentUser === undefined){
+    alert("Not signed in!");
+    return;
+  }
+  alert("hey");
   const NAME = document.getElementById("eventNameBox").value;
   const DATE = document.getElementById("dateBox").value;
   const ADDONE = document.getElementById("address1Box").value;
   const ADDTHREE = document.getElementById("address3Box").value;
   const POST = document.getElementById("postcodeBox").value;
-  console.log(DATE);
   if (NAME != "" && DATE != "" && ADDONE != "" && ADDTHREE != "" && POST != "") {
     const ADDTWO = document.getElementById("address2Box").value;
-    const TYPE = document.getElementById("typeSelect").value;
+    let type = document.getElementById("typeSelect");
+    type = document.getElementById("typeSelect").options[type.selectedIndex].value;
+    //type = document.getElementById("StatusSelect").options[type.selectedIndex].value;
     let shoppingList = document.getElementById("shoppingSelect");
-    let items = shoppingList.children;
-    for (let i = 0; i < items.length; i++) {
-      items[i] = items[i].value;
+    let items = [];
+    for (let i = 0; i < shoppingList.length; i++) {
+      //console.log(shoppingList[i].innerText);
+      items[i] = shoppingList[i].innerText;
     }
     const DRESS = document.getElementById("dressCodeBox").value;
-    const STATUS = document.getElementById("StatusSelect").value;
+    let status = document.getElementById("StatusSelect");
+    status = document.getElementById("StatusSelect").options[status.selectedIndex].value;
     const THUMB = sessionStorage.getItem('thumb');
     console.log(THUMB);
     //URL.createObjectURL(THUMB) cannot be sent this way as the url it creates is very tempoary and
@@ -30,19 +38,16 @@ function addEvent(e){
     //"eventDate" : DATE,
     "eventAddress" : ADDONE, //+ "," + ADDTWO + "," + ADDTHREE,
     "eventPostcode" : POST,
-    "eventPublic" : STATUS,
+    "eventPublic" : status,
     "eventURLImage" : THUMB,
     "eventDressCode" : DRESS,
-    "eventType" : TYPE,
+    "eventType" : type,
     "shopList" : items,
+    "eventHostID" :  currentUser.user.userID,
     "eventDate": DATE
   };
-    //missing eventHost userID and something to send the date to
-    //console.log(myEvent);
-    //console.log(JSON.stringify(myEvent));
     fetch("/createEvent", {
         method: "POST",
-        //credentials: "same-origin", // include, *same-origin, omit
         headers: {
             "Content-Type": "application/json",
         },
@@ -51,7 +56,8 @@ function addEvent(e){
     //.then(response => response.json()); // parses JSON response into native Javascript objects
     sessionStorage.removeItem('thumb');
   }
-  //e.preventDefault();
+  e.preventDefault();
+  document.getElementById("formGrid").reset();
 }
 
 function resetPress(e){
