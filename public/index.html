@@ -3,80 +3,81 @@
 <head>
   <meta charset="utf-8">
   <title>EventZ</title>
-  
+
   <link rel="stylesheet" href="stylesheets/style.css">
   <link rel="stylesheet" href="stylesheets/index.css">
-  
+
 </head>
 
 <body>
-  
+
   <main>
-    
+
     <form>
       <input type="text" id=search placeholder="Search Events"></input>
       <select id=type>
         <!-- options generated here -->
       </select>
-      <input type="submit" value="SEARCH" class=button>
+      <!--  <input type="submit" value="SEARCH" class=button>-->
+      <button value="SEARCH" type="button" class=button onclick="populateFilteredResults()">SEARCH</button>
     </form>
-    
+
     <div id=container>
-    
+
       <button class="warn-button popup-details" id=close>CLOSE</button>
       <button class="button popup-details" id=join>JOIN</button>
-    
+
       <div id=details class="popup-details">
-      
+
         <img src="" alt="An image depicting the event.">
-        
+
         <section>
           <h1 id=title>
             EVENT TITLE - DATE
           </h1>
-          
+
           <p id=address>
-            ADDRESS: 
+            ADDRESS:
           </p>
-          
+
           <p id=description>
           </p>
         </section>
-        
+
         <div id="map"></div>
-      
+
         <section>
           <p>
             SHOPPING LIST:
           </p>
-          
+
           <ul id=shoppinglist>
           </ul>
         </section>
-        
+
         <div id="smalldetails">
           <section>
             <p>
               DRESS CODE:
             </p>
-            
+
             <p id=dresscode>
             </p>
           </section>
-          
+
           <section>
             <p>
               DEALS:
             </p>
-            
+
             <ul id=deals>
             </ul>
           </section>
         </div>
       </div>
-      
+
       <ol id=results>
-        
+
         <!-- result structure
         <li>
           <img src="https://via.placeholder.com/200x100">
@@ -86,15 +87,15 @@
           <button class=button>VIEW</button>
         </li>
         -->
-        
+
       </ol>
     </div>
-    
+
   </main>
-  
+
   <script src="https://maps.googleapis.com/maps/api/js" async defer></script>
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script src="scripts/common.js"></script>
   <script src="scripts/index.js"></script>
-  
+
 </body>

@@ -148,16 +148,39 @@ async function deleteEvent(req, res){
     const drop = `DELETE FROM event WHERE eventID = ${req.query.eventID}`;
     await sql.execute(drop);
   }catch(e){
-    else res.sendStatus(500);
+    res.sendStatus(500);
     return;
   }
   res.sendStatus(200);
 }
 
-//LAVAN
-//event name, type, date
 async function filterEvent(req, res){
-
+  try{
+    console.log(req.query.eventName + " " + req.query.eventType);
+    const sql = await sqlPromise;
+    const query = `SELECT * FROM event WHERE eventName = '${req.query.eventName}' OR eventType = ${req.query.eventType} GROUP BY eventID`;
+    const [rows] = await sql.execute(query);
+    console.log([rows]);
+    const eventList = rows.map(row => {
+        return {
+          eventID: row.eventID,
+          eventName: row.eventName,
+          eventAddress: row.eventAddress,
+          eventPostcode: row.eventPostcode,
+          eventDressCode: row.eventDressCode,
+          eventPublic: row.eventPublic, //IF FALSE, DISPLAY ONLY IF USER IS INVITED
+          eventURLImage: row.eventURLImage,
+          eventType: row.eventType,
+          eventHost: row.eventHost,
+          eventDate: row.eventDate
+        };
+      });
+      res.send({eventList});
+    }
+    catch (e) {
+      res.sendStatus(500);
+      return;
+    }
 }
 
 //Eze

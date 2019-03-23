@@ -179,6 +179,23 @@ async function populateResults() {
 }
 
 /**
+ * Gets the events with specific name or specific type, based on user choice
+ */
+async function populateFilteredResults() {
+  document.getElementById("results").innerHTML = '';
+  const NAME = document.getElementById("search").value;
+  let type = document.getElementById("type");
+  type = document.getElementById("type").options[type.selectedIndex].value;
+  let response = await fetch("/filterEvent?eventName=" + NAME + "&eventType=" + type);
+
+  let filteredEvents = (await response.json()).eventList;
+  for (let event of filteredEvents) {
+    addEventToResults(event.eventName, event.eventID, event.eventURLImage);
+  }
+  return false;
+}
+
+/**
  * Gets all the types from the server and populates the type combo box.
  */
 async function populateTypes() {
