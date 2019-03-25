@@ -90,10 +90,9 @@ function insertHeader() {
   button.classList.add("g-signin2");
   button.setAttribute("data-onsuccess", "onSignIn");
 
-  let buttonSignOut = document.createElement("a");
-  buttonSignOut.href = "#";
-  buttonSignOut.id = "signoutlink";
-  buttonSignOut.textContent = "Sign Out!";
+  let buttonSignOut = document.createElement("button");
+  buttonSignOut.id = "signOutButton";
+  buttonSignOut.textContent = "Sign Out from EventZ";
   buttonSignOut.style.display = "none";
   buttonSignOut.setAttribute("onclick", "signOut()");
 
@@ -152,7 +151,8 @@ let instanceToken;
        "profile": profile
      };
      document.querySelector("#loggedin > img").src = profile.Paa;
-     document.getElementById("signoutlink").style.display = "block";
+     document.getElementById("signOutButton").style.display = "block";
+     document.getElementsByClassName('g-signin2')[0].style.display = "none";
    }
  }
 
@@ -165,7 +165,8 @@ function signOut()
   auth2.signOut().then(function() {
     alert("You have been logged out");
     document.querySelector("#loggedin > img").src  = "images/unknown.png";
-    document.getElementById("signoutlink").style.display = "none";
+    document.getElementById("signOutButton").style.display = "none";
+    document.getElementsByClassName('g-signin2')[0].style.display = "block";
   });
 }
 //display only for google button
