@@ -19,6 +19,9 @@ const googleClientId = "934035794483-hheclnb5qoh28b4n0ktilgm35160ue4u.apps.googl
 const loginPage = "login.html";
 
 function redirectLogin() {
+  if (sessionStorage.getItem("loggedin") == null) {
+    sessionStorage.setItem("loggedin", false);
+  }
   if (!window.location.href.endsWith(loginPage) && sessionStorage.getItem("loggedin") == "false") {
     window.location.replace(loginPage);
   }
@@ -161,7 +164,6 @@ async function onSignIn(googleUser) {
      document.getElementById("signOutButton").style.display = "block";
      document.getElementsByClassName('g-signin2')[0].style.display = "none";
      if (window.location.href.endsWith(loginPage)) {
-       console.log("ARGHHHHHGHHHH");
        window.location.replace("index.html");
      }
    }
@@ -203,7 +205,6 @@ function setup() {
   if (!window.location.href.endsWith(loginPage)) {
     insertNavbar();
   } else {
-    console.log("blerk");
     document.body.style["padding-left"] = "0";
   }
 
