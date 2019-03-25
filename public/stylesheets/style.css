@@ -128,7 +128,7 @@ nav > ol > a {
 }
 
 #signOutButton {
-  height: 6vh;
+  height: 2rem;
   border-width: 0;
   background: white;
   color: #737373;
@@ -139,13 +139,12 @@ nav > ol > a {
   transition-duration: 150ms;
   transition-timing-function: ease-in-out;
   padding: 0;
-
+  cursor: pointer;
 
 
   display: inline-block;
   vertical-align: middle;
   padding: 0 5vh;
-  font-size: 2vh;
   font-weight: bold;
   /*font-family: 'Roboto',arial,sans-serif;*/
 }

@@ -2,7 +2,7 @@
  * Contains functions that will be used accross multiple webpages.
  * @module public/scripts/common
  */
-
+ 
 const navbar = [
   ["HOME", "index.html"],
   ["CREATE EVENT", "create-event.html"],
@@ -14,7 +14,15 @@ const navbar = [
 
 const logo_path = "images/logo.png";
 
-const googleClientId = "934035794483-hheclnb5qoh28b4n0ktilgm35160ue4u.apps.googleusercontent.com"
+const googleClientId = "934035794483-hheclnb5qoh28b4n0ktilgm35160ue4u.apps.googleusercontent.com";
+
+const loginPage = "login.html";
+
+function redirectLogin() {
+  if (!window.location.href.endsWith(loginPage) && sessionStorage.getItem("loggedin") == "false") {
+    window.location.replace(loginPage);
+  }
+}
 
 /**
  * Inserts elements into body to create the navbar.
@@ -130,9 +138,7 @@ let instanceToken;
  * will call this function when the user logs in.
  * @param {object} googleUser - User information provided by the google platform api.
  */
- //FUNCTION FETCHING TO THE SERVER
-
- async function onSignIn(googleUser) {
+async function onSignIn(googleUser) {
    //console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
    instanceToken = googleUser;
    profile = googleUser.getBasicProfile();
@@ -150,9 +156,14 @@ let instanceToken;
        //"token": idToken,
        "profile": profile
      };
+     sessionStorage.setItem("loggedin", true);
      document.querySelector("#loggedin > img").src = profile.Paa;
      document.getElementById("signOutButton").style.display = "block";
      document.getElementsByClassName('g-signin2')[0].style.display = "none";
+     if (window.location.href.endsWith(loginPage)) {
+       console.log("ARGHHHHHGHHHH");
+       window.location.replace("index.html");
+     }
    }
  }
 
@@ -167,6 +178,8 @@ function signOut()
     document.querySelector("#loggedin > img").src  = "images/unknown.png";
     document.getElementById("signOutButton").style.display = "none";
     document.getElementsByClassName('g-signin2')[0].style.display = "block";
+    sessionStorage.setItem("loggedin", false);
+    redirectLogin();
   });
 }
 //display only for google button
@@ -187,7 +200,12 @@ function renderButton() {
  */
 function setup() {
   insertHeader();
-  insertNavbar();
+  if (!window.location.href.endsWith(loginPage)) {
+    insertNavbar();
+  } else {
+    console.log("blerk");
+    document.body.style["padding-left"] = "0";
+  }
 
   let meta = document.createElement("meta");
   meta.name = "google-signin-client_id";
@@ -196,4 +214,5 @@ function setup() {
 
 }
 
+redirectLogin();
 setup();

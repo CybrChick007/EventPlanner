@@ -206,6 +206,7 @@ async function populateFilteredResults() {
   for (let event of filteredEvents) {
     addEventToResults(event.eventName, event.eventID, event.eventURLImage);
   }
+  setPopupVisibility(false);
 }
 
 /**
@@ -236,26 +237,30 @@ async function populateTypes() {
 
 }
 
-document.getElementById("searchbutton").addEventListener("click", populateFilteredResults);
-document.getElementById("search").addEventListener("keyup", function (e) {
-  if (e.keyCode === 13) {
-    populateFilteredResults();
-  }
-});
-document.getElementById("join").addEventListener("click", joinEvent);
-document.getElementById("close").addEventListener("click", function (e) {
-  setPopupVisibility(false);
-});
-
-populateResults();
-populateTypes();
-
-// temporary map
-window.addEventListener("load", function() {
-  //setPopupVisibility(true);
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: {lat: 0, lng: 0},
-    zoom: 8,
-    disableDefaultUI: true
+function setup() {
+  document.getElementById("searchbutton").addEventListener("click", populateFilteredResults);
+  document.getElementById("search").addEventListener("keyup", function (e) {
+    if (e.keyCode === 13) {
+      populateFilteredResults();
+    }
   });
-});
+  document.getElementById("join").addEventListener("click", joinEvent);
+  document.getElementById("close").addEventListener("click", function (e) {
+    setPopupVisibility(false);
+  });
+
+  populateResults();
+  populateTypes();
+
+  // temporary map
+  window.addEventListener("load", function() {
+    //setPopupVisibility(true);
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: {lat: 0, lng: 0},
+      zoom: 8,
+      disableDefaultUI: true
+    });
+  });
+}
+
+setup();
