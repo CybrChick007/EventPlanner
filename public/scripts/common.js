@@ -90,7 +90,13 @@ function insertHeader() {
   button.classList.add("g-signin2");
   button.setAttribute("data-onsuccess", "onSignIn");
 
+  let buttonSignOut = document.createElement("a");
+  buttonSignOut.href = "#";
+  buttonSignOut.textContent = "Sign Out!";
+  buttonSignOut.setAttribute("onclick", "signOut()");
+
   loggedinSection.appendChild(button);
+  loggedinSection.appendChild(buttonSignOut);
   loggedinSection.appendChild(profileImg);
 
   header.appendChild(loggedinSection);
@@ -155,6 +161,7 @@ function signOut()
   const auth2 = gapi.auth2.getAuthInstance();
   auth2.signOut().then(function() {
     alert("You have been logged out");
+    document.querySelector("#loggedin > img").src  = "images/unknown.png";
   });
 }
 //display only for google button
