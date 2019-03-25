@@ -92,7 +92,9 @@ function insertHeader() {
 
   let buttonSignOut = document.createElement("a");
   buttonSignOut.href = "#";
+  buttonSignOut.id = "signoutlink";
   buttonSignOut.textContent = "Sign Out!";
+  buttonSignOut.style.display = "none";
   buttonSignOut.setAttribute("onclick", "signOut()");
 
   loggedinSection.appendChild(button);
@@ -150,6 +152,7 @@ let instanceToken;
        "profile": profile
      };
      document.querySelector("#loggedin > img").src = profile.Paa;
+     document.getElementById("signoutlink").style.display = "block";
    }
  }
 
@@ -162,6 +165,7 @@ function signOut()
   auth2.signOut().then(function() {
     alert("You have been logged out");
     document.querySelector("#loggedin > img").src  = "images/unknown.png";
+    document.getElementById("signoutlink").style.display = "none";
   });
 }
 //display only for google button
