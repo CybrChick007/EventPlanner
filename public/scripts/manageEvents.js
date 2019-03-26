@@ -5,7 +5,7 @@ import myEvent from "util.js";
  use to populate inputs (getSingleEvent?)*/
 let eventList = document.getElementById("myEvents");
 let saveButton = document.getElementById("savebtn");
-saveButton.addEventListener("click", function(){myEvent(e, "/editEvent");});
+saveButton.addEventListener("click", function(e){myEvent(e, "/editEvent");});
 let myEvents = fetch(url, {
   method: "GET",
   headers: {
