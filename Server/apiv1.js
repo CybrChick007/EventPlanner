@@ -36,7 +36,6 @@ async function authorizeUser(req, res, next) {
     const sql = await sqlPromise;
     const query = `SELECT userID, email FROM user WHERE email = '${email}'`;
     const [rows] = await sql.execute(query);
-    //console.log(email);
 
     if (rows.length == 0){
       const name   = email.substring(0, email.lastIndexOf("@"));
@@ -62,7 +61,6 @@ async function authorizeUser(req, res, next) {
 async function createEvent(req, res){
   try {
     const RND = Math.random() * (999999 - 100000) + 100000;
-    console.log(RND);
         const sql = await sqlPromise;
         const query = `INSERT INTO event VALUES(
           ${RND},
@@ -75,7 +73,6 @@ async function createEvent(req, res){
           ${req.body.eventType},
           ${req.body.eventHostID},
          '${req.body.eventDate}')`;
-
     sql.execute(query);
 
     const shopList = req.body.shopList; ////TODO: be converted in list
@@ -120,7 +117,6 @@ async function joinedEvent(req, res){
     const sql = await sqlPromise;
     const query = `SELECT * FROM guestEvent WHERE guestUserID = ${req.query.userID} AND guestEventID = ${req.query.eventID}`;
     const rows = await sql.execute(query);
-    console.log(rows);
     res.json(rows[0].length > 0);
   }
   catch(e){
@@ -147,6 +143,8 @@ async function deleteEvent(req, res){
     const sql = await sqlPromise;
     const drop = `DELETE FROM event WHERE eventID = ${req.query.eventID}`;
     await sql.execute(drop);
+    const drop2 = `DELETE FROM shoppingListItem WHERE eventID = ${req.query.eventID}`;
+    await sql.execute(drop2);
   }catch(e){
     res.sendStatus(500);
     return;
@@ -156,7 +154,6 @@ async function deleteEvent(req, res){
 
 async function filterEvent(req, res){
   try{
-    console.log(req.query.eventName + " " + req.query.eventType);
     const sql = await sqlPromise;
     let query;
     if (req.query.eventType) {
@@ -165,7 +162,6 @@ async function filterEvent(req, res){
       query = `SELECT * FROM event WHERE eventName LIKE '%${req.query.eventName}%' GROUP BY eventID ORDER BY eventDate ASC LIMIT 33`;
     }
     const [rows] = await sql.execute(query);
-    console.log([rows]);
     const eventList = rows.map(row => {
         return {
           eventID: row.eventID,
@@ -183,13 +179,11 @@ async function filterEvent(req, res){
       res.send({eventList});
     }
     catch (e) {
-      console.error(e);
       res.sendStatus(500);
       return;
     }
 }
 
-//Eze
 //displaying the first 10 upcoming event
 async function displayEvent(req, res, next){
   try{
@@ -212,18 +206,7 @@ async function displayEvent(req, res, next){
         };
       });
 
-    const query2 = `SELECT * FROM shoppingListItem`;
-    const [rows2] = await sql.execute(query);
-
-    const allItemShoppingList = rows2.map(row => {
-        return {
-          eventItemName: row.eventItemName,
-          eventID: row.eventID,
-          userBringerID: row.userBringerID
-        };
-      });
-
-    res.send({eventList, allItemShoppingList});
+    res.send({eventList});
     }
     catch (e) {
       res.sendStatus(500);
