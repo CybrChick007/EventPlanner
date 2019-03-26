@@ -2,8 +2,6 @@ let saveButton = document.getElementById("savebtn");
 saveButton.addEventListener("click", addEvent);
 /*let formSubmit = document.getElementById("formGrid");
 formSubmit.addEventListener("onsubmit", addEvent);*/
-let resetButton = document.getElementById("delbtn");
-resetButton.addEventListener("click", resetPress);
 
 function addEvent(e){
   if(currentUser === undefined){
@@ -36,7 +34,7 @@ function addEvent(e){
     //local to the machine it is on so the server wouldn't be able to access it
     let myEvent = {"eventName" : NAME,
     //"eventDate" : DATE,
-    "eventAddress" : ADDONE, //+ "," + ADDTWO + "," + ADDTHREE,
+    "eventAddress" : ADDONE + "," + ADDTWO + "," + ADDTHREE,
     "eventPostcode" : POST,
     "eventPublic" : status,
     "eventURLImage" : THUMB,
@@ -45,27 +43,18 @@ function addEvent(e){
     "shopList" : items,
     "eventHostID" :  currentUser.user.userID,
     "eventDate": DATE
-  };
+    };
     fetch("/createEvent", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + instanceToken.getAuthResponse().id_token,
         },
-        body: JSON.stringify(myEvent), // body data type must match "Content-Type" header
+        body: JSON.stringify(myEvent),
     })
-    //.then(response => response.json()); // parses JSON response into native Javascript objects
     sessionStorage.removeItem('thumb');
   }
+  console.log(myEvent);//for debugging
   e.preventDefault();
   document.getElementById("formGrid").reset();
-}
-
-function resetPress(e){
-  let shoppingList = document.getElementById("shoppingSelect");
-  while (shoppingList.firstChild) {
-    shoppingList.removeChild(shoppingList.firstChild);
-  }
-  document.getElementById("thumbnail").src="images/placeholderThumb.png";
-  sessionStorage.removeItem('thumb');
 }

@@ -4,6 +4,8 @@ addButton.addEventListener("click", addToShopping);
 delButton.addEventListener("click", removeFromShopping);
 let uploadButton = document.getElementById("uploadButton");
 uploadButton.addEventListener("change", upload);
+let resetButton = document.getElementById("delbtn");
+resetButton.addEventListener("click", resetPress);
 
 function addToShopping(e){
   let shopping = document.getElementById("shoppingBox");
@@ -43,4 +45,13 @@ function upload(e){
     //console.log('RESULT2', sessionStorage.getItem('thumb'));
   }
   reader.readAsDataURL(file);
+}
+
+function resetPress(e){
+  let shoppingList = document.getElementById("shoppingSelect");
+  while (shoppingList.firstChild) {
+    shoppingList.removeChild(shoppingList.firstChild);
+  }
+  document.getElementById("thumbnail").src="images/placeholderThumb.png";
+  sessionStorage.removeItem('thumb');
 }
