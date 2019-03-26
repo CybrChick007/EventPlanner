@@ -17,7 +17,7 @@ function addEventToResults(title, eventid, imageurl) {
   let item = document.createElement("li");
 
   let img = document.createElement("img");
-  if (imageurl) {
+  if (imageurl && imageurl !== "null") {
     img.src = imageurl;
   }
 
@@ -52,6 +52,7 @@ function setPopupVisibility(visible) {
     } else {
       elem.style.opacity = "0";
       elem.style["pointer-events"] = "none";
+      closeAllShoppingListDetails();
     }
   }
 }
@@ -148,6 +149,9 @@ async function viewEvent(eventID) {
     for (let item of shoppingList) {
       let elem = document.createElement("li");
       elem.textContent = item.eventItemName;
+      elem.addEventListener("click", function (e) {
+        viewShoppingListDetails(e, item);
+      });
       list.appendChild(elem);
     }
 
@@ -165,6 +169,55 @@ async function viewEvent(eventID) {
     alert("Failed to get event from server: " + response.status);
   }
 
+}
+
+function closeAllShoppingListDetails() {
+  for (elem of document.querySelectorAll(".shoppingitemdetails")) {
+    elem.parentElement.removeChild(elem);
+  }
+}
+
+function viewShoppingListDetails(e, item) {
+  closeAllShoppingListDetails();
+  
+  let container = document.createElement("section");
+  container.classList.add("shoppingitemdetails");
+  
+  let title = document.createElement("h1");
+  title.textContent = item.eventItemName;
+  
+  let bringer = document.createElement("p");
+  if (item.userBringerID) {
+    bringer.textContent = item.userBringerID;
+  } else {
+    bringer.textContent = "No-one is bringing this item.";
+  }
+  
+  let bringbutton = document.createElement("button");
+  bringbutton.textContent = "BRING";
+  bringbutton.classList.add("button");
+  bringbutton.addEventListener("click", function () {
+    
+  });
+  
+  let closebutton = document.createElement("button");
+  closebutton.textContent = "X";
+  closebutton.classList.add("warn-button");
+  closebutton.addEventListener("click", function () {
+    closeAllShoppingListDetails()
+  });
+  
+  container.appendChild(closebutton);
+  container.appendChild(title);
+  container.appendChild(bringer);
+  container.appendChild(bringbutton);
+  document.body.appendChild(container);
+  
+  let rect = e.target.getBoundingClientRect();
+  container.style.position = "fixed";
+  container.style.left = `${rect.right}px`;
+  container.style.top = `${rect.top}px`;
+  container.style["z-index"] = "10";
 }
 
 /**

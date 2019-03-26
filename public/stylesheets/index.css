@@ -67,6 +67,25 @@
   justify-items: start;
 }
 
+.shoppingitemdetails {
+  background-color: var(--theme-color);
+  padding: 1rem;
+}
+
+.shoppingitemdetails > h1 {
+  margin: 0;
+}
+
+.shoppingitemdetails > .warn-button {
+  right: 0.5rem;
+  top: 0.5rem;
+  position: absolute;
+}
+
+#shoppinglist > li {
+  cursor: pointer;
+}
+
 #results {
   overflow-y: scroll;
   overflow-x: hidden;
