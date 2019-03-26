@@ -6,6 +6,8 @@ import myEvent from "util.js";
 let eventList = document.getElementById("myEvents");
 let saveButton = document.getElementById("savebtn");
 saveButton.addEventListener("click", function(e){myEvent(e, "/editEvent");});
+let deleteButton = document.getElementById("delbtn");
+deleteButton.addEventListener("click", deleteEvent);
 let myEvents = fetch(url, {
   method: "GET",
   headers: {
@@ -21,6 +23,23 @@ for (let i = 0; i < myEvents.length; i++) {
   myEvent.type = "button";
   eventList.appendChild(myEvent);
   myEvent.addEventListener("click", getMyEvent);
+}
+
+function deleteEvent(e){
+  const ID = sessionStorage.getItem('id');
+  fetch("/deleteEvent?eventID=" + ID, {
+    method: "DELETE",
+    headers: {
+      "Authorization": "Bearer " + instanceToken.getAuthResponse().id_token,
+  },})
+  sessionStorage.removeItem('id');
+  let buttonList = document.getElementById("myEvents");
+  buttonChildren = buttonList.children;
+  for (let i = 0; i < buttonChildren.length; i++) {
+    if (buttonChildren[i].id === ID) {
+      buttonList.removeChild(buttonChildren[i]);
+    }
+  }
 }
 
 function getMyEvent(e){
@@ -70,4 +89,5 @@ function getMyEvent(e){
     thumb = "images/placeholderThumb.png";
   }
   document.getElementById("thumbnail").src = thumb;
+  sessionStorage.setItem('id', myEvent.id);
 }

@@ -24,6 +24,7 @@ function myEvent(e, url){
     let status = document.getElementById("StatusSelect");
     status = document.getElementById("StatusSelect").options[status.selectedIndex].value;
     const THUMB = sessionStorage.getItem('thumb');
+    const ID = sessionStorage.getItem('id');
     console.log(THUMB);
     //URL.createObjectURL(THUMB) cannot be sent this way as the url it creates is very tempoary and
     //local to the machine it is on so the server wouldn't be able to access it
@@ -37,7 +38,8 @@ function myEvent(e, url){
     "eventType" : type,
     "shopList" : items,
     "eventHostID" :  currentUser.user.userID,
-    "eventDate": DATE
+    "eventDate": DATE,
+    "eventID" : ID
     };
     fetch(url, {
         method: "POST",
@@ -48,6 +50,7 @@ function myEvent(e, url){
         body: JSON.stringify(myEvent),
     })
     sessionStorage.removeItem('thumb');
+    sessionStorage.removeItem('id');
   }
   console.log(myEvent);//for debugging
   e.preventDefault();
