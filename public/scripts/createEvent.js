@@ -54,7 +54,6 @@ function addEvent(e){
     })
     sessionStorage.removeItem('thumb');
   }
-  console.log(myEvent);//for debugging
   e.preventDefault();
   document.getElementById("formGrid").reset();
 }
