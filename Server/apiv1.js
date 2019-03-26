@@ -37,6 +37,7 @@ router.delete('/deleteEvent', GoogleAuth.guardMiddleware(), deleteEvent);
  * otherwise send a message saying that the user is not authorized.
  * If the email is already in the database, then simply log the user in.
  * If the connection with the DB or the query is not completed, an error 500 is returned.
+ * If query is completed return the user information.
 */
 async function authorizeUser(req, res, next) {
   try{
@@ -74,6 +75,7 @@ async function authorizeUser(req, res, next) {
  * the ID into the DB 'event' Table. Furthermore, it loops through the shopping list
  * items and add them into the 'shoppinglistitem' Table.
  * If the connection with the DB or the query is not completed, an error 500 is returned.
+ * If query is completed return status 200 (completed).
 */
 async function createEvent(req, res){
   try {
@@ -98,6 +100,7 @@ async function createEvent(req, res){
       sql.execute(query);
     });
 
+    res.sendStatus(200);
   }catch (e) {
     res.sendStatus(500);
     return;
@@ -109,6 +112,7 @@ async function createEvent(req, res){
  * It update the DB 'event' Table so that all the old information are replaced
  * with the new ones.
  * If the connection with the DB or the query is not completed, an error 500 is returned.
+ * If query is completed return the result of the query.
 */
 async function editEvent(req, res){
   try{
@@ -125,6 +129,7 @@ async function editEvent(req, res){
                      //eventHostID does not change
 
       //NEED TO UPDATE THE SHOPPING LIST (CONSIDERING REMOVED ITEMS)
+      //MAYBE RETURN 200 [IN CASE, CHANGE JS DOCS]
       return sql.execute(query);
   }
   catch (e) {
@@ -161,6 +166,7 @@ async function joinedEvent(req, res){
  * the viewEvent function is triggered. If the user has not joined the event yet,
  * it would be added in the list of guests.
  * If the connection with the DB or the query is not completed, an error 500 is returned.
+ * If query is completed return status 200 (completed).
 */
 async function joinEvent(req, res){
   try {
@@ -177,7 +183,11 @@ async function joinEvent(req, res){
 
 /**
  * deleteEvent is a DELETE function and it receives data through the req.query.
- *
+ * The host user is able to delete the selected event, so this function runs two
+ * queries to delete the actual event and the items within the shopping list of This
+ * specific event.
+ * If the connection with the DB or the query is not completed, an error 500 is returned.
+ * If query is completed return status 200 (completed).
 */
 async function deleteEvent(req, res){
   try{
@@ -193,6 +203,16 @@ async function deleteEvent(req, res){
   res.sendStatus(200);
 }
 
+/**
+ * filterEvent is a GET function and it receives data through the req.query.
+ * eventType could be undefined depending on user's decision, so it needs to be checked
+ * and run alternative query.
+ * With the key word 'LIKE' it is possible to retrieve events
+ * that contain letters/words inserted by the user (so the user does not need to type the
+ * entire event name).
+ * If the connection with the DB or the query is not completed, an error 500 is returned.
+ * If query is completed return the event list.
+*/
 async function filterEvent(req, res){
   try{
     const sql = await sqlPromise;
