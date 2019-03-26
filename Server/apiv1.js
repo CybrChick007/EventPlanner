@@ -14,24 +14,33 @@ const sqlPromise = mysql.createConnection(config.mysql);
 router.use(bodyParser.json());
 router.use(cors());
 
-//get request
-router.get('/auth/:email', authorizeUser);
+//get requests
+router.get('/auth', authorizeUser);
 router.get('/displayEvents', displayEvent);
 router.get('/getSingleEvent', getSingleEvent);
 router.get('/getTypes', getTypes);
 router.get('/joinedEvent', joinedEvent);
 router.get('/filterEvent', filterEvent);
 
-//post request
+//post requests
 router.post('/createEvent', GoogleAuth.guardMiddleware(), createEvent);
 router.post('/editEvent', GoogleAuth.guardMiddleware(), editEvent);
 router.post('/joinEvent', GoogleAuth.guardMiddleware(), joinEvent);
-router.post('/deleteEvent', GoogleAuth.guardMiddleware(), deleteEvent);
+router.delete('/deleteEvent', GoogleAuth.guardMiddleware(), deleteEvent);
 
 //functions
+
+/**
+ * authorizeUser is a GET function and receives the email in form of a query.
+ * Makes a query whether this exists in the database. If it does not exist, it checks the domain of the email.
+ * If this is within the University Of Portsmouth domain, then do the registration,
+ * otherwise send a message saying that the user is not authorized.
+ * If the email is already in the database, then simply log the user in.
+ * If the connection with the DB or the query is not completed, an error 500 is returned.
+*/
 async function authorizeUser(req, res, next) {
   try{
-    const email = req.params.email;
+    const email = req.query.email;
 
     const sql = await sqlPromise;
     const query = `SELECT userID, email FROM user WHERE email = '${email}'`;
@@ -58,9 +67,17 @@ async function authorizeUser(req, res, next) {
   }
 }
 
+
+/**
+ * createEvent is called as a POST function so it receives data through the req.body
+ * It creates a Random ID for the new event and injects all the information together withi
+ * the ID into the DB 'event' Table. Furthermore, it loops through the shopping list
+ * items and add them into the 'shoppinglistitem' Table.
+ * If the connection with the DB or the query is not completed, an error 500 is returned.
+*/
 async function createEvent(req, res){
   try {
-    const RND = Math.random() * (999999 - 100000) + 100000;
+    const RND = Math.random() * (999999 - 100000) + 100000; //need to check whether this random number already exists in the db
         const sql = await sqlPromise;
         const query = `INSERT INTO event VALUES(
           ${RND},
@@ -87,9 +104,12 @@ async function createEvent(req, res){
 }
 }
 
-
-//user specific events
-
+/**
+ * editEvent is called as a POST function so it receives data through the req.body
+ * It update the DB 'event' Table so that all the old information are replaced
+ * with the new ones.
+ * If the connection with the DB or the query is not completed, an error 500 is returned.
+*/
 async function editEvent(req, res){
   try{
       const sql = await sqlPromise;
@@ -103,6 +123,8 @@ async function editEvent(req, res){
                      eventDate = '${req.body.eventDate}'
                      where eventID = '${req.body.eventID}'`;
                      //eventHostID does not change
+
+      //NEED TO UPDATE THE SHOPPING LIST (CONSIDERING REMOVED ITEMS)
       return sql.execute(query);
   }
   catch (e) {
@@ -112,6 +134,14 @@ async function editEvent(req, res){
 
 }
 
+
+/**
+ * joinedEvent is called as a GET function and receives data in form of a query.
+ * userID is the current user logged in while eventID is the selected event when
+ * the viewEvent function is triggered. If the current user already joined this event,
+ * the 'joinEvent' button would be disabled
+ * If the connection with the DB or the query is not completed, an error 500 is returned.
+*/
 async function joinedEvent(req, res){
   try{
     const sql = await sqlPromise;
@@ -125,6 +155,13 @@ async function joinedEvent(req, res){
   }
 }
 
+/**
+ * joinEvent is called as a POST function so it receives data through the req.body
+ * userID is the current user logged in while eventID is the selected event when
+ * the viewEvent function is triggered. If the user has not joined the event yet,
+ * it would be added in the list of guests.
+ * If the connection with the DB or the query is not completed, an error 500 is returned.
+*/
 async function joinEvent(req, res){
   try {
     const sql = await sqlPromise;
@@ -138,6 +175,10 @@ async function joinEvent(req, res){
   res.sendStatus(200);
 }
 
+/**
+ * deleteEvent is a DELETE function and it receives data through the req.query.
+ *
+*/
 async function deleteEvent(req, res){
   try{
     const sql = await sqlPromise;
@@ -238,6 +279,12 @@ async function getSingleEvent(req, res, next){
     res.sendStatus(500);
     return;
   }
+}
+
+
+//get user specific events for the management page
+async function getUserEvents(req, res, next){
+
 }
 
 module.exports = router;

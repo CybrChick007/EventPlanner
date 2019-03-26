@@ -2,7 +2,7 @@
  * Contains functions that will be used accross multiple webpages.
  * @module public/scripts/common
  */
- 
+
 const navbar = [
   ["HOME", "index.html"],
   ["CREATE EVENT", "create-event.html"],
@@ -147,7 +147,8 @@ async function onSignIn(googleUser) {
    profile = googleUser.getBasicProfile();
    console.log(profile.U3);
 
-   const response = await fetch('http://localhost:8080/auth/' + profile.U3);
+   const response = await fetch(`http://localhost:8080/auth?email=${profile.U3}`);
+
    const data = await response.json();
    //console.log(data);
    if(data.message == 'Not authorized'){
