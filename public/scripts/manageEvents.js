@@ -1,7 +1,11 @@
+import myEvent from "util.js";
+
 /*api gives eventid and name, make butons in list, add eventlisteners,
  onclick calls another api which gets all of the events data which i can
  use to populate inputs (getSingleEvent?)*/
 let eventList = document.getElementById("myEvents");
+let saveButton = document.getElementById("savebtn");
+saveButton.addEventListener("click", function(e){myEvent(e, "/editEvent");});
 let myEvents = fetch(url, {
   method: "GET",
   headers: {

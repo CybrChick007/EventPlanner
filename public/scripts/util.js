@@ -1,11 +1,4 @@
-import myEvent from "util.js";
-
-let saveButton = document.getElementById("savebtn");
-saveButton.addEventListener("click", function(e){myEvent(e, "/createEvent");});
-/*let formSubmit = document.getElementById("formGrid");
-formSubmit.addEventListener("onsubmit", addEvent);*/
-
-function addEvent(e){
+function myEvent(e, url){
   if(currentUser === undefined){
     alert("Not signed in!");
     return;
@@ -46,7 +39,7 @@ function addEvent(e){
     "eventHostID" :  currentUser.user.userID,
     "eventDate": DATE
     };
-    fetch("/createEvent", {
+    fetch(url, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -56,6 +49,9 @@ function addEvent(e){
     })
     sessionStorage.removeItem('thumb');
   }
+  console.log(myEvent);//for debugging
   e.preventDefault();
   document.getElementById("formGrid").reset();
 }
+
+export myEvent;
