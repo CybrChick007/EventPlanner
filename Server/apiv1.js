@@ -27,6 +27,8 @@ router.get('/getUserEvents', getUserEvents);
 router.post('/createEvent', GoogleAuth.guardMiddleware(), createEvent);
 router.post('/editEvent', GoogleAuth.guardMiddleware(), editEvent);
 router.post('/joinEvent', GoogleAuth.guardMiddleware(), joinEvent);
+router.post('/bringItem', GoogleAuth.guardMiddleware(), bringItem);
+
 router.delete('/deleteEvent', GoogleAuth.guardMiddleware(), deleteEvent);
 
 //functions
@@ -320,6 +322,20 @@ async function getUserEvents(req, res, next){
     res.send({ eventList });
   }catch (e) {
     res.sendStatus(500);
+    return;
+  }
+}
+
+async function bringItem(req, res, next){
+  try{
+    const sql = await sqlPromise;
+    const query = `UPDATE shoppinglistitem SET userBringerID = ${req.body.userBringerID} where eventID = ${req.body.eventID} AND eventItemName = '${req.body.eventItemName}'`;
+    sql.execute(query);
+    res.sendStatus(200);
+  }
+  catch (e) {
+    if (e.errno === 1062) res.sendStatus(403);
+    else res.sendStatus(500);
     return;
   }
 }
