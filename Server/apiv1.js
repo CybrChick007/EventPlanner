@@ -52,6 +52,8 @@ async function authorizeUser(req, res, next) {
     const query = `SELECT userID, email FROM user WHERE email = '${email}'`;
     const [rows] = await sql.execute(query);
 
+    let signedIn = FALSE;
+
     if (rows.length == 0){
       const name   = email.substring(0, email.lastIndexOf("@"));
       const domain = email.substring(email.lastIndexOf("@") +1);
@@ -61,12 +63,19 @@ async function authorizeUser(req, res, next) {
         console.log("registering...");
         const query = `INSERT INTO user VALUES (NULL, '${email}', NULL, NULL, 21, NULL)`;
         const [rows] = await sql.execute(query);
+        signedIn = TRUE;
         //res.send({ message: 'Registration successful!' });
       }
     } else {
       const user = rows[0];
       res.send({ user }); //LOG IN
+      signedIn =TRUE;
     }
+    
+    if (signedIn = TRUE){
+      document.location("../public/index.html"); //redirect to homepage
+    }
+
   }catch (e) {
     res.sendStatus(500);
     return;
