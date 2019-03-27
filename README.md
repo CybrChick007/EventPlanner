@@ -11,14 +11,16 @@ Every commit should add the whole team as contributors to avoid different marks.
 Setup
 =====
 
-open linux terminal window and run the following commands if required:<br>
+open linux terminal window and run the following commands if required:
+
 sudo apt-get install npm<br>
 sudo apt-get install mysql-server<br>
 git clone our repository<br>
 cd EventPlanner<br>
 npm i<br>
 npm run setup<br>
-npm start<br>
+npm start
+
 if you have followed these steps then the server should start
 
 
@@ -66,6 +68,7 @@ API
 * /getUserEvents
   * GET: get user specific events for the management page, requires a query of hostID containing the hosts google id
 
+<br>
 
 * /createEvent
   * POST: gets a JSON file from the client and creates a new event in the database using the given data
@@ -76,6 +79,7 @@ API
 * /joinEvent
   * POST: joins the user to an event, requires a query of userID containing the users google id and a query of eventID containing the id of the event for the user to be joined to
 
+<br>
 
 * /deleteEvent
   * DELETE: deletes the given event, requires a query of eventID containing the event id of the event to be deleted
