@@ -9,16 +9,16 @@ function create_edit_Event(e, url){
   const ADDONE = document.getElementById("address1Box").value;
   const ADDTHREE = document.getElementById("address3Box").value;
   const POST = document.getElementById("postcodeBox").value;
+  let SHOPPINGLIST = document.getElementById("shoppingSelect");
   if (NAME != "" && DATE != "" && ADDONE != "" && ADDTHREE != "" && POST != "") {
     const ADDTWO = document.getElementById("address2Box").value;
     let type = document.getElementById("typeSelect");
     type = document.getElementById("typeSelect").options[type.selectedIndex].value;
     //type = document.getElementById("StatusSelect").options[type.selectedIndex].value;
-    let shoppingList = document.getElementById("shoppingSelect");
     let items = [];
-    for (let i = 0; i < shoppingList.length; i++) {
-      //console.log(shoppingList[i].innerText);
-      items[i] = shoppingList[i].innerText;
+    for (let i = 0; i < SHOPPINGLIST.length; i++) {
+      //console.log(SHOPPINGLIST[i].innerText);
+      items[i] = SHOPPINGLIST[i].innerText;
     }
     const DRESS = document.getElementById("dressCodeBox").value;
     let status = document.getElementById("StatusSelect");
@@ -55,6 +55,9 @@ function create_edit_Event(e, url){
   //console.log(myEvent);//for debugging
   e.preventDefault();
   document.getElementById("formGrid").reset();
+  while (SHOPPINGLIST.firstChild) {
+    SHOPPINGLIST.removeChild(SHOPPINGLIST.firstChild);
+  }
 }
 
 //export create_edit_Event;

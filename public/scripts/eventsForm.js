@@ -8,15 +8,16 @@ let resetButton = document.getElementById("delbtn");
 resetButton.addEventListener("click", resetPress);
 
 function addToShopping(e){
-  let shopping = document.getElementById("shoppingBox");
-  let shoppingItem = shopping.value;
+  let shoppingItem =  document.getElementById("shoppingBox").value;
   if (shoppingItem != "") {
     let list = document.getElementById("shoppingSelect");
     let item = document.createElement("option");
     item.value = shoppingItem;
     item.textContent = shoppingItem;
     list.appendChild(item);
-  }else {
+    document.getElementById("shoppingBox").value = "";
+  }
+  else {
     alert("Please enter a shopping item");
   }
 }

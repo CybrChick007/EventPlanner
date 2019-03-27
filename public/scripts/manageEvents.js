@@ -57,8 +57,13 @@ async function getMyEvent(e){
 
   let selectedShoppingList = selectedEventData.shoppingList;
 
+  const list = document.getElementById("shoppingSelect");
+
+  for (i = 0; i < list.length; i++) { //empty dropdown menu before inserting new data
+    list.options[i] = null;
+  }
+
   for (let i = 0; i < selectedShoppingList.length; i++) {
-    let list = document.getElementById("shoppingSelect");
     let item = document.createElement("option");
     item.value = i;
     item.textContent = selectedShoppingList[i].eventItemName;
