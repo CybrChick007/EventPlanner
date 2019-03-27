@@ -150,7 +150,7 @@ async function viewEvent(eventID) {
       let elem = document.createElement("li");
       elem.textContent = item.eventItemName;
       elem.addEventListener("click", function (e) {
-        viewShoppingListDetails(e, item);
+        viewShoppingListDetails(e.target, item);
       });
       list.appendChild(elem);
     }
@@ -191,10 +191,35 @@ async function bringItem(item) {
         "Authorization": "Bearer " + instanceToken.getAuthResponse().id_token,
       },
     });
+    if (response.ok) {
+      closeAllShoppingListDetails();
+      viewEvent(item.eventID);
+    }
   }
 }
 
-function viewShoppingListDetails(e, item) {
+async function unbringItem(item) {
+  if (currentUser) {
+    let response = await fetch("/unbringItem", {
+      method: "DELETE",
+      body: JSON.stringify({
+        "eventItemName": item.eventItemName,
+        "eventID": item.eventID,
+        "userBringerID": currentUser.user.userID,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + instanceToken.getAuthResponse().id_token,
+      },
+    });
+    if (response.ok) {
+      closeAllShoppingListDetails();
+      viewEvent(item.eventID);
+    }
+  }
+}
+
+async function viewShoppingListDetails(elem, item) {
   closeAllShoppingListDetails();
   
   let container = document.createElement("section");
@@ -205,21 +230,36 @@ function viewShoppingListDetails(e, item) {
   
   let bringer = document.createElement("p");
   if (item.userBringerID) {
-    bringer.textContent = item.userBringerID;
+    let response = await fetch("/getUser?userID=" + item.userBringerID);
+    if (!response.ok) return;
+    let bringerUser = await response.json();
+    bringer.textContent = "Being brought by: " + bringerUser.email;
   } else {
     bringer.textContent = "No-one is bringing this item.";
   }
   
   let bringbutton = document.createElement("button");
-  bringbutton.textContent = "BRING";
-  bringbutton.classList.add("button");
-  bringbutton.addEventListener("click", function () {
-    bringItem(item);
-  });
+  if (!item.userBringerID) {
+    bringbutton.textContent = "BRING";
+    bringbutton.classList.add("button");
+    bringbutton.addEventListener("click", function (e) {
+      bringItem(item);
+    });
+  } else if (item.userBringerID == currentUser.user.userID) {
+    bringbutton.textContent = "UNBRING";
+    bringbutton.classList.add("warn-button");
+    bringbutton.addEventListener("click", function (e) {
+      unbringItem(item);
+    });
+  } else {
+    bringbutton.textContent = "BROUGHT";
+    bringbutton.classList.add("disabled-button");
+  }
   
   let closebutton = document.createElement("button");
   closebutton.textContent = "X";
   closebutton.classList.add("warn-button");
+  closebutton.classList.add("close-item-button");
   closebutton.addEventListener("click", function () {
     closeAllShoppingListDetails()
   });
@@ -230,7 +270,7 @@ function viewShoppingListDetails(e, item) {
   container.appendChild(bringbutton);
   document.body.appendChild(container);
   
-  let rect = e.target.getBoundingClientRect();
+  let rect = elem.getBoundingClientRect();
   container.style.position = "fixed";
   container.style.left = `${rect.right}px`;
   container.style.top = `${rect.top}px`;

@@ -76,7 +76,7 @@
   margin: 0;
 }
 
-.shoppingitemdetails > .warn-button {
+.shoppingitemdetails > .close-item-button {
   right: 0.5rem;
   top: 0.5rem;
   position: absolute;

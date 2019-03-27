@@ -19,6 +19,7 @@ router.get('/auth', authorizeUser);
 router.get('/displayEvents', displayEvent);
 router.get('/getSingleEvent', getSingleEvent);
 router.get('/getTypes', getTypes);
+router.get('/getUser', getUser);
 router.get('/joinedEvent', joinedEvent);
 router.get('/filterEvent', filterEvent);
 router.get('/getUserEvents', getUserEvents);
@@ -30,6 +31,7 @@ router.post('/joinEvent', GoogleAuth.guardMiddleware(), joinEvent);
 router.post('/bringItem', GoogleAuth.guardMiddleware(), bringItem);
 
 router.delete('/deleteEvent', GoogleAuth.guardMiddleware(), deleteEvent);
+router.delete('/unbringItem', GoogleAuth.guardMiddleware(), unbringItem);
 
 //functions
 
@@ -290,6 +292,18 @@ async function getTypes(req, res, next){
   }
 }
 
+async function getUser(req, res){
+  try{
+    const sql = await sqlPromise;
+    const query = `SELECT * FROM user WHERE userID = ${req.query.userID}`;
+    const user = (await sql.execute(query))[0][0];
+    res.send(user);
+  }catch (e) {
+    res.sendStatus(500);
+    return;
+  }
+}
+
 async function getSingleEvent(req, res, next){
   try{
     const sql = await sqlPromise;
@@ -330,6 +344,20 @@ async function bringItem(req, res, next){
   try{
     const sql = await sqlPromise;
     const query = `UPDATE shoppinglistitem SET userBringerID = ${req.body.userBringerID} where eventID = ${req.body.eventID} AND eventItemName = '${req.body.eventItemName}'`;
+    sql.execute(query);
+    res.sendStatus(200);
+  }
+  catch (e) {
+    if (e.errno === 1062) res.sendStatus(403);
+    else res.sendStatus(500);
+    return;
+  }
+}
+
+async function unbringItem(req, res, next){
+  try{
+    const sql = await sqlPromise;
+    const query = `UPDATE shoppinglistitem SET userBringerID = null WHERE eventID = ${req.body.eventID} AND eventItemName = '${req.body.eventItemName}' AND userBringerID = ${req.body.userBringerID}`;
     sql.execute(query);
     res.sendStatus(200);
   }
