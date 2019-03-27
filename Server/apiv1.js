@@ -21,6 +21,7 @@ router.get('/getSingleEvent', getSingleEvent);
 router.get('/getTypes', getTypes);
 router.get('/joinedEvent', joinedEvent);
 router.get('/filterEvent', filterEvent);
+router.get('/getUserEvents', getUserEvents);
 
 //post requests
 router.post('/createEvent', GoogleAuth.guardMiddleware(), createEvent);
@@ -304,7 +305,23 @@ async function getSingleEvent(req, res, next){
 
 //get user specific events for the management page
 async function getUserEvents(req, res, next){
+  try{
+    const sql = await sqlPromise;
+    const query = `SELECT eventID, eventName FROM event where eventHost = ${req.query.hostID}`;
+    let [rows] = (await sql.execute(query));
 
+    const eventList = rows.map(row => {
+        return {
+          eventID: row.eventID,
+          eventName: row.eventName
+        };
+      });
+    console.log(eventList);
+    res.send({ eventList });
+  }catch (e) {
+    res.sendStatus(500);
+    return;
+  }
 }
 
 module.exports = router;
