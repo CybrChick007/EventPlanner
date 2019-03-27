@@ -1,12 +1,18 @@
+'use strict'
+
+//paakage requirements
 const express = require('express');
 const mysql = require('mysql2/promise');
 const bodyParser = require('body-parser');
 const GoogleAuth = require('simple-google-openid');
 const cors = require('cors');
 
-const { Router } = require('express');
+const {
+  Router
+} = require('express');
 const router = new Router();
 
+//package and database requirments for smooth running on all devices
 const config = require('./config');
 const sqlPromise = mysql.createConnection(config.mysql);
 
@@ -43,22 +49,24 @@ router.delete('/unbringItem', GoogleAuth.guardMiddleware(), unbringItem);
  * If the email is already in the database, then simply log the user in.
  * If the connection with the DB or the query is not completed, an error 500 is returned.
  * If query is completed return the user information.
-*/
+ */
 async function authorizeUser(req, res, next) {
-  try{
+  try {
     const email = req.query.email;
-
     const sql = await sqlPromise;
     const query = `SELECT userID, email FROM user WHERE email = '${email}'`;
     const [rows] = await sql.execute(query);
 
-    let signedIn = FALSE;
+    let signedIn = FALSE; //used for redirection
 
-    if (rows.length == 0){
-      const name   = email.substring(0, email.lastIndexOf("@"));
-      const domain = email.substring(email.lastIndexOf("@") +1);
-      if(domain != 'myport.ac.uk' && domain != 'port.ac.uk')
-        res.send({ message: 'Not authorized' }); //NOT AUTHORIZED
+    if (rows.length == 0) {
+      const name = email.substring(0, email.lastIndexOf("@"));
+      const domain = email.substring(email.lastIndexOf("@") + 1);
+
+      if (domain != 'myport.ac.uk' && domain != 'port.ac.uk') //limit acces to UoP domains
+        res.send({
+          message: 'Not authorized'
+        }); //NOT AUTHORIZED
       else { //REGISTER
         console.log("registering...");
         const query = `INSERT INTO user VALUES (NULL, '${email}', NULL, NULL, 21, NULL)`;
@@ -68,21 +76,22 @@ async function authorizeUser(req, res, next) {
       }
     } else {
       const user = rows[0];
-      res.send({ user }); //LOG IN
+      res.send({
+        user
+      }); //LOG IN
       signedIn = TRUE;
     }
-
-    if (signedIn == TRUE){
+    //redirect to homepage
+    if (signedIn == TRUE) {
       console.log("signed in");
-      document.location = "../public/index.html"; //redirect to homepage
+      document.location = "../public/index.html";
     }
-
-  }catch (e) {
+    //error handling
+  } catch (e) {
     res.sendStatus(500);
     return;
   }
 }
-
 
 /**
  * createEvent is called as a POST function so it receives data through the req.body
@@ -91,12 +100,12 @@ async function authorizeUser(req, res, next) {
  * items and add them into the 'shoppinglistitem' Table.
  * If the connection with the DB or the query is not completed, an error 500 is returned.
  * If query is completed return status 200 (completed).
-*/
-async function createEvent(req, res){
+ */
+async function createEvent(req, res) {
   try {
     const RND = Math.random() * (999999 - 100000) + 100000; //need to check whether this random number already exists in the db
-        const sql = await sqlPromise;
-        const query = `INSERT INTO event VALUES(
+    const sql = await sqlPromise;
+    const query = `INSERT INTO event VALUES(
           ${RND},
          '${req.body.eventName}',
          '${req.body.eventAddress}',
@@ -106,20 +115,22 @@ async function createEvent(req, res){
          '${req.body.eventURLImage}',
           ${req.body.eventType},
           ${req.body.eventHostID},
-         '${req.body.eventDate}')`;
+         '${req.body.eventDate}')`; //creates record in database
     sql.execute(query);
 
+    //shopping list items added into seperate table with foriegn key to main event table
     const shopList = req.body.shopList; ////TODO: be converted in list
-    shopList.forEach(function (item) {
+    shopList.forEach(function(item) {
       const query = `INSERT INTO shoppinglistitem VALUES('${item}', ${RND}, NULL)`;
       sql.execute(query);
     });
+    res.sendStatus(200); //successful
 
-    res.sendStatus(200);
-  }catch (e) {
+  //error handling
+  } catch (e) {
     res.sendStatus(500);
     return;
-}
+  }
 }
 
 /**
@@ -128,11 +139,11 @@ async function createEvent(req, res){
  * with the new ones.
  * If the connection with the DB or the query is not completed, an error 500 is returned.
  * If query is completed return the result of the query.
-*/
-async function editEvent(req, res){
-  try{
-      const sql = await sqlPromise;
-      const query = `UPDATE event SET eventName = '${req.body.eventName}',
+ */
+async function editEvent(req, res) {
+  try {
+    const sql = await sqlPromise;
+    const query = `UPDATE event SET eventName = '${req.body.eventName}',
                      eventAddress = '${req.body.eventAddress}',
                      eventPostcode = '${req.body.eventPostcode}',
                      eventDressCode = '${req.body.eventDressCode}',
@@ -141,13 +152,14 @@ async function editEvent(req, res){
                      eventType = '${req.body.eventType}',
                      eventDate = '${req.body.eventDate}'
                      where eventID = '${req.body.eventID}'`;
-                     //eventHostID does not change
+    //eventHostID does not change
 
-      //NEED TO UPDATE THE SHOPPING LIST (CONSIDERING REMOVED ITEMS)
-      //MAYBE RETURN 200 [IN CASE, CHANGE JS DOCS]
-      return sql.execute(query);
-  }
-  catch (e) {
+    //NEED TO UPDATE THE SHOPPING LIST (CONSIDERING REMOVED ITEMS)
+    //MAYBE RETURN 200 [IN CASE, CHANGE JS DOCS]
+    return sql.execute(query);
+
+  //Error handling
+  } catch (e) {
     res.sendStatus(500);
     return;
   }
@@ -161,15 +173,19 @@ async function editEvent(req, res){
  * the viewEvent function is triggered. If the current user already joined this event,
  * the 'joinEvent' button would be disabled
  * If the connection with the DB or the query is not completed, an error 500 is returned.
-*/
-async function joinedEvent(req, res){
-  try{
+ */
+async function joinedEvent(req, res) {
+  try {
     const sql = await sqlPromise;
-    const query = `SELECT * FROM guestEvent WHERE guestUserID = ${req.query.userID} AND guestEventID = ${req.query.eventID}`;
+    const query = `SELECT * FROM guestEvent WHERE
+                    guestUserID = ${req.query.userID} AND guestEventID = ${req.query.eventID}`;
+                    //shows user as attendee
+
     const rows = await sql.execute(query);
     res.json(rows[0].length > 0);
-  }
-  catch(e){
+
+  //error handling
+  } catch (e) {
     res.sendStatus(500);
     return;
   }
@@ -182,12 +198,16 @@ async function joinedEvent(req, res){
  * it would be added in the list of guests.
  * If the connection with the DB or the query is not completed, an error 500 is returned.
  * If query is completed return status 200 (completed).
-*/
-async function joinEvent(req, res){
+ */
+async function joinEvent(req, res) {
   try {
     const sql = await sqlPromise;
+    //adds user's ID to list of attendees
     const query = `INSERT INTO guestEvent VALUES('${req.body.userID}', '${req.body.eventID}')`;
+
     await sql.execute(query);
+
+  //error handling
   } catch (e) {
     if (e.errno === 1062) res.sendStatus(403);
     else res.sendStatus(500);
@@ -203,19 +223,23 @@ async function joinEvent(req, res){
  * specific event.
  * If the connection with the DB or the query is not completed, an error 500 is returned.
  * If query is completed return status 200 (completed).
-*/
-async function deleteEvent(req, res){
-  try{
+ */
+async function deleteEvent(req, res) {
+  try {
     const sql = await sqlPromise;
+    //deletes items from shopping list associated with event
     const drop2 = `DELETE FROM shoppingListItem WHERE eventID = ${req.query.eventID}`;
     await sql.execute(drop2);
+    //deletes actual event
     const drop = `DELETE FROM event WHERE eventID = ${req.query.eventID}`;
     await sql.execute(drop);
-  }catch(e){
+
+  //error handling
+  } catch (e) {
     res.sendStatus(500);
     return;
   }
-  res.sendStatus(200);
+  res.sendStatus(200); //successful
 }
 
 /**
@@ -227,102 +251,113 @@ async function deleteEvent(req, res){
  * entire event name).
  * If the connection with the DB or the query is not completed, an error 500 is returned.
  * If query is completed return the event list.
-*/
-async function filterEvent(req, res){
-  try{
+ */
+async function filterEvent(req, res) {
+  try {
     const sql = await sqlPromise;
     let query;
     if (req.query.eventType) {
+      //query formed through users selections
       query = `SELECT * FROM event WHERE eventName LIKE '%${req.query.eventName}%' AND eventType = ${req.query.eventType} GROUP BY eventID ORDER BY eventDate ASC LIMIT 33`;
     } else {
       query = `SELECT * FROM event WHERE eventName LIKE '%${req.query.eventName}%' GROUP BY eventID ORDER BY eventDate ASC LIMIT 33`;
     }
     const [rows] = await sql.execute(query);
     const eventList = rows.map(row => {
-        return {
-          eventID: row.eventID,
-          eventName: row.eventName,
-          eventAddress: row.eventAddress,
-          eventPostcode: row.eventPostcode,
-          eventDressCode: row.eventDressCode,
-          eventPublic: row.eventPublic, //IF FALSE, DISPLAY ONLY IF USER IS INVITED
-          eventURLImage: row.eventURLImage,
-          eventType: row.eventType,
-          eventHost: row.eventHost,
-          eventDate: row.eventDate
-        };
-      });
-      res.send({eventList});
-    }
-    catch (e) {
-      res.sendStatus(500);
-      return;
-    }
+      //send results to client
+      return {
+        eventID: row.eventID,
+        eventName: row.eventName,
+        eventAddress: row.eventAddress,
+        eventPostcode: row.eventPostcode,
+        eventDressCode: row.eventDressCode,
+        eventPublic: row.eventPublic, //IF FALSE, DISPLAY ONLY IF USER IS INVITED
+        eventURLImage: row.eventURLImage,
+        eventType: row.eventType,
+        eventHost: row.eventHost,
+        eventDate: row.eventDate
+      };
+    });
+    res.send({
+      eventList
+    });
+  //error handling
+  } catch (e) {
+    res.sendStatus(500);
+    return;
+  }
 }
 
-//displaying the first 10 upcoming event
-async function displayEvent(req, res, next){
-  try{
+//selecting the first 10 upcoming events by date
+async function displayEvent(req, res, next) {
+  try {
     const sql = await sqlPromise;
     const query = `SELECT * FROM event ORDER BY eventDate ASC LIMIT 10`;
     const [rows] = await sql.execute(query);
 
-    const eventList = rows.map(row => {
-        return {
-          eventID: row.eventID,
-          eventName: row.eventName,
-          eventAddress: row.eventAddress,
-          eventPostcode: row.eventPostcode,
-          eventDressCode: row.eventDressCode,
-          eventPublic: row.eventPublic, //IF FALSE, DISPLAY ONLY IF USER IS INVITED
-          eventURLImage: row.eventURLImage,
-          eventType: row.eventType,
-          eventHost: row.eventHost,
-          eventDate: row.eventDate
-        };
-      });
+    const eventList = rows.map(row => { //list of events pulled from database
+      return {
+        eventID: row.eventID,
+        eventName: row.eventName,
+        eventAddress: row.eventAddress,
+        eventPostcode: row.eventPostcode,
+        eventDressCode: row.eventDressCode,
+        eventPublic: row.eventPublic, //IF FALSE, DISPLAY ONLY IF USER IS INVITED
+        eventURLImage: row.eventURLImage,
+        eventType: row.eventType,
+        eventHost: row.eventHost,
+        eventDate: row.eventDate
+      };
+    });
 
-    res.send({eventList});
-    }
-    catch (e) {
-      res.sendStatus(500);
-      return;
-    }
+    res.send({
+      eventList
+    });
+  //error handling
+  } catch (e) {
+    res.sendStatus(500);
+    return;
+  }
 }
 
-async function getTypes(req, res, next){
-  try{
+//functions to obtain single pieces of information, to be used for searches and dropdown selections
+
+async function getTypes(req, res, next) {
+  try {
     const sql = await sqlPromise;
     const query = `SELECT * FROM typeEvent`;
     const types = (await sql.execute(query))[0];
     res.send(types);
-  }catch (e) {
+  } catch (e) {
     res.sendStatus(500);
     return;
   }
 }
 
-async function getUser(req, res){
-  try{
+async function getUser(req, res) {
+  try {
     const sql = await sqlPromise;
     const query = `SELECT * FROM user WHERE userID = ${req.query.userID}`;
     const user = (await sql.execute(query))[0][0];
     res.send(user);
-  }catch (e) {
+  } catch (e) {
     res.sendStatus(500);
     return;
   }
 }
 
-async function getSingleEvent(req, res, next){
-  try{
+async function getSingleEvent(req, res, next) {
+  try {
     const sql = await sqlPromise;
     const query = `SELECT * FROM event WHERE eventID = ${req.query.eventID}`;
     const event = (await sql.execute(query))[0][0];
     const query2 = `SELECT * FROM shoppinglistitem WHERE eventID = ${event.eventID}`;
     const shoppingList = (await sql.execute(query2))[0];
-    res.send({event, shoppingList});
-  }catch (e) {
+    res.send({
+      event,
+      shoppingList
+    });
+  } catch (e) {
     res.sendStatus(500);
     return;
   }
@@ -330,48 +365,48 @@ async function getSingleEvent(req, res, next){
 
 
 //get user specific events for the management page
-async function getUserEvents(req, res, next){
-  try{
+async function getUserEvents(req, res, next) {
+  try {
     const sql = await sqlPromise;
     const query = `SELECT eventID, eventName FROM event where eventHost = ${req.query.hostID}`;
     let [rows] = (await sql.execute(query));
 
     const eventList = rows.map(row => {
-        return {
-          eventID: row.eventID,
-          eventName: row.eventName
-        };
-      });
+      return {
+        eventID: row.eventID,
+        eventName: row.eventName
+      };
+    });
     console.log(eventList);
-    res.send({ eventList });
-  }catch (e) {
+    res.send({
+      eventList
+    });
+  } catch (e) {
     res.sendStatus(500);
     return;
   }
 }
 
-async function bringItem(req, res, next){
-  try{
+async function bringItem(req, res, next) {
+  try {
     const sql = await sqlPromise;
     const query = `UPDATE shoppinglistitem SET userBringerID = ${req.body.userBringerID} where eventID = ${req.body.eventID} AND eventItemName = '${req.body.eventItemName}'`;
     sql.execute(query);
     res.sendStatus(200);
-  }
-  catch (e) {
+  } catch (e) {
     if (e.errno === 1062) res.sendStatus(403);
     else res.sendStatus(500);
     return;
   }
 }
 
-async function unbringItem(req, res, next){
-  try{
+async function unbringItem(req, res, next) {
+  try {
     const sql = await sqlPromise;
     const query = `UPDATE shoppinglistitem SET userBringerID = null WHERE eventID = ${req.body.eventID} AND eventItemName = '${req.body.eventItemName}' AND userBringerID = ${req.body.userBringerID}`;
     sql.execute(query);
     res.sendStatus(200);
-  }
-  catch (e) {
+  } catch (e) {
     if (e.errno === 1062) res.sendStatus(403);
     else res.sendStatus(500);
     return;
