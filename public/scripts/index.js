@@ -177,6 +177,23 @@ function closeAllShoppingListDetails() {
   }
 }
 
+async function bringItem(item) {
+  if (currentUser) {
+    let response = await fetch("/bringItem", {
+      method: "POST",
+      body: JSON.stringify({
+        "eventItemName": item.eventItemName,
+        "eventID": item.eventID,
+        "userBringerID": currentUser.user.userID,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + instanceToken.getAuthResponse().id_token,
+      },
+    });
+  }
+}
+
 function viewShoppingListDetails(e, item) {
   closeAllShoppingListDetails();
   
@@ -197,7 +214,7 @@ function viewShoppingListDetails(e, item) {
   bringbutton.textContent = "BRING";
   bringbutton.classList.add("button");
   bringbutton.addEventListener("click", function () {
-    
+    bringItem(item);
   });
   
   let closebutton = document.createElement("button");
