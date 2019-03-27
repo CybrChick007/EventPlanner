@@ -69,11 +69,12 @@ async function authorizeUser(req, res, next) {
     } else {
       const user = rows[0];
       res.send({ user }); //LOG IN
-      signedIn =TRUE;
+      signedIn = TRUE;
     }
-    
-    if (signedIn = TRUE){
-      document.location("../public/index.html"); //redirect to homepage
+
+    if (signedIn == TRUE){
+      console.log("signed in");
+      document.location = "../public/index.html"; //redirect to homepage
     }
 
   }catch (e) {
