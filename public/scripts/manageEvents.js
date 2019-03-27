@@ -8,7 +8,7 @@ let saveButton = document.getElementById("savebtn");
 saveButton.addEventListener("click", function(e){myEvent(e, "/editEvent");});
 let deleteButton = document.getElementById("delbtn");
 deleteButton.addEventListener("click", deleteEvent);
-let myEvents = fetch(url, {
+let myEvents = fetch("/getUserEvents?hostID" + currentUser.user.userID, {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
