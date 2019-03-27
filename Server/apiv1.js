@@ -50,48 +50,34 @@ router.delete('/unbringItem', GoogleAuth.guardMiddleware(), unbringItem);
  * If the connection with the DB or the query is not completed, an error 500 is returned.
  * If query is completed return the user information.
  */
-async function authorizeUser(req, res, next) {
-  try {
-    const email = req.query.email;
-    const sql = await sqlPromise;
-    const query = `SELECT userID, email FROM user WHERE email = '${email}'`;
-    const [rows] = await sql.execute(query);
+ async function authorizeUser(req, res, next) {
+   try{
+     const email = req.query.email;
 
-    let signedIn = FALSE; //used for redirection
+     const sql = await sqlPromise;
+     const query = `SELECT userID, email FROM user WHERE email = '${email}'`;
+     const [rows] = await sql.execute(query);
 
-    if (rows.length == 0) {
-      const name = email.substring(0, email.lastIndexOf("@"));
-      const domain = email.substring(email.lastIndexOf("@") + 1);
-
-      if (domain != 'myport.ac.uk' && domain != 'port.ac.uk') //limit acces to UoP domains
-        res.send({
-          message: 'Not authorized'
-        }); //NOT AUTHORIZED
-      else { //REGISTER
-        console.log("registering...");
-        const query = `INSERT INTO user VALUES (NULL, '${email}', NULL, NULL, 21, NULL)`;
-        const [rows] = await sql.execute(query);
-        signedIn = TRUE;
-        //res.send({ message: 'Registration successful!' });
-      }
-    } else {
-      const user = rows[0];
-      res.send({
-        user
-      }); //LOG IN
-      signedIn = TRUE;
-    }
-    //redirect to homepage
-    if (signedIn == TRUE) {
-      console.log("signed in");
-      document.location = "../public/index.html";
-    }
-    //error handling
-  } catch (e) {
-    res.sendStatus(500);
-    return;
-  }
-}
+     if (rows.length == 0){
+       const name   = email.substring(0, email.lastIndexOf("@"));
+       const domain = email.substring(email.lastIndexOf("@") +1);
+       if(domain != 'myport.ac.uk' && domain != 'port.ac.uk')
+         res.send({ message: 'Not authorized' }); //NOT AUTHORIZED
+       else { //REGISTER
+         console.log("registering...");
+         const query = `INSERT INTO user VALUES (NULL, '${email}', NULL, NULL, 21, NULL)`;
+         const [rows] = await sql.execute(query);
+         //res.send({ message: 'Registration successful!' });
+       }
+     } else {
+       const user = rows[0];
+       res.send({ user }); //LOG IN
+     }
+   }catch (e) {
+     res.sendStatus(500);
+     return;
+   }
+ }
 
 /**
  * createEvent is called as a POST function so it receives data through the req.body
