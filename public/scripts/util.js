@@ -25,7 +25,7 @@ function myEvent(e, url){
     status = document.getElementById("StatusSelect").options[status.selectedIndex].value;
     const THUMB = sessionStorage.getItem('thumb');
     const ID = sessionStorage.getItem('id');
-    console.log(THUMB);
+    //console.log(THUMB);
     //URL.createObjectURL(THUMB) cannot be sent this way as the url it creates is very tempoary and
     //local to the machine it is on so the server wouldn't be able to access it
     let myEvent = {"eventName" : NAME,
@@ -52,7 +52,7 @@ function myEvent(e, url){
     sessionStorage.removeItem('thumb');
     sessionStorage.removeItem('id');
   }
-  console.log(myEvent);//for debugging
+  //console.log(myEvent);//for debugging
   e.preventDefault();
   document.getElementById("formGrid").reset();
 }
