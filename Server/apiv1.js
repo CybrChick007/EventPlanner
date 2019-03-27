@@ -197,10 +197,10 @@ async function joinEvent(req, res){
 async function deleteEvent(req, res){
   try{
     const sql = await sqlPromise;
-    const drop = `DELETE FROM event WHERE eventID = ${req.query.eventID}`;
-    await sql.execute(drop);
     const drop2 = `DELETE FROM shoppingListItem WHERE eventID = ${req.query.eventID}`;
     await sql.execute(drop2);
+    const drop = `DELETE FROM event WHERE eventID = ${req.query.eventID}`;
+    await sql.execute(drop);
   }catch(e){
     res.sendStatus(500);
     return;

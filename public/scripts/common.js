@@ -167,6 +167,7 @@ async function onSignIn(googleUser) {
      if (window.location.href.endsWith(loginPage)) {
        window.location.replace("index.html");
      }
+     //console.log(currentUser);
    }
  }
 

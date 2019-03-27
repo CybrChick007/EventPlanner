@@ -1,9 +1,9 @@
-function myEvent(e, url){
-  if(currentUser === undefined){
-    alert("Not signed in!");
-    return;
-  }
-  alert("hey");
+function create_edit_Event(e, url){
+  // if(currentUser === undefined){
+  //   alert("Not signed in!");
+  //   return;
+  // }
+
   const NAME = document.getElementById("eventNameBox").value;
   const DATE = document.getElementById("dateBox").value;
   const ADDONE = document.getElementById("address1Box").value;
@@ -57,4 +57,4 @@ function myEvent(e, url){
   document.getElementById("formGrid").reset();
 }
 
-export myEvent;
+//export create_edit_Event;
