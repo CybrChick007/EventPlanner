@@ -11,7 +11,7 @@ Every commit should add the whole team as contributors to avoid different marks.
 Setup
 =====
 
-open linux terminal window and run the following commands if required:
+open a terminal window and run the following commands if required:
 
 sudo apt-get install npm<br>
 sudo apt-get install mysql-server<br>
@@ -23,7 +23,20 @@ npm start
 
 if you have followed these steps then the server should start
 
+If you are having problems with npm run setup then following these steps should solve them. For reference I had problems getting it to work on my own ubuntu virtual box virtual machine, so if you are running something different the solution I propose may or may not work for you.
 
+sudo service mysql start<br>
+sudo mysql --user=root -p<br>
+grant all privileges on \*.* to 'root'@'localhost';<br>
+flush privileges;<br>
+USE mysql;<br>
+SELECT User, Host, plugin FROM mysql.user;<br>
+UPDATE user SET plugin='mysql_native_password' WHERE User='root';<br>
+FLUSH PRIVILEGES;<br>
+exit;<br>
+npm run setup
+
+to re-access the mysql database after this use: sudo mysql -u root
 
 Authors
 =======

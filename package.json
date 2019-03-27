@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server/server.js",
-    "setup": "mysql -u root < server/database.sql",
+    "start": "nodemon Server/server.js",
+    "setup": "mysql -u root < Server/database.sql",
 	"generate-docs": "jsdoc package.json public/scripts server -d docs -c docs/conf.json"
   },
   "repository": {
