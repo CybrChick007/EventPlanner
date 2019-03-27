@@ -140,7 +140,11 @@ async function viewEvent(eventID) {
     document.getElementById("address").textContent = "Address: " + event.eventAddress + ", " + event.eventPostcode;
     document.getElementById("description").textContent = event.eventDescription;
     document.getElementById("dresscode").textContent = event.eventDressCode;
-    document.querySelector("#details > img").src = event.eventURLImage;
+    if (event.eventURLImage) {
+      document.querySelector("#details > img").src = event.eventURLImage;
+    } else {
+      document.querySelector("#details > img").src = "images/placeholderThumb.png";
+    }
 
     let list = document.getElementById("shoppinglist");
     while (list.firstChild) {
