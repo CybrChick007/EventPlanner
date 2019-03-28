@@ -15,18 +15,30 @@ In style.css, the following properties are defined for common use:
 ### Lavan
 
  - login.html
+ - TEST joinedEvent and displayEvents
 
 ### Lewis
 
  - index.html
  - timetable.html
+ - TEST getType and bringItem and unbringItem
 
 ### Nathan
 
  - manage-events.html
  - create-event.html
+ - TEST getSingleEvent and filterEvent
 
 ### Matt
 
  - messaging.html
  - settings.html
+ - TEST static and getUser
+
+### Fin
+  - work on server side
+  - TEST auth and getUserEvents
+
+### Eze
+  - work on server side
+  - TEST joinEvent and deleteEvent
