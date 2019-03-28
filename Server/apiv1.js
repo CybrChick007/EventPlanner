@@ -129,6 +129,7 @@ async function createEvent(req, res) {
 async function editEvent(req, res) {
   try {
     const sql = await sqlPromise;
+    console.log(req.body);
     const query = `UPDATE event SET eventName = '${req.body.eventName}',
                      eventAddress = '${req.body.eventAddress}',
                      eventPostcode = '${req.body.eventPostcode}',
@@ -214,11 +215,14 @@ async function deleteEvent(req, res) {
   try {
     const sql = await sqlPromise;
     //deletes items from shopping list associated with event
-    const drop2 = `DELETE FROM shoppingListItem WHERE eventID = ${req.query.eventID}`;
+    const drop1 = `DELETE FROM shoppingListItem WHERE eventID = ${req.query.eventID}`;
+    await sql.execute(drop1);
+    //delete users that joined the event from the table guestEvent
+    const drop2 = `DELETE FROM guestevent WHERE guestEventID = ${req.query.eventID}`;
     await sql.execute(drop2);
     //deletes actual event
-    const drop = `DELETE FROM event WHERE eventID = ${req.query.eventID}`;
-    await sql.execute(drop);
+    const drop3 = `DELETE FROM event WHERE eventID = ${req.query.eventID}`;
+    await sql.execute(drop3);
 
   //error handling
   } catch (e) {

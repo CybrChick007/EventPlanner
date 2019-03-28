@@ -14,7 +14,8 @@ function addToShopping(e){
     let item = document.createElement("option");
     item.value = shoppingItem;
     item.textContent = shoppingItem;
-    list.appendChild(item);
+    list.prepend(item);
+    list.selectedIndex = 0;
     document.getElementById("shoppingBox").value = "";
   }
   else {

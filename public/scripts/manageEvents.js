@@ -58,10 +58,7 @@ async function getMyEvent(e){
   let selectedShoppingList = selectedEventData.shoppingList;
 
   const list = document.getElementById("shoppingSelect");
-
-  for (i = 0; i < list.length; i++) { //empty dropdown menu before inserting new data
-    list.options[i] = null;
-  }
+  document.getElementById("shoppingSelect").options.length = 0;  //empty dropdown menu before inserting new data
 
   for (let i = 0; i < selectedShoppingList.length; i++) {
     let item = document.createElement("option");
@@ -72,27 +69,25 @@ async function getMyEvent(e){
 
   document.getElementById("eventNameBox").value = selectedEvent.eventName;
   const ADDRESS = selectedEvent.eventAddress.split(',');
-  document.getElementById("dateBox").value = new Date(selectedEvent.eventDate);
+  document.getElementById("dateBox").value =   selectedEvent.eventDate.replace('Z', ''); //selectedEvent.eventDate;
+  console.log( (selectedEvent.eventDate).replace('Z', ''));
   document.getElementById("address1Box").value = ADDRESS[0];
   document.getElementById("address2Box").value = ADDRESS[1];
   document.getElementById("address3Box").value = ADDRESS[2];
   document.getElementById("postcodeBox").value = selectedEvent.eventPostcode;
   let type = document.getElementById("typeSelect");
-  let types = type.options;
+
   const MYTYPE = selectedEvent.eventType;
-  for (let i = 0; i < types.length; i++) {
-    if (types[i].value === MYTYPE) {
-      type.selectedIndex = i;
-    }
-  }
+  type.selectedIndex = MYTYPE;
+
   document.getElementById("dressCodeBox").value = selectedEvent.eventDressCode;
-  let index = 3;
+
   if (selectedEvent.eventPublic === "Public") {
-    index = 0;
+    document.getElementById("StatusSelect").selectedIndex = 0;
   }else {
-    index = 1;
+    document.getElementById("StatusSelect").selectedIndex = 1;
   }
-  document.getElementById("StatusSelect").selectedIndex = index;
+
   let thumb = selectedEvent.eventURLImage;
   sessionStorage.setItem('thumb', thumb);
   if (thumb == "") {
