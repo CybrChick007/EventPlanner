@@ -11,3 +11,8 @@ def get_all_pages():
         "timetable",
     ]
     return ["{}/{}.html".format(DOMAIN, x) for x in pages]
+
+def login(driver):
+    # to be replaced by automatic
+    driver.get(DOMAIN + "/login.html")
+    input("Please login by following the instructions on the browser, then press enter: ")

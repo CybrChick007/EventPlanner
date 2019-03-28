@@ -10,11 +10,15 @@ class Redirect(unittest.TestCase):
 
     def test_redirect_to_login_page(self):
         """ makes sure all pages redirect to the login page when not logged in """
-        
-        driver = self.driver
+
         for url in get_all_pages():
-            driver.get(url)
-            self.assertIn("login.html", driver.current_url)
+            self.driver.get(url)
+            self.assertIn("login.html", self.driver.current_url)
+
+    def test_redirect_to_index(self):
+
+        login(self.driver)
+        self.assertIn("index.html", self.driver.current_url)
 
     def tearDown(self):
         self.driver.close()
