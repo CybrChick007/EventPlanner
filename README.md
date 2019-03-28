@@ -33,6 +33,7 @@ USE mysql;<br>
 SELECT User, Host, plugin FROM mysql.user;<br>
 UPDATE user SET plugin='mysql_native_password' WHERE User='root';<br>
 FLUSH PRIVILEGES;<br>
+SET PASSWORD FOR root@localhost=PASSWORD('');<br>
 exit;<br>
 npm run setup
 
@@ -72,6 +73,9 @@ API
 * /getTypes
   * GET: gives all of the possible types for events
 
+* /getUser
+  * GET: gives all of the information about a given user, requires a query of userID containing the requested users google id
+
 * /joinedEvent
   * GET: tells the client if the user has joined up to the given event, requires a query of userID containing the users google id and another query of eventID containing the id of the requested event
 
@@ -92,7 +96,13 @@ API
 * /joinEvent
   * POST: joins the user to an event, requires a query of userID containing the users google id and a query of eventID containing the id of the event for the user to be joined to
 
+* /bringItem
+  * POST: gets a JSON file from the client and updates a shopping list item with who is going to bring the item to the event using the given data
+
 <br>
 
 * /deleteEvent
   * DELETE: deletes the given event, requires a query of eventID containing the event id of the event to be deleted
+
+* /unbringItem
+  * DELETE: gets a JSON file from the client and updates a shopping list item, removing the person who was previously marked as bringing the item
