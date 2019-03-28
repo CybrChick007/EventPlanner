@@ -51,5 +51,5 @@ create table shoppingListItem(
   FOREIGN KEY (userBringerID) REFERENCES user(userID)
 );
 
-INSERT INTO typeEvent VALUES (0, "Club");
-INSERT INTO typeEvent VALUES (1, "House Party");
+INSERT INTO typeEvent VALUES (1, "Club");
+INSERT INTO typeEvent VALUES (2, "House Party");
