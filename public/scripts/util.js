@@ -9,7 +9,7 @@ function create_edit_Event(e, url){
   if (NAME != "" && DATE != "" && ADDONE != "" && ADDTHREE != "" && POST != "") {
     const ADDTWO = document.getElementById("address2Box").value;
     
-    const TYPE = document.getElementById("typeSelect").selectedIndex;
+    const TYPE = document.getElementById("typeSelect").value;
     let items = [];
     for (let i = 0; i < SHOPPINGLIST.length; i++) {
       items[i] = SHOPPINGLIST[i].innerText;

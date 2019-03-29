@@ -57,3 +57,29 @@ function resetPress(e){
   document.getElementById("thumbnail").src="images/placeholderThumb.png";
   sessionStorage.removeItem('thumb');
 }
+
+/**
+ * Gets all the types from the server and populates the type combo box.
+ */
+async function populateTypes() {
+
+  let response = await fetch("/getTypes");
+
+  if (response.ok) {
+
+    let types = await response.json();
+
+    let combo = document.getElementById("typeSelect");
+    
+    for (let type of types) {
+      let item = document.createElement("option");
+      item.textContent = type.typeName;
+      item.value = type.typeID;
+      combo.appendChild(item);
+    }
+
+  }
+
+}
+
+populateTypes()
