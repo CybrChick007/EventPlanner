@@ -5,9 +5,10 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "test-all": "./node_modules/.bin/qunit test.js",
     "start": "nodemon Server/server.js",
     "setup": "mysql -u root < Server/database.sql",
-	"generate-docs": "jsdoc package.json public/scripts server -d docs -c docs/conf.json"
+    "generate-docs": "jsdoc package.json public/scripts server -d docs -c docs/conf.json"
   },
   "repository": {
     "type": "git",
@@ -24,7 +25,9 @@
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "mysql2": "^1.6.5",
+    "node-fetch": "^2.3.0",
     "nodemon": "^1.18.9",
+    "qunit": "^2.9.2",
     "simple-google-openid": "^0.2.3"
   },
   "keywords": [

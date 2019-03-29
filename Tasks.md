@@ -41,4 +41,4 @@ In style.css, the following properties are defined for common use:
 
 ### Eze
   - work on server side
-  - TEST joinEvent and deleteEvent
+  - TEST joinEvent and serverPath
