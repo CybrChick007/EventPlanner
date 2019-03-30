@@ -1,3 +1,13 @@
+/**
+ * Provides functionality for `createEvent.js` and `manageEvents.js`.
+ * @module public/scripts/util
+ */
+
+ /**
+  * Sends a JSON file to the specified url containing the entered form data.
+  * @param {event} e - The event that triggered this functions execution.
+  * @param {string} url - The URL to send the JSON to.
+  */
 function create_edit_Event(e, url){
 
   const NAME = document.getElementById("eventNameBox").value;
@@ -5,10 +15,12 @@ function create_edit_Event(e, url){
   const ADDONE = document.getElementById("address1Box").value;
   const ADDTHREE = document.getElementById("address3Box").value;
   const POST = document.getElementById("postcodeBox").value;
+  const TIME = document.getElementById("timeBox").value;
   let SHOPPINGLIST = document.getElementById("shoppingSelect");
-  if (NAME != "" && DATE != "" && ADDONE != "" && ADDTHREE != "" && POST != "") {
+  if (NAME != "" && DATE != "" && ADDONE != "" && ADDTHREE != "" && POST != "" && TIME != "") {
     const ADDTWO = document.getElementById("address2Box").value;
-    
+    const DATETIME = DATE + TIME;
+    console.log(DATETIME);
     const TYPE = document.getElementById("typeSelect").value;
     let items = [];
     for (let i = 0; i < SHOPPINGLIST.length; i++) {
@@ -29,7 +41,7 @@ function create_edit_Event(e, url){
     "eventType" : TYPE,
     "shopList" : items,
     "eventHostID" :  currentUser.user.userID,
-    "eventDate": DATE,
+    "eventDate": DATETIME,
     "eventID" : ID
     };
     fetch(url, {
@@ -42,6 +54,8 @@ function create_edit_Event(e, url){
     })
     sessionStorage.removeItem('thumb');
     sessionStorage.removeItem('id');
+  }else {
+    alert("The Event Name, Date of Event, Time of Event, Address and Postcode fields are required!");
   }
   e.preventDefault();
   document.getElementById("formGrid").reset();
@@ -49,5 +63,3 @@ function create_edit_Event(e, url){
     SHOPPINGLIST.removeChild(SHOPPINGLIST.firstChild);
   }
 }
-
-//export create_edit_Event;

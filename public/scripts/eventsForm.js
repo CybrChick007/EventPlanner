@@ -1,3 +1,7 @@
+/**
+ * Provides functionality for `manage-events.html` and `create-event.html`.
+ * @module public/scripts/index
+ */
 let addButton = document.getElementById("sladd");
 let delButton = document.getElementById("sldel");
 addButton.addEventListener("click", addToShopping);
@@ -7,6 +11,10 @@ uploadButton.addEventListener("change", upload);
 let resetButton = document.getElementById("delbtn");
 resetButton.addEventListener("click", resetPress);
 
+/**
+ * Adds the text from the `Add to Shopping List` textbox as an option in the select statement `Shopping List`
+ * @param {event} e - The event that triggered this functions execution.
+ */
 function addToShopping(e){
   let shoppingItem =  document.getElementById("shoppingBox").value;
   if (shoppingItem != "") {
@@ -23,6 +31,10 @@ function addToShopping(e){
   }
 }
 
+/**
+ * removes the currently selected item from the `Shopping List`
+ * @param {event} e - The event that triggered this functions execution.
+ */
 function removeFromShopping(e){
   let sel = document.getElementById("shoppingSelect");
   if (sel.selectedIndex != -1) {
@@ -33,6 +45,12 @@ function removeFromShopping(e){
   }
 }
 
+/**
+ * changes the source of the preview image to the image the user has uploaded,
+ * and then converts the image file to X64 and stores it in session storage
+ * so it can be used in the save function.
+ * @param {event} e - The event that triggered this functions execution.
+ */
 function upload(e){
   const MYIMAGE = e.target.files[0];
   const MYURL = URL.createObjectURL(MYIMAGE);
@@ -49,6 +67,11 @@ function upload(e){
   reader.readAsDataURL(file);
 }
 
+/**
+ * removes all of the shopping list items and the thumbnail image when
+ * the `RESET` or `DELETE EVENT` buttons are pressed
+ * @param {event} e - The event that triggered this functions execution.
+ */
 function resetPress(e){
   let shoppingList = document.getElementById("shoppingSelect");
   while (shoppingList.firstChild) {
@@ -70,7 +93,7 @@ async function populateTypes() {
     let types = await response.json();
 
     let combo = document.getElementById("typeSelect");
-    
+
     for (let type of types) {
       let item = document.createElement("option");
       item.textContent = type.typeName;

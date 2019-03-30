@@ -11,7 +11,7 @@ Every commit should add the whole team as contributors to avoid different marks.
 Setup
 =====
 
-open a terminal window and run the following commands if required:
+open a linux terminal window and run the following commands if required:
 
 sudo apt-get install npm<br>
 sudo apt-get install mysql-server<br>
@@ -21,7 +21,7 @@ npm i<br>
 npm run setup<br>
 npm start
 
-if you have followed these steps then the server should start
+if you have followed these steps then the server should start, now go to localhost:8080 in your browser and you should be able to see our website
 
 If you are having problems with npm run setup then following these steps should solve them. For reference I had problems getting it to work on my own ubuntu virtual box virtual machine, so if you are running something different the solution I propose may or may not work for you.
 
@@ -37,7 +37,7 @@ SET PASSWORD FOR root@localhost=PASSWORD('');<br>
 exit;<br>
 npm run setup
 
-to re-access the mysql database after this use: sudo mysql -u root
+to re-access the mysql database after this use: mysql -u root
 
 Authors
 =======

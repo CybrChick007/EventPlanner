@@ -10,7 +10,7 @@
   grid-template-rows: repeat(8, auto);
   grid-template-areas:
     "en en . sltxt addsl"
-    "datetxt datetxt . stdd removesl"
+    "datetxt datetxt timetxt stdd removesl"
     "a1 a1 . dress ."
     "a2 a2 . ppdd ."
     "a3 a3 . thumb ."
@@ -94,4 +94,8 @@ form > label > input {
 
 #delbtn{
   grid-area: del;
+}
+
+#time{
+  grid-area: timetxt;
 }

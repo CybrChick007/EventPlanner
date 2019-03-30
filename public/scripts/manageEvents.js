@@ -1,14 +1,31 @@
-/*api gives eventid and name, make butons in list, add eventlisteners,
- onclick calls another api which gets all of the events data which i can
- use to populate inputs (getSingleEvent?)*/
+/**
+ * Provides functionality for `manage-events.html`.
+ * @module public/scripts/manageEvents
+ */
+
 let eventList = document.getElementById("myEvents");
 
 let saveButton = document.getElementById("savebtn");
-saveButton.addEventListener("click", function(e){create_edit_Event(e, "/editEvent");});
+saveButton.addEventListener("click", edit);
 
 let deleteButton = document.getElementById("delbtn");
 deleteButton.addEventListener("click", deleteEvent);
 
+/**
+ * verifies that an event to edit has been selected before calling create_edit_Event from util.js
+ * @param {event} e - The event that triggered this functions execution.
+ */
+function edit(e){
+  if (sessionStorage.getItem('id') != null) {
+    create_edit_Event(e, "/editEvent");
+  }else {
+    alert("Please select an event to edit first!");
+  }
+}
+
+/**
+ * populates a list with all of the events the user is hosting 2 seconds after the page has loaded
+ */
 async function populateList(){
   const URL = "/getUserEvents?hostID=" + currentUser.user.userID;
   let response = await fetch(URL);
@@ -24,26 +41,38 @@ async function populateList(){
     myEvent.style.cursor = "pointer";
     eventList.appendChild(myEvent);
     myEvent.addEventListener("click", getMyEvent);
-}
-
-}
-function deleteEvent(e){
-  const ID = sessionStorage.getItem('id');
-  fetch("/deleteEvent?eventID=" + ID, {
-    method: "DELETE",
-    headers: {
-      "Authorization": "Bearer " + instanceToken.getAuthResponse().id_token,
-  },})
-  sessionStorage.removeItem('id');
-  let buttonList = document.getElementById("myEvents");
-  buttonChildren = buttonList.children;
-  for (let i = 0; i < buttonChildren.length; i++) {
-    if (buttonChildren[i].id === ID) {
-      buttonList.removeChild(buttonChildren[i]);
-    }
   }
 }
 
+/**
+ * deletes the currently selected event
+ * @param {event} e - The event that triggered this functions execution.
+ */
+function deleteEvent(e){
+  const ID = sessionStorage.getItem('id');
+  if (ID != null) {
+    fetch("/deleteEvent?eventID=" + ID, {
+      method: "DELETE",
+      headers: {
+        "Authorization": "Bearer " + instanceToken.getAuthResponse().id_token,
+    },})
+    sessionStorage.removeItem('id');
+    let buttonList = document.getElementById("myEvents");
+    buttonChildren = buttonList.children;
+    for (let i = 0; i < buttonChildren.length; i++) {
+      if (buttonChildren[i].id === ID) {
+        buttonList.removeChild(buttonChildren[i]);
+      }
+    }
+  }else {
+    alert("Please select an event to delete first!");
+  }
+}
+
+/**
+ * gets all of the details of the selected event and then displays them to the user
+ * @param {event} e - The event that triggered this functions execution.
+ */
 async function getMyEvent(e){
   let myEvent = e.target;
 
