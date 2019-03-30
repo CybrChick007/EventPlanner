@@ -19,7 +19,7 @@ function create_edit_Event(e, url){
   let SHOPPINGLIST = document.getElementById("shoppingSelect");
   if (NAME != "" && DATE != "" && ADDONE != "" && ADDTHREE != "" && POST != "" && TIME != "") {
     const ADDTWO = document.getElementById("address2Box").value;
-    const DATETIME = DATE + TIME;
+    const DATETIME = DATE + "T" + TIME;
     console.log(DATETIME);
     const TYPE = document.getElementById("typeSelect").value;
     let items = [];

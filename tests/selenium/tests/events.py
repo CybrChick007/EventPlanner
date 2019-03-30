@@ -7,7 +7,8 @@ import time
 
 valid_event = {
     "eventNameBox": "Test Event {}".format(random.randint(1000,9999)),
-    "dateBox": "2021-03-18T13:00",
+    "dateBox": "2021-03-18",
+    "timeBox": "13:00",
     "address1Box": "Address line 1",
     "address2Box": "Address line 2",
     "address3Box": "Address line 3",
