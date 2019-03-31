@@ -98,8 +98,13 @@ async function getMyEvent(e){
 
   document.getElementById("eventNameBox").value = selectedEvent.eventName;
   const ADDRESS = selectedEvent.eventAddress.split(',');
-  document.getElementById("dateBox").value =   selectedEvent.eventDate.replace('Z', ''); //selectedEvent.eventDate;
-  console.log( (selectedEvent.eventDate).replace('Z', ''));
+
+  const eventDay = selectedEvent.eventDate.split('T')[0];
+  let eventTime = selectedEvent.eventDate.split('T')[1];
+  eventTime = eventTime.replace('Z', '');
+  document.getElementById("dateBox").value = eventDay;
+  document.getElementById("timeBox").value = eventTime;
+
   document.getElementById("address1Box").value = ADDRESS[0];
   document.getElementById("address2Box").value = ADDRESS[1];
   document.getElementById("address3Box").value = ADDRESS[2];
