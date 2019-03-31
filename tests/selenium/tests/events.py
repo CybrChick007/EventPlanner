@@ -29,12 +29,15 @@ class Events(unittest.TestCase):
         self.driver.get(DOMAIN + "/create-event.html")
         for elem_id, value in valid_event.items():
             self.driver.execute_script("document.getElementById('{}').setAttribute('value', '{}')".format(elem_id, value))
+        
+        time.sleep(0.5)
         self.driver.find_element_by_id("savebtn").click()
-
-        time.sleep(1)
+        time.sleep(0.5)
+        
         self.driver.get(DOMAIN + "/index.html")
         self.driver.find_element_by_id("search").send_keys(valid_event["eventNameBox"])
         self.driver.find_element_by_id("search").send_keys(Keys.RETURN)
+        time.sleep(1)
         self.assertIn(valid_event["eventNameBox"], self.driver.page_source)
 
     def tearDown(self):
