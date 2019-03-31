@@ -28,6 +28,10 @@ form > label > input {
   width: 90%;
 }
 
+form > label > select{
+  min-width: 5rem;
+}
+
 #sladd{
   grid-area: addsl;
 }
