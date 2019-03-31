@@ -111,6 +111,48 @@ asyncTest(
   }
 );
 
+/**
+ * Bring item.
+ */
+asyncTest(
+  "Bring item",
+  async (assert) => {
+    require(serverFile);
+
+    let options = {
+      method: "POST",
+      body: JSON.stringify({
+        "userBringerID": 1,
+        "eventID": 1,
+        "eventItemName": "Item",
+      })
+    };
+    let status = await getResponseStatus(assert, options.method, "/bringItem", options);
+    assert.equal(status, 401, "Not logged in, api path should be forbidden (401).");
+  }
+);
+
+/**
+ * Unbring item.
+ */
+asyncTest(
+  "Unbring item",
+  async (assert) => {
+    require(serverFile);
+
+    let options = {
+      method: "DELETE",
+      body: JSON.stringify({
+        "userBringerID": 1,
+        "eventID": 1,
+        "eventItemName": "Item",
+      })
+    };
+    let status = await getResponseStatus(assert, options.method, "/unbringItem", options);
+    assert.equal(status, 401, "Not logged in, api path should be forbidden (401).");
+  }
+);
+
 function asyncTest(testName, testFunction) {
   QUnit.test(
     testName,
@@ -129,7 +171,7 @@ function asyncTest(testName, testFunction) {
 }
 
 function fetchPath (method, path, options) {
-  const opts = Object.assign({}, { method, timeout: 1000 }, options);
+  const opts = Object.assign({}, { method, timeout: 5 * 1000 }, options);
   return fetch(`http://localhost:8080${path}`, opts);
 }
 
