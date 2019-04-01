@@ -8,9 +8,21 @@ Everyone should alert the whole group when a commit is made to avoid any overwri
 
 Every commit should add the whole team as contributors to avoid different marks.
 
-## Testing
+## Authors
 
-Run qunit tests with `npm run test-all`. Run selenium tests by navigating to `tests/selenium` and running `run.py`
+Github username = up number = Name
+
+lewisc64 = up851097 = Lewis Carpenter
+
+ezelopes = up872640 = Ezequiel Lopes
+
+up861332 = up861332 = Nathan Moore
+
+CybrChick007 = up879064 = Finlay Plant
+
+Matthew Remon = up746698 = Matthew Remon
+
+Lavan Puvan = up817903 = Lavan Puvanendiran
 
 ## Setup
 
@@ -42,22 +54,9 @@ npm run setup
 
 to re-access the mysql database after this use: mysql -u root
 
-## Authors
+## Testing
 
-Github username = up number = Name
-
-lewisc64 = up851097 = Lewis Carpenter
-
-ezelopes = up872640 = Ezequiel Lopes
-
-up861332 = up861332 = Nathan Moore
-
-CybrChick007 = up879064 = Finlay Plant
-
-Matthew Remon = up746698 = Matthew Remon
-
-Lavan Puvan = up817903 = Lavan Puvanendiran
-
+To run qunit tests first do `npm run testSetup` and then `npm run test-all`. To run selenium tests navigate to `tests/selenium` and run `run.py`, following the instructions of the README.md in that folder.
 
 
 ## API
