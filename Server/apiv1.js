@@ -129,8 +129,7 @@ async function createEvent(req, res) {
 async function editEvent(req, res) {
   try {
     const sql = await sqlPromise;
-    console.log(req.body);
-    const query = `UPDATE event SET eventName = '${req.body.eventName}',
+    const queryUpdateEvent = `UPDATE event SET eventName = '${req.body.eventName}',
                      eventAddress = '${req.body.eventAddress}',
                      eventPostcode = '${req.body.eventPostcode}',
                      eventDressCode = '${req.body.eventDressCode}',
@@ -139,12 +138,18 @@ async function editEvent(req, res) {
                      eventType = '${req.body.eventType}',
                      eventDate = '${req.body.eventDate}'
                      where eventID = '${req.body.eventID}'`;
+    sql.execute(queryUpdateEvent);
     //eventHostID does not change
-
+    const queryDeleteItems = `DELETE FROM shoppinglistitem WHERE eventID =${req.body.eventID}`;
+    sql.execute(queryDeleteItems);
+    req.body.shopList.forEach(function(item) {
+        console.log(item);
+        const queryUpdateItems = `INSERT INTO shoppinglistitem VALUES('${item}', ${req.body.eventID}, NULL)`;
+        sql.execute(queryUpdateItems);
+    });
     //NEED TO UPDATE THE SHOPPING LIST (CONSIDERING REMOVED ITEMS)
     //MAYBE RETURN 200 [IN CASE, CHANGE JS DOCS]
-    return sql.execute(query);
-
+    res.sendStatus(200);
   //Error handling
   } catch (e) {
     res.sendStatus(500);
