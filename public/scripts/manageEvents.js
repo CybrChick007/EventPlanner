@@ -39,6 +39,7 @@ async function populateList(){
     myEvent.textContent = name;
     myEvent.style.color = "#834187";
     myEvent.style.cursor = "pointer";
+    myEvent.classList.add("button");
     eventList.appendChild(myEvent);
     myEvent.addEventListener("click", getMyEvent);
   }
@@ -102,8 +103,9 @@ async function getMyEvent(e){
   const eventDay = selectedEvent.eventDate.split('T')[0];
   let eventTime = selectedEvent.eventDate.split('T')[1];
   eventTime = eventTime.replace('Z', '');
+  let time = eventTime.split(':');
   document.getElementById("dateBox").value = eventDay;
-  document.getElementById("timeBox").value = eventTime;
+  document.getElementById("timeBox").value = time[0] + ':' + time[1];
 
   document.getElementById("address1Box").value = ADDRESS[0];
   document.getElementById("address2Box").value = ADDRESS[1];
@@ -131,5 +133,5 @@ async function getMyEvent(e){
   sessionStorage.setItem('id', myEvent.id);
 }
 
-setTimeout(populateList, 2000);
+setTimeout(populateList, 500);
 //populateList();
