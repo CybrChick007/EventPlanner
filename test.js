@@ -92,9 +92,9 @@ asyncTest(
   "Get types from server.",
   async (assert) => {
     require(serverFile);
-    
+
     const types = await getResponseJson(assert, "GET", "/getTypes");
-    
+
     assert.ok(Array.isArray(types), "Returned JSON object must be an array.");
     assert.ok(types.length > 0, "Must be object with length > 0");
     for (let type of types) {
@@ -107,7 +107,7 @@ asyncTest(
         "All properties of each element cannot be null."
       )
     }
-    
+
   }
 );
 
@@ -152,6 +152,34 @@ asyncTest(
     assert.equal(status, 401, "Not logged in, api path should be forbidden (401).");
   }
 );
+
+/**
+ *get single event
+ */
+asyncTest(
+ "Get single event",
+ async (assert) => {
+   require(serverFile);
+   let options = {method: "GET"};
+   let myEvent = await getResponseJson(assert, "GET", "/getSingleEvent?eventID=1", options);
+   assert.equal(myEvent.event.eventName, "test event", "The data gotten back should equal the test data");
+ }
+);
+
+/**
+ *filter events
+ */
+ asyncTest(
+  "Filter events",
+  async (assert) => {
+    require(serverFile);
+    let options = {method: "GET"};
+    let events = await getResponseJson(assert, "GET", "/filterEvent?eventName=test", options);
+    assert.equal(events.eventList[0].eventType, 1, "The first part of data gotten back should be the first item entered from the test data");
+    let events2 = await getResponseJson(assert, "GET", "/filterEvent?eventName=test&eventType=2", options);
+    assert.equal(events2.eventList[0].eventType, 2, "The data gotten back should be the second item entered from the test data");
+  }
+ );
 
 function asyncTest(testName, testFunction) {
   QUnit.test(

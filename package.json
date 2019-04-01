@@ -8,6 +8,7 @@
     "test-all": "./node_modules/.bin/qunit test.js",
     "start": "nodemon Server/server.js",
     "setup": "mysql -u root < Server/database.sql",
+    "testSetup": "mysql -u root < testData.sql",
     "generate-docs": "jsdoc package.json public/scripts server -d docs -c docs/conf.json"
   },
   "repository": {
