@@ -19,6 +19,23 @@
     ". save del up up";
 }
 
+#myEvents {
+  height: 12rem;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  list-style: none;
+  background-color: var(--theme-color-dark);
+  padding-left: 0;
+}
+
+#myEvents > li {
+  background-color: white;
+  border-radius: 0;
+  border: 1px solid #888888;
+  color: #888888;
+  margin-left: 0;
+}
+
 form > button{
   width: 100%;
   height: 100%;

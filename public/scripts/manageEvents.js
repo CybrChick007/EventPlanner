@@ -37,8 +37,8 @@ async function populateList(){
     let myEvent = document.createElement("li");
     myEvent.id = id;
     myEvent.textContent = name;
-    myEvent.style.color = "#834187";
-    myEvent.style.cursor = "pointer";
+    //myEvent.style.color = "#834187";
+    //myEvent.style.cursor = "pointer";
     myEvent.classList.add("button");
     eventList.appendChild(myEvent);
     myEvent.addEventListener("click", getMyEvent);
@@ -114,7 +114,7 @@ async function getMyEvent(e){
   let type = document.getElementById("typeSelect");
 
   const MYTYPE = selectedEvent.eventType;
-  type.selectedIndex = MYTYPE;
+  type.value = MYTYPE;
 
   document.getElementById("dressCodeBox").value = selectedEvent.eventDressCode;
 
