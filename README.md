@@ -8,8 +8,11 @@ Everyone should alert the whole group when a commit is made to avoid any overwri
 
 Every commit should add the whole team as contributors to avoid different marks.
 
-Setup
-=====
+## Testing
+
+Run qunit tests with `npm run test-all`. Run selenium tests by navigating to `tests/selenium` and running `run.py`
+
+## Setup
 
 open a linux terminal window and run the following commands if required:
 
@@ -39,8 +42,7 @@ npm run setup
 
 to re-access the mysql database after this use: mysql -u root
 
-Authors
-=======
+## Authors
 
 Github username = up number = Name
 
@@ -58,8 +60,7 @@ Lavan Puvan = up817903 = Lavan Puvanendiran
 
 
 
-API
-===
+## API
 
 * /auth
   * GET: Authorises the user

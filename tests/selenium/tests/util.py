@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from getpass import getpass
+import time
 
 DOMAIN = "localhost:8080"
 
@@ -28,13 +29,14 @@ def login(driver):
     if "login.html" in driver.current_url:
         
         driver.find_element_by_css_selector("div.g-signin2").click()
+        time.sleep(0.5)
         driver.switch_to.window(driver.window_handles[-1])
         
         for name, text in zip(["identifier", "password"], [GOOGLE_EMAIL, GOOGLE_PASSWORD]):
             elem = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.NAME, name))
             )
-            driver.implicitly_wait(0.5)
+            time.sleep(0.5)
             elem.send_keys(text)
             elem.send_keys(Keys.RETURN)
             
