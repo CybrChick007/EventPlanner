@@ -107,7 +107,7 @@ async function createEvent(req, res) {
     //shopping list items added into seperate table with foriegn key to main event table
     const shopList = req.body.shopList; ////TODO: be converted in list
     shopList.forEach(function(item) {
-      const query = `INSERT INTO shoppinglistitem VALUES('${item}', ${RND}, NULL)`;
+      const query = `INSERT INTO shoppingListItem VALUES('${item}', ${RND}, NULL)`;
       sql.execute(query);
     });
     res.sendStatus(200); //successful
@@ -140,11 +140,11 @@ async function editEvent(req, res) {
                      where eventID = '${req.body.eventID}'`;
     sql.execute(queryUpdateEvent);
     //eventHostID does not change
-    const queryDeleteItems = `DELETE FROM shoppinglistitem WHERE eventID =${req.body.eventID}`;
+    const queryDeleteItems = `DELETE FROM shoppingListItem WHERE eventID =${req.body.eventID}`;
     sql.execute(queryDeleteItems);
     req.body.shopList.forEach(function(item) {
         console.log(item);
-        const queryUpdateItems = `INSERT INTO shoppinglistitem VALUES('${item}', ${req.body.eventID}, NULL)`;
+        const queryUpdateItems = `INSERT INTO shoppingListItem VALUES('${item}', ${req.body.eventID}, NULL)`;
         sql.execute(queryUpdateItems);
     });
     //NEED TO UPDATE THE SHOPPING LIST (CONSIDERING REMOVED ITEMS)
@@ -169,8 +169,8 @@ async function editEvent(req, res) {
 async function joinedEvent(req, res) {
   try {
     const sql = await sqlPromise;
-    const query = `SELECT * FROM guestevent WHERE
-                    guestuserid = ${req.query.userID} AND guesteventid = ${req.query.eventID}`;
+    const query = `SELECT * FROM guestEvent WHERE
+                    guestUserID = ${req.query.userID} AND guestEventID = ${req.query.eventID}`;
                     //shows user as attendee
 
     const rows = await sql.execute(query);
@@ -195,7 +195,7 @@ async function joinEvent(req, res) {
   try {
     const sql = await sqlPromise;
     //adds user's ID to list of attendees
-    const query = `INSERT INTO guestevent VALUES('${req.body.userID}', '${req.body.eventID}')`;
+    const query = `INSERT INTO guestEvent VALUES('${req.body.userID}', '${req.body.eventID}')`;
 
     await sql.execute(query);
 
@@ -220,13 +220,13 @@ async function deleteEvent(req, res) {
   try {
     const sql = await sqlPromise;
     //deletes items from shopping list associated with event
-    const drop1 = `DELETE FROM shoppinglistitem WHERE eventid = ${req.query.eventID}`;
+    const drop1 = `DELETE FROM shoppingListItem WHERE eventID = ${req.query.eventID}`;
     await sql.execute(drop1);
     //delete users that joined the event from the table guestEvent
-    const drop2 = `DELETE FROM guestevent WHERE guesteventid = ${req.query.eventID}`;
+    const drop2 = `DELETE FROM guestEvent WHERE guestEventID = ${req.query.eventID}`;
     await sql.execute(drop2);
     //deletes actual event
-    const drop3 = `DELETE FROM event WHERE eventid = ${req.query.eventID}`;
+    const drop3 = `DELETE FROM event WHERE eventID = ${req.query.eventID}`;
     await sql.execute(drop3);
 
   //error handling
@@ -253,9 +253,9 @@ async function filterEvent(req, res) {
     let query;
     if (req.query.eventType) {
       //query formed through users selections
-      query = `SELECT * FROM event WHERE eventname LIKE '%${req.query.eventName}%' AND eventtype = ${req.query.eventType} GROUP BY eventID ORDER BY eventDate ASC LIMIT 33`;
+      query = `SELECT * FROM event WHERE eventName LIKE '%${req.query.eventName}%' AND eventType = ${req.query.eventType} GROUP BY eventID ORDER BY eventDate ASC LIMIT 33`;
     } else {
-      query = `SELECT * FROM event WHERE eventname LIKE '%${req.query.eventName}%' GROUP BY eventid ORDER BY eventdate ASC LIMIT 33`;
+      query = `SELECT * FROM event WHERE eventName LIKE '%${req.query.eventName}%' GROUP BY eventID ORDER BY eventDate ASC LIMIT 33`;
     }
     const [rows] = await sql.execute(query);
     const eventList = rows.map(row => {
@@ -287,7 +287,7 @@ async function filterEvent(req, res) {
 async function displayEvent(req, res, next) {
   try {
     const sql = await sqlPromise;
-    const query = `SELECT * FROM event ORDER BY eventdate ASC LIMIT 10`;
+    const query = `SELECT * FROM event ORDER BY eventDate ASC LIMIT 10`;
     const [rows] = await sql.execute(query);
 
     const eventList = rows.map(row => { //list of events pulled from database
@@ -320,7 +320,7 @@ async function displayEvent(req, res, next) {
 async function getTypes(req, res, next) {
   try {
     const sql = await sqlPromise;
-    const query = `SELECT * FROM typeevent`;
+    const query = `SELECT * FROM typeEvent`;
     const types = (await sql.execute(query))[0];
     res.send(types);
   } catch (e) {
@@ -332,7 +332,7 @@ async function getTypes(req, res, next) {
 async function getUser(req, res) {
   try {
     const sql = await sqlPromise;
-    const query = `SELECT * FROM user WHERE userid = ${req.query.userID}`;
+    const query = `SELECT * FROM user WHERE userID = ${req.query.userID}`;
     const user = (await sql.execute(query))[0][0];
     res.send(user);
   } catch (e) {
@@ -344,9 +344,9 @@ async function getUser(req, res) {
 async function getSingleEvent(req, res, next) {
   try {
     const sql = await sqlPromise;
-    const query = `SELECT * FROM event WHERE eventid = ${req.query.eventID}`;
+    const query = `SELECT * FROM event WHERE eventID = ${req.query.eventID}`;
     const event = (await sql.execute(query))[0][0];
-    const query2 = `SELECT * FROM shoppinglistitem WHERE eventid = ${event.eventID}`;
+    const query2 = `SELECT * FROM shoppingListItem WHERE eventID = ${event.eventID}`;
     const shoppingList = (await sql.execute(query2))[0];
     res.send({
       event,
@@ -363,7 +363,7 @@ async function getSingleEvent(req, res, next) {
 async function getUserEvents(req, res, next) {
   try {
     const sql = await sqlPromise;
-    const query = `SELECT eventID, eventName FROM event where eventhost = ${req.query.hostID}`;
+    const query = `SELECT eventID, eventName FROM event WHERE eventHost = ${req.query.hostID}`;
     let [rows] = (await sql.execute(query));
 
     const eventList = rows.map(row => {
@@ -385,7 +385,7 @@ async function getUserEvents(req, res, next) {
 async function bringItem(req, res, next) {
   try {
     const sql = await sqlPromise;
-    const query = `UPDATE shoppinglistitem SET userBringerid = ${req.body.userBringerID} where eventid = ${req.body.eventID} AND eventitemname = '${req.body.eventItemName}'`;
+    const query = `UPDATE shoppingListItem SET userBringerID = ${req.body.userBringerID} where eventID = ${req.body.eventID} AND eventItemName = '${req.body.eventItemName}'`;
     sql.execute(query);
     res.sendStatus(200);
   } catch (e) {
@@ -398,7 +398,7 @@ async function bringItem(req, res, next) {
 async function unbringItem(req, res, next) {
   try {
     const sql = await sqlPromise;
-    const query = `UPDATE shoppinglistitem SET userbringerid = null WHERE eventid = ${req.body.eventID} AND eventitemname = '${req.body.eventItemName}' AND userbringerid = ${req.body.userBringerID}`;
+    const query = `UPDATE shoppingListItem SET userBringerID = null WHERE eventID = ${req.body.eventID} AND eventItemName = '${req.body.eventItemName}' AND userBringerID = ${req.body.userBringerID}`;
     sql.execute(query);
     res.sendStatus(200);
   } catch (e) {
