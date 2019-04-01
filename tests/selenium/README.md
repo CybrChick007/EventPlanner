@@ -5,6 +5,7 @@
  - Python 3.4+
  - Google Chrome
  - Selenium for Python
+ - Chrome Driver in PATH (Place the chrome driver in this directory. This is already set up for windows)
 
 ## Use
 

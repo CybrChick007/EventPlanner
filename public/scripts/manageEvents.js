@@ -118,7 +118,7 @@ async function getMyEvent(e){
 
   document.getElementById("dressCodeBox").value = selectedEvent.eventDressCode;
 
-  if (selectedEvent.eventPublic === "Public") {
+  if (selectedEvent.eventPublic) {
     document.getElementById("StatusSelect").selectedIndex = 0;
   }else {
     document.getElementById("StatusSelect").selectedIndex = 1;

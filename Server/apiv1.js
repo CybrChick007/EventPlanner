@@ -287,7 +287,7 @@ async function filterEvent(req, res) {
 async function displayEvent(req, res, next) {
   try {
     const sql = await sqlPromise;
-    const query = `SELECT * FROM event ORDER BY eventDate ASC LIMIT 10`;
+    const query = `SELECT * FROM event ORDER BY eventDate ASC LIMIT 12`;
     const [rows] = await sql.execute(query);
 
     const eventList = rows.map(row => { //list of events pulled from database
