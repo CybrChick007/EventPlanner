@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: public/scripts/manageEvents.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: public/scripts/manageEvents.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Provides functionality for `manage-events.html`.
+ * @module public/scripts/manageEvents
+ */
+
+let eventList = document.getElementById("myEvents");
+
+let saveButton = document.getElementById("savebtn");
+saveButton.addEventListener("click", edit);
+
+let deleteButton = document.getElementById("delbtn");
+deleteButton.addEventListener("click", deleteEvent);
+
+/**
+ * verifies that an event to edit has been selected before calling create_edit_Event from util.js
+ * @param {event} e - The event that triggered this functions execution.
+ */
+function edit(e){
+  if (sessionStorage.getItem('id') != null) {
+    create_edit_Event(e, "/editEvent");
+  }else {
+    alert("Please select an event to edit first!");
+  }
+}
+
+/**
+ * populates a list with all of the events the user is hosting 2 seconds after the page has loaded
+ */
+async function populateList(){
+  if (!currentUser) {
+    setTimeout(populateList, 50);
+    return;
+  }
+  const URL = "/getUserEvents?hostID=" + currentUser.user.userID;
+  let response = await fetch(URL);
+  let myEvents = (await response.json()).eventList;
+
+  for (let i = 0; i &lt; myEvents.length; i++) {
+    let id = myEvents[i].eventID;
+    let name = myEvents[i].eventName;
+    let myEvent = document.createElement("li");
+    myEvent.id = id;
+    myEvent.textContent = name;
+    //myEvent.style.color = "#834187";
+    //myEvent.style.cursor = "pointer";
+    myEvent.classList.add("button");
+    eventList.appendChild(myEvent);
+    myEvent.addEventListener("click", getMyEvent);
+  }
+}
+
+/**
+ * deletes the currently selected event
+ * @param {event} e - The event that triggered this functions execution.
+ */
+function deleteEvent(e){
+  const ID = sessionStorage.getItem('id');
+  if (ID != null) {
+    fetch("/deleteEvent?eventID=" + ID, {
+      method: "DELETE",
+      headers: {
+        "Authorization": "Bearer " + instanceToken.getAuthResponse().id_token,
+    },})
+    sessionStorage.removeItem('id');
+    let buttonList = document.getElementById("myEvents");
+    buttonChildren = buttonList.children;
+    for (let i = 0; i &lt; buttonChildren.length; i++) {
+      if (buttonChildren[i].id === ID) {
+        buttonList.removeChild(buttonChildren[i]);
+      }
+    }
+  }else {
+    alert("Please select an event to delete first!");
+  }
+}
+
+/**
+ * gets all of the details of the selected event and then displays them to the user
+ * @param {event} e - The event that triggered this functions execution.
+ */
+async function getMyEvent(e){
+  let myEvent = e.target;
+
+  const URL = "/getSingleEvent?eventID=" + myEvent.id;
+  let responseEvent = await fetch(URL);
+
+  let selectedEventData = (await responseEvent.json());
+  console.log(selectedEventData);
+
+  let selectedEvent = selectedEventData.event;
+
+  let selectedShoppingList = selectedEventData.shoppingList;
+
+  const list = document.getElementById("shoppingSelect");
+  document.getElementById("shoppingSelect").options.length = 0;  //empty dropdown menu before inserting new data
+
+  for (let i = 0; i &lt; selectedShoppingList.length; i++) {
+    let item = document.createElement("option");
+    item.value = i;
+    item.textContent = selectedShoppingList[i].eventItemName;
+    list.appendChild(item);
+  }
+
+  document.getElementById("eventNameBox").value = selectedEvent.eventName;
+  const ADDRESS = selectedEvent.eventAddress.split(',');
+
+  const eventDay = selectedEvent.eventDate.split('T')[0];
+  let eventTime = selectedEvent.eventDate.split('T')[1];
+  eventTime = eventTime.replace('Z', '');
+  let time = eventTime.split(':');
+  document.getElementById("dateBox").value = eventDay;
+  document.getElementById("timeBox").value = time[0] + ':' + time[1];
+
+  document.getElementById("address1Box").value = ADDRESS[0];
+  document.getElementById("address2Box").value = ADDRESS[1];
+  document.getElementById("address3Box").value = ADDRESS[2];
+  document.getElementById("postcodeBox").value = selectedEvent.eventPostcode;
+  let type = document.getElementById("typeSelect");
+
+  const MYTYPE = selectedEvent.eventType;
+  type.value = MYTYPE;
+
+  document.getElementById("dressCodeBox").value = selectedEvent.eventDressCode;
+
+  if (selectedEvent.eventPublic) {
+    document.getElementById("StatusSelect").selectedIndex = 0;
+  }else {
+    document.getElementById("StatusSelect").selectedIndex = 1;
+  }
+
+  let thumb = selectedEvent.eventURLImage;
+  sessionStorage.setItem('thumb', thumb);
+  if (thumb == "") {
+    thumb = "images/placeholderThumb.png";
+  }
+  document.getElementById("thumbnail").src = thumb;
+  sessionStorage.setItem('id', myEvent.id);
+}
+
+populateList();
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-public_scripts_common.html">public/scripts/common</a></li><li><a href="module-public_scripts_createEvent.html">public/scripts/createEvent</a></li><li><a href="module-public_scripts_index.html">public/scripts/index</a></li><li><a href="module-public_scripts_manageEvents.html">public/scripts/manageEvents</a></li><li><a href="module-public_scripts_util.html">public/scripts/util</a></li><li><a href="module-server_apiv1.html">server/apiv1</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Apr 02 2019 18:11:54 GMT+0100 (British Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

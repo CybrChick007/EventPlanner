@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: common.js</title>
+    <title>JSDoc: Source: public/scripts/common.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: common.js</h1>
+    <h1 class="page-title">Source: public/scripts/common.js</h1>
 
     
 
@@ -42,7 +42,18 @@ const navbar = [
 
 const logo_path = "images/logo.png";
 
-const googleClientId = "934035794483-hheclnb5qoh28b4n0ktilgm35160ue4u"
+const googleClientId = "934035794483-hheclnb5qoh28b4n0ktilgm35160ue4u.apps.googleusercontent.com";
+
+const loginPage = "login.html";
+
+function redirectLogin() {
+  if (sessionStorage.getItem("loggedin") == null) {
+    sessionStorage.setItem("loggedin", false);
+  }
+  if (!window.location.href.endsWith(loginPage) &amp;&amp; sessionStorage.getItem("loggedin") == "false") {
+    window.location.replace(loginPage);
+  }
+}
 
 /**
  * Inserts elements into body to create the navbar.
@@ -112,13 +123,20 @@ function insertHeader() {
   loggedinSection.id = "loggedin";
 
   let profileImg = document.createElement("img");
-  profileImg.src = "images/logo.png";
+  profileImg.src = "images/unknown.png";
 
   let button = document.createElement("div");
   button.classList.add("g-signin2");
   button.setAttribute("data-onsuccess", "onSignIn");
 
+  let buttonSignOut = document.createElement("button");
+  buttonSignOut.id = "signOutButton";
+  buttonSignOut.textContent = "Sign Out from EventZ";
+  buttonSignOut.style.display = "none";
+  buttonSignOut.setAttribute("onclick", "signOut()");
+
   loggedinSection.appendChild(button);
+  loggedinSection.appendChild(buttonSignOut);
   loggedinSection.appendChild(profileImg);
 
   header.appendChild(loggedinSection);
@@ -144,35 +162,42 @@ function setNavbarVisibility(visible) {
   }
 }
 
-//FUNCTION FETCHING TO THE SERVER
 let currentUser;
-
+let instanceToken;
 /**
  * As specified by the google login button, the google platform api
  * will call this function when the user logs in.
  * @param {object} googleUser - User information provided by the google platform api.
  */
 async function onSignIn(googleUser) {
-  //console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
-  idToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token;
-  profile = googleUser.getBasicProfile();
-  console.log(profile.U3);
+   //console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+   instanceToken = googleUser;
+   profile = googleUser.getBasicProfile();
+   console.log(profile.U3);
 
-  const response = await fetch('http://localhost:8080/auth/' + profile.U3);
-  const data = await response.json();
-  //console.log(data);
-  if(data.message == 'Not authorized'){
-    alert('Not authorized');
-    signOut();
-  } else {
-    currentUser = {
-      "user": data.user,
-      "token": idToken,
-      "profile": profile,
-    };
-    document.querySelector("#loggedin > img").src = profile.Paa;
-  }
-}
+   const response = await fetch(`http://localhost:8080/auth?email=${profile.U3}`);
+
+   const data = await response.json();
+   //console.log(data);
+   if(data.message == 'Not authorized'){
+     alert('Not authorized');
+     signOut();
+   } else {
+     currentUser = {
+       "user": data.user,
+       //"token": idToken,
+       "profile": profile
+     };
+     sessionStorage.setItem("loggedin", true);
+     document.querySelector("#loggedin > img").src = profile.Paa;
+     document.getElementById("signOutButton").style.display = "block";
+     document.getElementsByClassName('g-signin2')[0].style.display = "none";
+     if (window.location.href.endsWith(loginPage)) {
+       window.location.replace("index.html");
+     }
+     //console.log(currentUser);
+   }
+ }
 
 /**
  * Will sign the user out of the website.
@@ -182,6 +207,11 @@ function signOut()
   const auth2 = gapi.auth2.getAuthInstance();
   auth2.signOut().then(function() {
     alert("You have been logged out");
+    document.querySelector("#loggedin > img").src  = "images/unknown.png";
+    document.getElementById("signOutButton").style.display = "none";
+    document.getElementsByClassName('g-signin2')[0].style.display = "block";
+    sessionStorage.setItem("loggedin", false);
+    redirectLogin();
   });
 }
 //display only for google button
@@ -202,15 +232,20 @@ function renderButton() {
  */
 function setup() {
   insertHeader();
-  insertNavbar();
+  if (!window.location.href.endsWith(loginPage)) {
+    insertNavbar();
+  } else {
+    document.body.style["padding-left"] = "0";
+  }
 
   let meta = document.createElement("meta");
   meta.name = "google-signin-client_id";
-  meta.content = googleClientId + ".apps.googleusercontent.com";
+  meta.content = googleClientId;
   document.head.appendChild(meta);
 
 }
 
+redirectLogin();
 setup();
 </code></pre>
         </article>
@@ -222,13 +257,13 @@ setup();
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-public_scripts_common.html">public/scripts/common</a></li><li><a href="module-public_scripts_index.html">public/scripts/index</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-public_scripts_common.html">public/scripts/common</a></li><li><a href="module-public_scripts_createEvent.html">public/scripts/createEvent</a></li><li><a href="module-public_scripts_index.html">public/scripts/index</a></li><li><a href="module-public_scripts_manageEvents.html">public/scripts/manageEvents</a></li><li><a href="module-public_scripts_util.html">public/scripts/util</a></li><li><a href="module-server_apiv1.html">server/apiv1</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Mar 21 2019 18:44:12 GMT+0000 (Greenwich Mean Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Apr 02 2019 18:11:54 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

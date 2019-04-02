@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: public/scripts/createEvent.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,25 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: public/scripts/createEvent.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Provides functionality for `create-event.html` by adding an event listener to the save button which calls create_edit_Event from util.js.
+ * @module public/scripts/createEvent
+ */
 
-
-    <h3>eventplanner 1.0.0</h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+let saveButton = document.getElementById("savebtn");
+saveButton.addEventListener("click", function(e){create_edit_Event(e, "/createEvent");});
+</code></pre>
+        </article>
+    </section>
 
 
 
