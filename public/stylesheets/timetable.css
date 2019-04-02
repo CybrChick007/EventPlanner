@@ -1,0 +1,8 @@
+main > section {
+  background-color: var(--theme-color-dark);
+  padding: 1rem;
+}
+
+main > section > h1 {
+  margin: 0;
+}

@@ -85,6 +85,9 @@ To run qunit tests first do `npm run testSetup` and then `npm run test-all`. To 
 * /getUserEvents
   * GET: get user specific events for the management page, requires a query of hostID containing the hosts google id
 
+* /timetables/:file
+  * GET: generates and serves a iCalendar format file for the user with the ID of the filename
+
 <br>
 
 * /createEvent

@@ -5,6 +5,7 @@
   <title>EventZ</title>
   
   <link rel="stylesheet" href="stylesheets/style.css">
+  <link rel="stylesheet" href="stylesheets/timetable.css">
   
 </head>
 
@@ -12,11 +13,21 @@
   
   <main>
     
-    
+    <section>
+      <h1>Timetable</h1>
+      
+      <p>
+        This timetable will show all events you are attending, inlcuding the ones you host.
+      </p>
+      
+      <button id=downloadfile class=button>Download iCalendar file</button>
+      <button id=googlecalendar class=button>Add to Google Calendar</button>
+    </section>
     
   </main>
 	
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script src="scripts/common.js"></script>
+  <script src="scripts/timetable.js"></script>
   
 </body>
