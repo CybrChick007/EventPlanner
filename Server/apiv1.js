@@ -73,7 +73,8 @@ router.delete('/unbringItem', GoogleAuth.guardMiddleware(), unbringItem);
          console.log("registering...");
          const query = `INSERT INTO user VALUES (NULL, '${email}', NULL, NULL, 21, NULL)`;
          const [rows] = await sql.execute(query);
-         //res.send({ message: 'Registration successful!' });
+         const user = rows[0];
+         res.send({ user });
        }
      } else {
        const user = rows[0];
@@ -371,38 +372,38 @@ async function getSingleEvent(req, res, next) {
  */
 async function getTimetable(req, res, next) {
   try {
-    
+
     let file = req.params.file.split(".");
     let userID = file[0];
     let extension = file[1];
-    
+
     if (extension !== "ical" && extension !== "ics" && extension !== "ifb" && extension !== "icalendar") {
       res.sendStatus(404);
       return;
     }
-    
+
     const sql = await sqlPromise;
-    
+
     if ((await sql.execute(`SELECT * FROM user WHERE userID = ${userID}`))[0].length === 0) {
       res.sendStatus(404);
       return;
     }
-    
+
     const attributes = "eventName, eventID, eventDate, eventAddress, eventPostcode";
     const query = `(SELECT ${attributes} FROM event, guestEvent WHERE eventID = guestEventID AND guestUserID = ${userID}) UNION (SELECT ${attributes} FROM event WHERE eventHost = ${userID})`;
     let rows = (await sql.execute(query))[0];
-    
+
     function dateToString(date) {
       return date.toISOString().replace(/(-|:|\..+)/g, "");
     }
-    
+
     let lines = [
       "BEGIN:VCALENDAR",
       "PRODID:EventZ",
       "VERSION:2.0",
       "CALSCALE:GREGORIAN",
     ];
-        
+
     for (let event of rows) {
       lines.push("BEGIN:VEVENT");
       lines.push("UID:" + event.eventID);
@@ -413,12 +414,12 @@ async function getTimetable(req, res, next) {
       lines.push("LOCATION:" + event.eventAddress + ", " + event.eventPostcode);
       lines.push("END:VEVENT");
     }
-    
+
     lines.push("END:VCALENDAR");
-    
+
     res.setHeader("content-type", "text/plain");
     res.send(lines.join("\n"));
-    
+
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
