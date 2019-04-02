@@ -136,7 +136,7 @@ async function viewEvent(eventID) {
     let event = data.event;
     let shoppingList = data.shoppingList;
 
-    document.getElementById("title").textContent = event.eventName + " - " + new Date(event.eventDate).toString();
+    document.getElementById("title").textContent = event.eventName + " - " + event.eventDate.substring(0, 10) + " " + event.eventDate.substring(11, 16);
     document.getElementById("address").textContent = "Address: " + event.eventAddress + ", " + event.eventPostcode;
     document.getElementById("description").textContent = event.eventDescription;
     document.getElementById("dresscode").textContent = event.eventDressCode;
