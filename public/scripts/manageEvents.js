@@ -27,6 +27,10 @@ function edit(e){
  * populates a list with all of the events the user is hosting 2 seconds after the page has loaded
  */
 async function populateList(){
+  if (!currentUser) {
+    setTimeout(populateList, 50);
+    return;
+  }
   const URL = "/getUserEvents?hostID=" + currentUser.user.userID;
   let response = await fetch(URL);
   let myEvents = (await response.json()).eventList;
@@ -133,5 +137,4 @@ async function getMyEvent(e){
   sessionStorage.setItem('id', myEvent.id);
 }
 
-setTimeout(populateList, 500);
-//populateList();
+populateList();
