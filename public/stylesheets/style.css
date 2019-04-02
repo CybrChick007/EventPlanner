@@ -157,3 +157,10 @@ nav > ol > a {
 #signOutButton:hover {
   box-shadow: 1px 4px 5px 1px rgba(0,0,0,0.1);
 }
+
+h1 {
+  color: black;
+  font-family: verdana;
+  font-size: 300%;
+  text-align: center;
+}
