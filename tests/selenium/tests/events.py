@@ -73,6 +73,21 @@ class Events(unittest.TestCase):
 
         self.__event_exists(valid_event)
 
+    def test_event_join(self):
+        login(self.driver)
+
+        self.driver.get(DOMAIN + "/index.html")
+        self.driver.find_element_by_id("search").send_keys(valid_event["eventNameBox"])
+        self.driver.find_element_by_id("search").send_keys(Keys.RETURN)
+        time.sleep(0.5)
+        self.driver.find_element_by_css_selector("li > .button").click()
+        time.sleep(0.5)
+        join_button = self.driver.find_element_by_id("join")
+        self.assertEqual(join_button.text, "JOIN")
+        self.driver.find_element_by_id("join").click()
+        time.sleep(1)
+        self.assertEqual(join_button.text, "JOINED")
+
     def tearDown(self):
         self.driver.quit()
 
