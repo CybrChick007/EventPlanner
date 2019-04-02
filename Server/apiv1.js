@@ -104,7 +104,7 @@ async function createEvent(req, res) {
          '${req.body.eventAddress}',
          '${req.body.eventPostcode}',
          '${req.body.eventDressCode}',
-         '${req.body.eventPublic}',
+         ${req.body.eventPublic},
          '${req.body.eventURLImage}',
           ${req.body.eventType},
           ${req.body.eventHostID},
@@ -140,7 +140,7 @@ async function editEvent(req, res) {
                      eventAddress = '${req.body.eventAddress}',
                      eventPostcode = '${req.body.eventPostcode}',
                      eventDressCode = '${req.body.eventDressCode}',
-                     eventPublic = '${req.body.eventPublic}',
+                     eventPublic = ${req.body.eventPublic},
                      eventURLImage = '${req.body.eventURLImage}',
                      eventType = '${req.body.eventType}',
                      eventDate = '${req.body.eventDate}'

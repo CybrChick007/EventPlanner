@@ -27,7 +27,7 @@ function create_edit_Event(e, url){
       items[i] = SHOPPINGLIST[i].innerText;
     }
     const DRESS = document.getElementById("dressCodeBox").value;
-    const STATUS = document.getElementById("StatusSelect").selectedIndex;
+    const PUBLIC = document.getElementById("StatusSelect").selectedIndex === 0;
     const THUMB = sessionStorage.getItem('thumb');
     const ID = sessionStorage.getItem('id');
     //URL.createObjectURL(THUMB) cannot be sent this way as the url it creates is very tempoary and
@@ -35,7 +35,7 @@ function create_edit_Event(e, url){
     let myEvent = {"eventName" : NAME,
     "eventAddress" : ADDONE + "," + ADDTWO + "," + ADDTHREE,
     "eventPostcode" : POST,
-    "eventPublic" : STATUS,
+    "eventPublic" : PUBLIC,
     "eventURLImage" : THUMB,
     "eventDressCode" : DRESS,
     "eventType" : TYPE,
