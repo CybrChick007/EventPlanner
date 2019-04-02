@@ -158,9 +158,9 @@ nav > ol > a {
   box-shadow: 1px 4px 5px 1px rgba(0,0,0,0.1);
 }
 
-.welcome {
+#welcome {
   color: black;
   font-family: verdana;
-  font-size: 300%;
+  font-size: 200%;
   text-align: center;
 }
