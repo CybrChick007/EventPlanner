@@ -1,0 +1,36 @@
+main {
+  background-color: var(--theme-color);
+}
+
+#threads {
+  list-style: none;
+  cursor: pointer;
+}
+
+#messages {
+  height: 12rem;
+  width: 24rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  list-style: none;
+  padding-left: 0;
+}
+
+#messages > li {
+  position: relative;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--background-color);
+  margin-top: 1rem;
+  left: 25%;
+  width: 70%;
+}
+
+#messages > li.other {
+  left: 0;
+}
+
+#messagescontainer {
+  background-color: var(--theme-color-dark);
+  padding: 1rem;
+}

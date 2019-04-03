@@ -17,6 +17,10 @@ const {
 } = require('express');
 const router = new Router();
 
+//in memory storage
+
+let messages = [];
+
 //package and database requirments for smooth running on all devices
 const config = require('./config');
 const sqlPromise = mysql.createConnection(config.mysql);
@@ -27,6 +31,7 @@ router.use(cors());
 
 //get requests
 router.get('/auth', authorizeUser);
+router.get('/getUserByEmail', getUserByEmail);
 router.get('/displayEvents', displayEvent);
 router.get('/getSingleEvent', getSingleEvent);
 router.get('/getTypes', getTypes);
@@ -35,12 +40,15 @@ router.get('/joinedEvent', joinedEvent);
 router.get('/filterEvent', filterEvent);
 router.get('/getUserEvents', getUserEvents);
 router.get('/timetables/:file', getTimetable);
+router.get('/messages', getMessages); // p1 and p2
+router.get('/messagethreads', getMessagingThreads); // userID
 
 //post requests
 router.post('/createEvent', GoogleAuth.guardMiddleware(), createEvent);
 router.post('/editEvent', GoogleAuth.guardMiddleware(), editEvent);
 router.post('/joinEvent', GoogleAuth.guardMiddleware(), joinEvent);
 router.post('/bringItem', GoogleAuth.guardMiddleware(), bringItem);
+router.post('/messages', GoogleAuth.guardMiddleware(), postMessage);
 
 router.delete('/deleteEvent', GoogleAuth.guardMiddleware(), deleteEvent);
 router.delete('/unbringItem', GoogleAuth.guardMiddleware(), unbringItem);
@@ -85,6 +93,21 @@ router.delete('/unbringItem', GoogleAuth.guardMiddleware(), unbringItem);
      return;
    }
  }
+ 
+async function getUserByEmail(req, res) {
+  try {
+
+    const sql = await sqlPromise;
+    const query = `SELECT * FROM user WHERE email = '${req.query.email}' LIMIT 1`;
+    const rows = (await sql.execute(query))[0];
+    res.json(rows[0]);
+
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+    return;
+  }
+}
 
 /**
  * createEvent is called as a POST function so it receives data through the req.body
@@ -345,6 +368,136 @@ async function getUser(req, res) {
   } catch (e) {
     res.sendStatus(500);
     return;
+  }
+}
+
+/*
+let messages = [
+  {
+    participants: [3, 3],
+    messages: [
+      {
+        userID: 3
+        message: "message.";
+      },
+    ]
+  }
+]
+*/
+
+/**
+ * Gets all messages between userIDs given by query parameters p1 and p2.
+ */
+async function getMessages(req, res) {
+  try {
+    
+    let p1 = parseInt(req.query.p1);
+    let p2 = parseInt(req.query.p2);
+    
+    for (let thread of messages) {
+      let valid = true;
+      for (let participant of thread.participants) {
+        if (participant != p1 && participant != p2) {
+          valid = false;
+          break;
+        }
+      }
+      if (valid) {
+        res.json(thread.messages);
+        return;
+      }
+    }
+    
+    res.sendStatus(404);
+    
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+  }
+}
+
+/**
+ * Gets all messages between userIDs given by query parameters p1 and p2.
+ */
+async function getMessagingThreads(req, res) {
+  try {
+    
+    let userID = req.query.userID;
+    let threads = [];
+    
+    for (let thread of messages) {
+      let valid = false;
+      for (let participant of thread.participants) {
+        if (participant == userID) {
+          valid = true;
+          break;
+        }
+      }
+      if (valid) {
+        threads.push(thread);
+      }
+    }
+    
+    res.json(threads);
+    
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+  }
+}
+
+/**
+ * Adds a message to memory model given by JSON body attributes p1 and p2 and userID.
+ */
+async function postMessage(req, res) {
+  try {
+    
+    let p1 = req.body.p1;
+    let p2 = req.body.p2;
+    let userID = req.body.userID;
+    let message = req.body.message;
+    
+    for (let thread of messages) {
+      let valid = true;
+      for (let participant of thread.participants) {
+        if (participant != p1 && participant != p2) {
+          valid = false;
+          break;
+        }
+      }
+      if (valid) {
+        thread.messages.push({
+          userID: userID,
+          message: message,
+        });
+        res.sendStatus(200);
+        return;
+      }
+    }
+    
+    let item = {
+      participants: [p1, p2],
+      messages: [],
+    }
+    
+    if (message != null && userID != null) {
+      item.messages = [
+        {
+          userID: userID,
+          message: message,
+        },
+      ]
+    }
+    
+    messages.push(
+      item
+    );
+    
+    res.sendStatus(200);
+    
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
   }
 }
 

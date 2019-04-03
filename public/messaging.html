@@ -5,6 +5,7 @@
   <title>EventZ</title>
   
   <link rel="stylesheet" href="stylesheets/style.css">
+  <link rel="stylesheet" href="stylesheets/messaging.css">
   
 </head>
 
@@ -12,11 +13,22 @@
   
   <main>
     
+    <input type="text" id=email placeholder="Email Address"></input>
+    <button id=create class=button>CREATE THREAD</button>
+    
+    <ol id=threads></ol>
+    
+    <section id=messagescontainer>
+      <ol id=messages></ol>
+      <input type="text" id=message placeholder="Type message..."></input>
+      <button id=send class=button>SEND</button>
+    </section>
     
     
   </main>
 	
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script src="scripts/common.js"></script>
+  <script src="scripts/messaging.js"></script>
   
 </body>
