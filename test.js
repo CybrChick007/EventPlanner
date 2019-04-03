@@ -316,6 +316,47 @@ asyncTest(
   }
 );
 
+/**
+ * Get user
+ */
+asyncTest(
+  "Get user details",
+  async (assert) => {
+    require(serverFile);
+    let options = {method: "GET"};
+    let user = await getResponseJson(assert, "GET", "/getUser?userID=3", options);
+    assert.equal(user.Age, 18, "Should give the information of the third person on the system.");
+  }
+);
+
+/**
+ *Get user events
+ */
+asyncTest(
+  "Get a users events",
+  async (assert) => {
+    require(serverFile);
+    let options = {method: "GET"};
+    let events = await getResponseJson(assert, "GET", "/getUserEvents?hostID=2", options);
+    assert.ok(events.eventList[0].eventID != null && events.eventList[0].eventID != "" && events.eventList[0].eventName != null && events.eventList[0].eventName != "", "eventID and eventName cannot be null or empty");
+    assert.ok(events.eventList[1].eventID != null && events.eventList[1].eventID != "" && events.eventList[1].eventName != null && events.eventList[1].eventName != "", "eventID and eventName cannot be null or empty");
+    assert.ok(events.eventList[0].eventID != events.eventList[1].eventID, "Event ID's must be unique");
+  }
+);
+
+/**
+ *get user by email
+ */
+ asyncTest(
+   "Gets a users details from their email address",
+   async (assert) => {
+     require(serverFile);
+     let options = {method: "GET"};
+     let user = await getResponseJson(assert, "GET", "/getUserByEmail?email=test3@myport.ac.uk", options);
+     assert.equal(user.Fname, "test3f", "Should equal our test data");
+   }
+);
+
 function asyncTest(testName, testFunction) {
   QUnit.test(
     testName,
