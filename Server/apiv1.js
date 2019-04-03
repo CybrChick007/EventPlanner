@@ -401,7 +401,7 @@ async function getMessages(req, res) {
       }
     }
     
-    res.sendStatus(404);
+    res.json([]);
     
   } catch (e) {
     console.error(e);
@@ -449,18 +449,20 @@ async function postMessage(req, res) {
     let p2 = req.body.p2;
     let userID = req.body.userID;
     let message = req.body.message;
-    
+
     for (let thread of messages) {
       if (thread.participants[0] == p1 && thread.participants[1] == p2 || thread.participants[1] == p1 && thread.participants[0] == p2) {
-        thread.messages.push({
-          userID: userID,
-          message: message,
-        });
+        if (message != null && message.trim() != "") {
+          thread.messages.push({
+            userID: userID,
+            message: message,
+          });
+        }
         res.sendStatus(200);
         return;
       }
     }
-    
+      
     let item = {
       participants: [p1, p2],
       messages: [],
