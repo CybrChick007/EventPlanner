@@ -93,7 +93,7 @@ router.delete('/unbringItem', GoogleAuth.guardMiddleware(), unbringItem);
      return;
    }
  }
- 
+
 async function getUserByEmail(req, res) {
   try {
 
@@ -390,19 +390,19 @@ let messages = [
  */
 async function getMessages(req, res) {
   try {
-    
+
     let p1 = parseInt(req.query.p1);
     let p2 = parseInt(req.query.p2);
-    
+
     for (let thread of messages) {
       if (thread.participants[0] == p1 && thread.participants[1] == p2 || thread.participants[1] == p1 && thread.participants[0] == p2) {
         res.json(thread.messages);
         return;
       }
     }
-    
+
     res.json([]);
-    
+
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
@@ -414,10 +414,10 @@ async function getMessages(req, res) {
  */
 async function getMessagingThreads(req, res) {
   try {
-    
+
     let userID = req.query.userID;
     let threads = [];
-    
+
     for (let thread of messages) {
       let valid = false;
       for (let participant of thread.participants) {
@@ -430,9 +430,9 @@ async function getMessagingThreads(req, res) {
         threads.push(thread);
       }
     }
-    
+
     res.json(threads);
-    
+
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
@@ -444,7 +444,7 @@ async function getMessagingThreads(req, res) {
  */
 async function postMessage(req, res) {
   try {
-    
+
     let p1 = req.body.p1;
     let p2 = req.body.p2;
     let userID = req.body.userID;
@@ -462,12 +462,12 @@ async function postMessage(req, res) {
         return;
       }
     }
-      
+
     let item = {
       participants: [p1, p2],
       messages: [],
     }
-    
+
     if (message != null && userID != null) {
       item.messages = [
         {
@@ -476,18 +476,22 @@ async function postMessage(req, res) {
         },
       ]
     }
-    
+
     messages.push(
       item
     );
-    
+
     res.sendStatus(200);
-    
+
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
   }
 }
+
+/**
+  *  Gets a single event given by the 'eventID' query param. 
+  */
 
 async function getSingleEvent(req, res, next) {
   try {
