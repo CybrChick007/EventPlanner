@@ -13,13 +13,13 @@
   <ul id="Personalsettings">
   </ul>
 
-  <section id=settingscontainer>
+  <form id=settingscontainer>
     <label>Update First Name  </label><input type="text" id=fName placeholder="First Name..." required></input>
     <label>Update Last Name  </label><input type="text" id=lName placeholder="Last Name..." required></input>
     <label>Update Age  </label><input type="text" id=age placeholder="Age..." required></input>
     <label>Contact Number  </label><input type="text" id=contactNumber placeholder="Number..." required></input>
-    <button onclick="saveSettings()" class=button>SAVE SETTINGS</button>
-  </section>
+    <button id=saveSettings type="submit" class=button>SAVE SETTINGS</button>
+  </form>
 
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script src="scripts/common.js"></script>

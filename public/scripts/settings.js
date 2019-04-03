@@ -1,9 +1,27 @@
-function saveSettings(){
+async function loadUserSettings(){
+  if (!currentUser) {
+    setTimeout(loadUserSettings, 50);
+    return;
+  }
+  let response = await fetch("/getUserByEmail?email=" + profile.U3);
+  let userDetails = await response.json();
+  fillTextBox(userDetails.FName,"fName");
+  fillTextBox(userDetails.LName,"lName");
+  fillTextBox(userDetails.Age,"age");
+  fillTextBox(userDetails.ContactNumber,"contactNumber");
+}
+
+function fillTextBox(value, elementID){
+  if(value != undefined){
+      document.getElementById(elementID).value = value;
+  }
+}
+
+async function saveSettings(){
   const FIRSTNAME = document.getElementById("fName").value;
   const LASTNAME = document.getElementById("lName").value;
   const AGE = document.getElementById("age").value;
   const CONTACTNUMBER = document.getElementById("contactNumber").value;
-  console.log(profile.U3);
   let newSettings = {
     "email" : profile.U3,
     "FName" : FIRSTNAME,
@@ -12,7 +30,7 @@ function saveSettings(){
     "ContactNumber": CONTACTNUMBER
   };
 
-  fetch("/saveSettings", {
+  await fetch("/saveSettings", {
       method: "POST",
       headers: {
           "Content-Type": "application/json",
@@ -20,5 +38,11 @@ function saveSettings(){
       },
       body: JSON.stringify(newSettings),
   });
-  console.log("completed");
+  alert("Updated!");
+  document.getElementById("settingscontainer").reset();
 }
+
+let saveSettingsButton = document.getElementById("saveSettings");
+saveSettingsButton.addEventListener("click", saveSettings);
+
+window.addEventListener("load", loadUserSettings);
