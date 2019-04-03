@@ -238,6 +238,32 @@ asyncTest(
 );
 
 /**
+  * Test for joinedEvent
+  */
+
+  asyncTest(
+   "Get joined event",
+   async (assert) => {
+     require(serverFile);
+
+     const events = await getResponseJson(assert, "GET", "/joinedEvent");
+     assert.ok(Array.isArray(events.guestEvent), "Returned JSON object must be an array.");
+
+     // for (let singleEvent of events.guestEvent) {
+     //   assert.ok(
+     //     singleEvent.hasOwnProperty("guestUserID") && singleEvent.hasOwnProperty("guestEventID"),
+     //     "Each element must be an object with attributes 'guestUserID' and 'guestEventID'"
+       )
+       assert.ok(
+         singleEvent.guestUserID != null && singleEvent.guestEventID != null,
+         "All properties of each element cannot be null."
+       )
+     }
+
+   }
+ );
+
+/**
  * Server should return the messages stored in memory for the involved users
  * given by p1 and p2 query params.
  * This is stored in memory, so we can only test for empty array.
