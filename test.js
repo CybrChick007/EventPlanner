@@ -91,14 +91,107 @@ asyncTest(
   }
 );
 
-/*
-("/joinEvent", {
-  method: "POST",
-  body: JSON.stringify({
-    "userID": currentUser.user.userID,
-    "eventID": currentData.event.eventID,
-  })
-*/
+asyncTest(
+  `Create Event`,
+  async (assert) => {
+    require(serverFile);
+
+    let response = {
+      method: "POST",
+      body: JSON.stringify({
+        "userID": 1,
+        "eventName": "Test",
+        "eventAddress": "Test Road",
+        "eventPostcode": "Test Postcode",
+        "eventDressCode": "Test Dress Code",
+        "eventPublic": 0,
+        "eventURLImage": null,
+        "eventType": 1,
+        "eventHost": 1,
+        "eventDate": "2019-03-30 11:11:00"
+      })
+    };
+
+    assert.deepEqual(
+      await getResponseStatus(assert, 'POST', '/createEvent', response),
+      401,
+      'the server should serve respond with 401 error'
+    );
+  }
+);
+
+asyncTest(
+  `Edit Event`,
+  async (assert) => {
+    require(serverFile);
+
+    let response = {
+      method: "POST",
+      body: JSON.stringify({
+        "eventID": 1,
+        "eventName": "Test",
+        "eventAddress": "Test Road",
+        "eventPostcode": "Test Postcode",
+        "eventDressCode": "Test Dress Code",
+        "eventPublic": 0,
+        "eventURLImage": null,
+        "eventType": 1,
+        "eventHost": 1,
+        "eventDate": "2019-03-30 11:11:00"
+      })
+    };
+
+    assert.deepEqual(
+      await getResponseStatus(assert, 'POST', '/editEvent', response),
+      401,
+      'the server should respond with 401 error'
+    );
+  }
+);
+
+asyncTest(
+  `Delete Event`,
+  async (assert) => {
+    require(serverFile);
+
+    let response = {
+      method: "DELETE",
+      body: JSON.stringify({
+        "eventID": 1
+      })
+    };
+
+    assert.deepEqual(
+      await getResponseStatus(assert, 'POST', '/deleteEvent', response),
+      401,
+      'the server should respond with 401 error'
+    );
+  }
+);
+
+asyncTest(
+  `Save Settings`,
+  async (assert) => {
+    require(serverFile);
+
+    let response = {
+      method: "POST",
+      body: JSON.stringify({
+      "email": "emailTest",
+        "FName": "FirstNameTest",
+        "LName": "LastNameTest",
+        "Age": 21,
+        "ContactNumber": "0000000000"
+      })
+    };
+
+    assert.deepEqual(
+      await getResponseStatus(assert, 'POST', '/saveSettings', response),
+      401,
+      'the server should respond with 401 error'
+    );
+  }
+);
 
 /**
  * Server should return the types stored in the database
@@ -354,7 +447,7 @@ asyncTest(
     require(serverFile);
 
     let extensions = ["ics", "ical", "ifb", "icalendar"];
-    
+
     for (let extension of extensions) {
       let file = await getResponseText(assert, "GET", "/timetables/1." + extension);
       assert.ok(file.split("\n")[0] == "BEGIN:VCALENDAR", "Response text should start with BEGIN:VCALENDAR");
