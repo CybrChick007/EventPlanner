@@ -5,34 +5,24 @@
   <title>EventZ</title>
 
   <link rel="stylesheet" href="stylesheets/style.css">
-  <link rel="stylesheet" href="stylesheets/event_form.css">
+  <link rel="stylesheet" href="stylesheets/settings.css">
 </head>
 
 <body>
 
-  <main>
   <ul id="Personalsettings">
   </ul>
-    <form id="formGrid">
-      <label id="ChangeEmail">Change Email*
-        <input type="text">
-        <button type="Save" id="savebutton" class="button">Submit Changes </button>
-      </label>
-      <label id="ChangeUser">Change username*
-        <input type"text">
-        <button type ="Submit" id="subButton" class="button">Submit changes </button>
-      </label>
-      <label id="age">Your Age(optional)*
-        <input type="text">
-        <button type="Save" class="button">Save </button>
-      </label>
-    </form>
 
-  </form>
-
-  </main>
+  <section id=settingscontainer>
+    <label>Update First Name  </label><input type="text" id=fName placeholder="First Name..." required></input>
+    <label>Update Last Name  </label><input type="text" id=lName placeholder="Last Name..." required></input>
+    <label>Update Age  </label><input type="text" id=age placeholder="Age..." required></input>
+    <label>Contact Number  </label><input type="text" id=contactNumber placeholder="Number..." required></input>
+    <button onclick="saveSettings()" class=button>SAVE SETTINGS</button>
+  </section>
 
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script src="scripts/common.js"></script>
+  <script src="scripts/settings.js"></script>
 
 </body>

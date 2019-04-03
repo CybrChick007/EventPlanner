@@ -1,0 +1,24 @@
+main {
+  background-color: var(--theme-color);
+}
+
+#settings {
+  height: 12rem;
+  width: 24rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  list-style: none;
+  padding-left: 0;
+}
+
+#settingscontainer {
+  background-color: var(--theme-color-dark);
+  padding: 1rem;
+}
+
+#settingscontainer  > input{
+  position: relative;
+  margin: 1em 2em;
+  line-height: 1.5em;
+  display: table;
+}
