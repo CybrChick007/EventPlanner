@@ -163,4 +163,11 @@ nav > ol > a {
   font-family: verdana;
   font-size: 200%;
   text-align: center;
+  display: inline;
+  
+  outline-style: solid;
+  outline-color: rgb(255,250,250);
+  outline-width: 1px;
+  outline-offset: inherit;
+
 }
