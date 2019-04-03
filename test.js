@@ -241,27 +241,15 @@ asyncTest(
   * Test for joinedEvent
   */
 
-  asyncTest(
-   "Get joined event",
-   async (assert) => {
-     require(serverFile);
+asyncTest(
+  "Get joined event",
+  async (assert) => {
+    require(serverFile);
 
-     const events = await getResponseJson(assert, "GET", "/joinedEvent");
-     assert.ok(Array.isArray(events.guestEvent), "Returned JSON object must be an array.");
-
-     // for (let singleEvent of events.guestEvent) {
-     //   assert.ok(
-     //     singleEvent.hasOwnProperty("guestUserID") && singleEvent.hasOwnProperty("guestEventID"),
-     //     "Each element must be an object with attributes 'guestUserID' and 'guestEventID'"
-       )
-       assert.ok(
-         singleEvent.guestUserID != null && singleEvent.guestEventID != null,
-         "All properties of each element cannot be null."
-       )
-     }
-
-   }
- );
+    const joined = await getResponseJson(assert, "GET", "/joinedEvent?userID=1&eventID=1");
+    assert.ok(typeof joined == "boolean", "Returned JSON object must be a boolean.");
+  }
+);
 
 /**
  * Server should return the messages stored in memory for the involved users
@@ -324,8 +312,8 @@ asyncTest(
   async (assert) => {
     require(serverFile);
     let options = {method: "GET"};
-    let user = await getResponseJson(assert, "GET", "/getUser?userID=3", options);
-    assert.equal(user.Age, 18, "Should give the information of the third person on the system.");
+    let user = await getResponseJson(assert, "GET", "/getUser?userID=2", options);
+    assert.equal(user.Age, 18, "Should give the information of the second person on the system.");
   }
 );
 
@@ -338,9 +326,9 @@ asyncTest(
     require(serverFile);
     let options = {method: "GET"};
     let events = await getResponseJson(assert, "GET", "/getUserEvents?hostID=2", options);
-    assert.ok(events.eventList[0].eventID != null && events.eventList[0].eventID != "" && events.eventList[0].eventName != null && events.eventList[0].eventName != "", "eventID and eventName cannot be null or empty");
-    assert.ok(events.eventList[1].eventID != null && events.eventList[1].eventID != "" && events.eventList[1].eventName != null && events.eventList[1].eventName != "", "eventID and eventName cannot be null or empty");
-    assert.ok(events.eventList[0].eventID != events.eventList[1].eventID, "Event ID's must be unique");
+    for (let event of events.eventList) {
+      assert.ok(event.eventID != null && event.eventID != "" && event.eventName != null && event.eventName != "", "eventID and eventName cannot be null or empty");
+    }
   }
 );
 
@@ -352,9 +340,26 @@ asyncTest(
    async (assert) => {
      require(serverFile);
      let options = {method: "GET"};
-     let user = await getResponseJson(assert, "GET", "/getUserByEmail?email=test3@myport.ac.uk", options);
-     assert.equal(user.Fname, "test3f", "Should equal our test data");
+     let user = await getResponseJson(assert, "GET", "/getUserByEmail?email=test2@myport.ac.uk", options);
+     assert.equal(user.Fname, "test2f", "Should equal our test data");
    }
+);
+
+/**
+ * Tests if timetable getting returns an iCalendar format file.
+ */
+asyncTest(
+  "Get timetable.",
+  async (assert) => {
+    require(serverFile);
+
+    let extensions = ["ics", "ical", "ifb", "icalendar"];
+    
+    for (let extension of extensions) {
+      let file = await getResponseText(assert, "GET", "/timetables/1." + extension);
+      assert.ok(file.split("\n")[0] == "BEGIN:VCALENDAR", "Response text should start with BEGIN:VCALENDAR");
+    }
+  }
 );
 
 function asyncTest(testName, testFunction) {
@@ -394,6 +399,17 @@ async function getResponseJson(assert, method, path, options) {
     const response = await fetchPath(method, path, options);
     assert.equal(response.status, 200, "Response must be status 200.");
     return await response.json();
+  } catch (e) {
+    assert.failed(`error in ${path}: ${e}`);
+  }
+  throw new Error('aborting some tests due to the errors above');
+}
+
+async function getResponseText(assert, method, path, options) {
+  try {
+    const response = await fetchPath(method, path, options);
+    assert.equal(response.status, 200, "Response must be status 200.");
+    return await response.text();
   } catch (e) {
     assert.failed(`error in ${path}: ${e}`);
   }

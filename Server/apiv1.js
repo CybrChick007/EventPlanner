@@ -101,6 +101,12 @@ async function getUserByEmail(req, res) {
     const sql = await sqlPromise;
     const query = `SELECT * FROM user WHERE email = '${req.query.email}' LIMIT 1`;
     const rows = (await sql.execute(query))[0];
+    
+    if (rows.length == 0) {
+      res.sendStatus(404);
+      return;
+    }
+    
     res.json(rows[0]);
 
   } catch (e) {
@@ -589,7 +595,6 @@ async function getUserEvents(req, res, next) {
         eventName: row.eventName
       };
     });
-    console.log(eventList);
     res.send({
       eventList
     });
