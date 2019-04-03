@@ -214,6 +214,30 @@ asyncTest(
   }
  );
 
+ /**
+  * Gets all events from server
+  */
+ asyncTest(
+  "Get all events from server.",
+  async (assert) => {
+    require(serverFile);
+
+    const events = await getResponseJson(assert, "GET", "/displayEvents");
+    assert.ok(Array.isArray(events.eventList), "Returned JSON object must be an array.");
+    for (let singleEvent of events.eventList) {
+      assert.ok(
+        singleEvent.hasOwnProperty("eventID") && singleEvent.hasOwnProperty("eventName"),
+        "Each element must be an object with attributes 'eventID' and 'eventName'"
+      )
+      assert.ok(
+        singleEvent.eventID != null && singleEvent.eventName != null,
+        "All properties of each element cannot be null."
+      )
+    }
+
+  }
+);
+
 function asyncTest(testName, testFunction) {
   QUnit.test(
     testName,
