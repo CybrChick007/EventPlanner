@@ -395,14 +395,7 @@ async function getMessages(req, res) {
     let p2 = parseInt(req.query.p2);
     
     for (let thread of messages) {
-      let valid = true;
-      for (let participant of thread.participants) {
-        if (participant != p1 && participant != p2) {
-          valid = false;
-          break;
-        }
-      }
-      if (valid) {
+      if (thread.participants[0] == p1 && thread.participants[1] == p2 || thread.participants[1] == p1 && thread.participants[0] == p2) {
         res.json(thread.messages);
         return;
       }
@@ -458,14 +451,7 @@ async function postMessage(req, res) {
     let message = req.body.message;
     
     for (let thread of messages) {
-      let valid = true;
-      for (let participant of thread.participants) {
-        if (participant != p1 && participant != p2) {
-          valid = false;
-          break;
-        }
-      }
-      if (valid) {
+      if (thread.participants[0] == p1 && thread.participants[1] == p2 || thread.participants[1] == p1 && thread.participants[0] == p2) {
         thread.messages.push({
           userID: userID,
           message: message,
