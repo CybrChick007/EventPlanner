@@ -8,7 +8,7 @@ create table user(
   Fname varchar (15),
   Lname varchar (15),
   Age int not null,
-  ContactNumber varchar (10),
+  ContactNumber varchar (15),
   PRIMARY KEY (userID)
 );
 

@@ -49,6 +49,7 @@ router.post('/editEvent', GoogleAuth.guardMiddleware(), editEvent);
 router.post('/joinEvent', GoogleAuth.guardMiddleware(), joinEvent);
 router.post('/bringItem', GoogleAuth.guardMiddleware(), bringItem);
 router.post('/messages', GoogleAuth.guardMiddleware(), postMessage);
+router.post('/saveSettings', GoogleAuth.guardMiddleware(), saveSettings);
 
 router.delete('/deleteEvent', GoogleAuth.guardMiddleware(), deleteEvent);
 router.delete('/unbringItem', GoogleAuth.guardMiddleware(), unbringItem);
@@ -490,7 +491,7 @@ async function postMessage(req, res) {
 }
 
 /**
-  *  Gets a single event given by the 'eventID' query param. 
+  *  Gets a single event given by the 'eventID' query param.
   */
 
 async function getSingleEvent(req, res, next) {
@@ -630,6 +631,23 @@ async function unbringItem(req, res, next) {
   } catch (e) {
     if (e.errno === 1062) res.sendStatus(403);
     else res.sendStatus(500);
+    return;
+  }
+}
+
+async function saveSettings(req, res, next){
+  try {
+    const sql = await sqlPromise;
+    const query = `UPDATE user SET
+    FName = '${req.body.FName}',
+    LName = '${req.body.LName}',
+    Age = '${req.body.Age}',
+    ContactNumber = '${req.body.ContactNumber}'
+    WHERE email = '${req.body.email}'`;
+    sql.execute(query);
+    res.sendStatus(200);
+  } catch (e) {
+   res.sendStatus(500);
     return;
   }
 }

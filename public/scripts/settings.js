@@ -5,7 +5,7 @@ function saveSettings(){
   const CONTACTNUMBER = document.getElementById("contactNumber").value;
   console.log(profile.U3);
   let newSettings = {
-    "userID" : profile.U3,
+    "email" : profile.U3,
     "FName" : FIRSTNAME,
     "LName" : LASTNAME,
     "Age" : AGE,
