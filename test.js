@@ -67,8 +67,12 @@ asyncTest(
 POST and DELETE requests are protected by the guardMiddleware, so it is not possible
 to test the actual functionality (it would take too long). We can test that the response
 status is '401' meaning that the access is forbidden.
-The example below tests the joinEvent function (adding to a dB table a pair of values).
 Every POST and DELETE request would return the same Status 401.
+*/
+
+/*
+  Tests joinEvent function (adding to a dB table a pair of values).
+  These values must be integers.
 */
 asyncTest(
   `Join Event`,
@@ -83,14 +87,24 @@ asyncTest(
       })
     };
 
+    const bodyParsed = JSON.parse(response.body);
+
     assert.deepEqual(
       await getResponseStatus(assert, 'POST', '/joinEvent', response),
       401,
       'the server should serve something successfully'
     );
+    assert.ok(
+      Number.isInteger(bodyParsed.userID) && Number.isInteger(bodyParsed.eventID),
+      "IDs must be integer"
+    )
   }
 );
 
+/*
+  Tests createEvent function (adding to dB table all details of an event).
+  Testing that specific values must be integers
+*/
 asyncTest(
   `Create Event`,
   async (assert) => {
@@ -122,11 +136,14 @@ asyncTest(
     assert.ok(
       Number.isInteger(bodyParsed.userID) && Number.isInteger(bodyParsed.eventPublic) && Number.isInteger(bodyParsed.eventType) && Number.isInteger(bodyParsed.eventHost),
       "User id and foreign keys must be integers"
-
     )
   }
 );
 
+/*
+  Tests editEvent function (update dB table with all new details of an event).
+  Testing that specific values must be integers
+*/
 asyncTest(
   `Edit Event`,
   async (assert) => {
@@ -161,7 +178,10 @@ asyncTest(
     )
   }
 );
-
+/*
+  Tests deleteEvent function (delete from dB table all details of an event).
+  Testing that specific values must be integers
+*/
 asyncTest(
   `Delete Event`,
   async (assert) => {
@@ -188,6 +208,10 @@ asyncTest(
   }
 );
 
+/*
+  Tests saveSettings function (update dB table all details of a user).
+  Testing that specific values must be integers
+*/
 asyncTest(
   `Save Settings`,
   async (assert) => {
