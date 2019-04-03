@@ -100,7 +100,7 @@ asyncTest(
   })
 */
 
-/*
+/**
  * Server should return the types stored in the database
  * when /getTypes is sent a GET request.
  */
@@ -123,7 +123,6 @@ asyncTest(
         "All properties of each element cannot be null."
       )
     }
-
   }
 );
 
@@ -235,6 +234,59 @@ asyncTest(
       )
     }
 
+  }
+);
+
+/**
+ * Server should return the messages stored in memory for the involved users
+ * given by p1 and p2 query params.
+ * This is stored in memory, so we can only test for empty array.
+ */
+asyncTest(
+  "Get messages.",
+  async (assert) => {
+    require(serverFile);
+
+    const messages = await getResponseJson(assert, "GET", "/messages?p1=1&p2=1");
+
+    assert.ok(Array.isArray(messages), "Returned JSON object must be an array.");
+  }
+);
+
+/**
+ * Server should return the threads stored in memory for the involved user
+ * given by the userID query param.
+ * This is stored in memory, so we can only test for empty array.
+ */
+asyncTest(
+  "Get threads.",
+  async (assert) => {
+    require(serverFile);
+
+    const threads = await getResponseJson(assert, "GET", "/messagethreads?userID=1");
+
+    assert.ok(Array.isArray(threads), "Returned JSON object must be an array.");
+  }
+);
+
+/**
+ * Post message involving p1 and p2, with the sender userID.
+ */
+asyncTest(
+  "Post message.",
+  async (assert) => {
+    require(serverFile);
+
+    let options = {
+      method: "POST",
+      body: JSON.stringify({
+        "p1": 1,
+        "p2": 1,
+        "userID": 1,
+      })
+    };
+    let status = await getResponseStatus(assert, options.method, "/messages", options);
+    assert.equal(status, 401, "Not logged in, api path should be forbidden (401).");
   }
 );
 
