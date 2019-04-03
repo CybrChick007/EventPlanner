@@ -47,6 +47,22 @@ asyncTest(
   }
 );
 
+/**
+ * testing that the server serves pages
+ */
+asyncTest(
+  `Server serves pages`,
+  async (assert) => {
+    require(serverFile);
+
+    assert.deepEqual(
+      await getResponseStatus(assert, 'GET', '/index.html'),
+      200,
+      'the server should serve something successfully'
+    );
+  }
+);
+
 /*
 POST and DELETE requests are protected by the guardMiddleware, so it is not possible
 to test the actual functionality (it would take too long). We can test that the response
@@ -178,6 +194,23 @@ asyncTest(
     assert.equal(events.eventList[0].eventType, 1, "The first part of data gotten back should be the first item entered from the test data");
     let events2 = await getResponseJson(assert, "GET", "/filterEvent?eventName=test&eventType=2", options);
     assert.equal(events2.eventList[0].eventType, 2, "The data gotten back should be the second item entered from the test data");
+  }
+ );
+
+/**
+ * Tests Authorise User
+ */
+ asyncTest(
+  "Authorise User",
+  async (assert) => {
+    require(serverFile);
+    let options = {method: "GET"};
+    let user = await getResponseJson(assert, "GET", "/auth?email=test@port.ac.uk", options);
+    assert.ok(user.message != 'Not authorized', "The given email address should be authorised");
+    user = await getResponseJson(assert, "GET", "/auth?email=test2@myport.ac.uk", options);
+    assert.ok(user.message != 'Not authorized', "The given email address should be authorised");
+    user = await getResponseJson(assert, "GET", "/auth?email=test3@gmail.com", options);
+    assert.equal(user.message, 'Not authorized', "The given email address should not be authorised");
   }
  );
 
