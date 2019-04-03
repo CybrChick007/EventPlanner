@@ -6,7 +6,6 @@ Own branches were only made for the pre prototyping stage to allow everyone to p
 
 Everyone should alert the whole group when a commit is made to avoid any overwrites or errors.
 
-Every commit should add the whole team as contributors to avoid different marks.
 
 ## Authors
 
@@ -88,7 +87,15 @@ To run qunit tests first do `npm run testSetup` and then `npm run test-all`. To 
 * /timetables/:file
   * GET: generates and serves a iCalendar format file for the user with the ID of the filename
 
-<br>
+* /getUserByEmail
+  * GET: gets all of the information about the user with the given email address, requires a query of email containing the email address of the user you want to find.
+
+* /messagethreads
+  * GET: gets all of the messaging connections connected to the given user ID, requires a query of userID containing the user ID of the person you want to search for connections from.
+
+* /messages
+  * GET: Gets all messages between userIDs given by query parameters p1 and p2.
+  * POST: Adds a message to memory model given by JSON body attributes p1 and p2 and userID.
 
 * /createEvent
   * POST: gets a JSON file from the client and creates a new event in the database using the given data
@@ -102,7 +109,8 @@ To run qunit tests first do `npm run testSetup` and then `npm run test-all`. To 
 * /bringItem
   * POST: gets a JSON file from the client and updates a shopping list item with who is going to bring the item to the event using the given data
 
-<br>
+* /saveSettings
+  * POST: gets a JSON file from the client and updates that persons user information on our system.
 
 * /deleteEvent
   * DELETE: deletes the given event, requires a query of eventID containing the event id of the event to be deleted
