@@ -112,11 +112,18 @@ asyncTest(
       })
     };
 
+    const bodyParsed = JSON.parse(response.body);
+
     assert.deepEqual(
       await getResponseStatus(assert, 'POST', '/createEvent', response),
       401,
       'the server should serve respond with 401 error'
     );
+    assert.ok(
+      Number.isInteger(bodyParsed.userID) && Number.isInteger(bodyParsed.eventPublic) && Number.isInteger(bodyParsed.eventType) && Number.isInteger(bodyParsed.eventHost),
+      "User id and foreign keys must be integers"
+
+    )
   }
 );
 
@@ -141,11 +148,17 @@ asyncTest(
       })
     };
 
+    const bodyParsed = JSON.parse(response.body);
+
     assert.deepEqual(
       await getResponseStatus(assert, 'POST', '/editEvent', response),
       401,
       'the server should respond with 401 error'
     );
+    assert.ok(
+      Number.isInteger(bodyParsed.eventID) && Number.isInteger(bodyParsed.eventPublic) && Number.isInteger(bodyParsed.eventType) && Number.isInteger(bodyParsed.eventHost),
+      "Event id and foreign keys must be integers"
+    )
   }
 );
 
@@ -161,11 +174,17 @@ asyncTest(
       })
     };
 
+    const bodyParsed = JSON.parse(response.body);
+
     assert.deepEqual(
       await getResponseStatus(assert, 'POST', '/deleteEvent', response),
       401,
       'the server should respond with 401 error'
     );
+    assert.ok(
+      Number.isInteger(bodyParsed.eventID),
+      "ID must be integer"
+    )
   }
 );
 
@@ -177,7 +196,7 @@ asyncTest(
     let response = {
       method: "POST",
       body: JSON.stringify({
-      "email": "emailTest",
+        "email": "emailTest",
         "FName": "FirstNameTest",
         "LName": "LastNameTest",
         "Age": 21,
@@ -185,11 +204,17 @@ asyncTest(
       })
     };
 
+    const bodyParsed = JSON.parse(response.body);
+
     assert.deepEqual(
       await getResponseStatus(assert, 'POST', '/saveSettings', response),
       401,
       'the server should respond with 401 error'
     );
+    assert.ok(
+      Number.isInteger(bodyParsed.Age) && bodyParsed.email != null,
+      "Age must be integer"
+    )
   }
 );
 
