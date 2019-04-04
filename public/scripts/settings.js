@@ -5,13 +5,14 @@ async function loadUserSettings(){
   }
   let response = await fetch("/getUserByEmail?email=" + profile.U3);
   let userDetails = await response.json();
-  fillTextBox(userDetails.FName,"fName");
-  fillTextBox(userDetails.LName,"lName");
+  fillTextBox(userDetails.Fname,"fName");
+  fillTextBox(userDetails.Lname,"lName");
   fillTextBox(userDetails.Age,"age");
   fillTextBox(userDetails.ContactNumber,"contactNumber");
 }
 
 function fillTextBox(value, elementID){
+  console.log(value);
   if(value != undefined){
       document.getElementById(elementID).value = value;
   }
