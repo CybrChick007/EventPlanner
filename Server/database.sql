@@ -25,7 +25,7 @@ create table event(
   eventPostcode varchar(8) not null,
   eventDressCode varchar(255) not null,
   eventPublic boolean not null,
-  eventURLImage varchar(2000),
+  eventURLImage varchar(60000),
   eventType int not null,
   eventHost int not null,
   eventDate datetime not null,
