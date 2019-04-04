@@ -1,6 +1,6 @@
 /**
  * Provides functionality for `manage-events.html` and `create-event.html`.
- * @module public/scripts/index
+ * @module public/scripts/eventsForm
  */
 let addButton = document.getElementById("sladd");
 let delButton = document.getElementById("sldel");
