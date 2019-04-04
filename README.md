@@ -56,7 +56,7 @@ to re-access the mysql database after this use: mysql -u root
 
 ## Testing
 
-To run qunit tests first do `npm run testSetup` and then `npm run test-all`. To run selenium tests navigate to `tests/selenium` and run `run.py`, following the instructions of the README.md in that folder.
+To run qunit tests first do `npm run testSetup` and then `npm run test-all`. To run selenium tests navigate to `tests/selenium` and run `run.py`, following the instructions of the README.md in that folder. [Video of selenium tests running.](https://www.youtube.com/watch?v=xsoe_m-f9d0)
 
 
 ## API
