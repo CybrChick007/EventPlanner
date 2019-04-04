@@ -6,6 +6,7 @@ Own branches were only made for the pre prototyping stage to allow everyone to p
 
 Everyone should alert the whole group when a commit is made to avoid any overwrites or errors.
 
+Demo: https://youtu.be/xo7X6cc1z1k
 
 ## Authors
 
