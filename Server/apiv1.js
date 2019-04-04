@@ -95,6 +95,10 @@ router.delete('/unbringItem', GoogleAuth.guardMiddleware(), unbringItem);
    }
  }
 
+/**
+ * Returns all data stored about the user in the database,
+ * the user identified by the `email` query param.
+ */ 
 async function getUserByEmail(req, res) {
   try {
 
@@ -320,7 +324,9 @@ async function filterEvent(req, res) {
   }
 }
 
-//selecting the first 10 upcoming events by date
+/**
+ * Returns all data about the most recent 12 public events.
+ */
 async function displayEvent(req, res, next) {
   try {
     const sql = await sqlPromise;
@@ -354,6 +360,9 @@ async function displayEvent(req, res, next) {
 
 //functions to obtain single pieces of information, to be used for searches and dropdown selections
 
+/**
+ * Returns all types contained within the database.
+ */
 async function getTypes(req, res, next) {
   try {
     const sql = await sqlPromise;
@@ -366,6 +375,9 @@ async function getTypes(req, res, next) {
   }
 }
 
+/**
+ * Returns all data about a user given by the `userID` query param.
+ */
 async function getUser(req, res) {
   try {
     const sql = await sqlPromise;
@@ -377,20 +389,6 @@ async function getUser(req, res) {
     return;
   }
 }
-
-/*
-let messages = [
-  {
-    participants: [3, 3],
-    messages: [
-      {
-        userID: 3
-        message: "message.";
-      },
-    ]
-  }
-]
-*/
 
 /**
  * Gets all messages between userIDs given by query parameters p1 and p2.
@@ -640,6 +638,10 @@ async function unbringItem(req, res, next) {
   }
 }
 
+/**
+ * Saves values of a user identified by the JSON body attribute `email`
+ * with the other values contained within the JSON body.
+ */
 async function saveSettings(req, res, next){
   try {
     const sql = await sqlPromise;

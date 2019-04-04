@@ -45,6 +45,10 @@ const {
 } = require('express');
 const router = new Router();
 
+//in memory storage
+
+let messages = [];
+
 //package and database requirments for smooth running on all devices
 const config = require('./config');
 const sqlPromise = mysql.createConnection(config.mysql);
@@ -55,6 +59,7 @@ router.use(cors());
 
 //get requests
 router.get('/auth', authorizeUser);
+router.get('/getUserByEmail', getUserByEmail);
 router.get('/displayEvents', displayEvent);
 router.get('/getSingleEvent', getSingleEvent);
 router.get('/getTypes', getTypes);
@@ -63,12 +68,16 @@ router.get('/joinedEvent', joinedEvent);
 router.get('/filterEvent', filterEvent);
 router.get('/getUserEvents', getUserEvents);
 router.get('/timetables/:file', getTimetable);
+router.get('/messages', getMessages); // p1 and p2
+router.get('/messagethreads', getMessagingThreads); // userID
 
 //post requests
 router.post('/createEvent', GoogleAuth.guardMiddleware(), createEvent);
 router.post('/editEvent', GoogleAuth.guardMiddleware(), editEvent);
 router.post('/joinEvent', GoogleAuth.guardMiddleware(), joinEvent);
 router.post('/bringItem', GoogleAuth.guardMiddleware(), bringItem);
+router.post('/messages', GoogleAuth.guardMiddleware(), postMessage);
+router.post('/saveSettings', GoogleAuth.guardMiddleware(), saveSettings);
 
 router.delete('/deleteEvent', GoogleAuth.guardMiddleware(), deleteEvent);
 router.delete('/unbringItem', GoogleAuth.guardMiddleware(), unbringItem);
@@ -101,7 +110,8 @@ router.delete('/unbringItem', GoogleAuth.guardMiddleware(), unbringItem);
          console.log("registering...");
          const query = `INSERT INTO user VALUES (NULL, '${email}', NULL, NULL, 21, NULL)`;
          const [rows] = await sql.execute(query);
-         //res.send({ message: 'Registration successful!' });
+         const user = rows[0];
+         res.send({ user });
        }
      } else {
        const user = rows[0];
@@ -112,6 +122,31 @@ router.delete('/unbringItem', GoogleAuth.guardMiddleware(), unbringItem);
      return;
    }
  }
+
+/**
+ * Returns all data stored about the user in the database,
+ * the user identified by the `email` query param.
+ */ 
+async function getUserByEmail(req, res) {
+  try {
+
+    const sql = await sqlPromise;
+    const query = `SELECT * FROM user WHERE email = '${req.query.email}' LIMIT 1`;
+    const rows = (await sql.execute(query))[0];
+    
+    if (rows.length == 0) {
+      res.sendStatus(404);
+      return;
+    }
+    
+    res.json(rows[0]);
+
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+    return;
+  }
+}
 
 /**
  * createEvent is called as a POST function so it receives data through the req.body
@@ -131,7 +166,7 @@ async function createEvent(req, res) {
          '${req.body.eventAddress}',
          '${req.body.eventPostcode}',
          '${req.body.eventDressCode}',
-         '${req.body.eventPublic}',
+         ${req.body.eventPublic},
          '${req.body.eventURLImage}',
           ${req.body.eventType},
           ${req.body.eventHostID},
@@ -167,7 +202,7 @@ async function editEvent(req, res) {
                      eventAddress = '${req.body.eventAddress}',
                      eventPostcode = '${req.body.eventPostcode}',
                      eventDressCode = '${req.body.eventDressCode}',
-                     eventPublic = '${req.body.eventPublic}',
+                     eventPublic = ${req.body.eventPublic},
                      eventURLImage = '${req.body.eventURLImage}',
                      eventType = '${req.body.eventType}',
                      eventDate = '${req.body.eventDate}'
@@ -317,7 +352,9 @@ async function filterEvent(req, res) {
   }
 }
 
-//selecting the first 10 upcoming events by date
+/**
+ * Returns all data about the most recent 12 public events.
+ */
 async function displayEvent(req, res, next) {
   try {
     const sql = await sqlPromise;
@@ -351,6 +388,9 @@ async function displayEvent(req, res, next) {
 
 //functions to obtain single pieces of information, to be used for searches and dropdown selections
 
+/**
+ * Returns all types contained within the database.
+ */
 async function getTypes(req, res, next) {
   try {
     const sql = await sqlPromise;
@@ -363,6 +403,9 @@ async function getTypes(req, res, next) {
   }
 }
 
+/**
+ * Returns all data about a user given by the `userID` query param.
+ */
 async function getUser(req, res) {
   try {
     const sql = await sqlPromise;
@@ -374,6 +417,114 @@ async function getUser(req, res) {
     return;
   }
 }
+
+/**
+ * Gets all messages between userIDs given by query parameters p1 and p2.
+ */
+async function getMessages(req, res) {
+  try {
+
+    let p1 = parseInt(req.query.p1);
+    let p2 = parseInt(req.query.p2);
+
+    for (let thread of messages) {
+      if (thread.participants[0] == p1 &amp;&amp; thread.participants[1] == p2 || thread.participants[1] == p1 &amp;&amp; thread.participants[0] == p2) {
+        res.json(thread.messages);
+        return;
+      }
+    }
+
+    res.json([]);
+
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+  }
+}
+
+/**
+ * Gets all messages between userIDs given by query parameters p1 and p2.
+ */
+async function getMessagingThreads(req, res) {
+  try {
+
+    let userID = req.query.userID;
+    let threads = [];
+
+    for (let thread of messages) {
+      let valid = false;
+      for (let participant of thread.participants) {
+        if (participant == userID) {
+          valid = true;
+          break;
+        }
+      }
+      if (valid) {
+        threads.push(thread);
+      }
+    }
+
+    res.json(threads);
+
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+  }
+}
+
+/**
+ * Adds a message to memory model given by JSON body attributes p1 and p2 and userID.
+ */
+async function postMessage(req, res) {
+  try {
+
+    let p1 = req.body.p1;
+    let p2 = req.body.p2;
+    let userID = req.body.userID;
+    let message = req.body.message;
+
+    for (let thread of messages) {
+      if (thread.participants[0] == p1 &amp;&amp; thread.participants[1] == p2 || thread.participants[1] == p1 &amp;&amp; thread.participants[0] == p2) {
+        if (message != null &amp;&amp; message.trim() != "") {
+          thread.messages.push({
+            userID: userID,
+            message: message,
+          });
+        }
+        res.sendStatus(200);
+        return;
+      }
+    }
+
+    let item = {
+      participants: [p1, p2],
+      messages: [],
+    }
+
+    if (message != null &amp;&amp; userID != null) {
+      item.messages = [
+        {
+          userID: userID,
+          message: message,
+        },
+      ]
+    }
+
+    messages.push(
+      item
+    );
+
+    res.sendStatus(200);
+
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+  }
+}
+
+/**
+  *  Gets a single event given by the 'eventID' query param.
+  */
 
 async function getSingleEvent(req, res, next) {
   try {
@@ -399,38 +550,38 @@ async function getSingleEvent(req, res, next) {
  */
 async function getTimetable(req, res, next) {
   try {
-    
+
     let file = req.params.file.split(".");
     let userID = file[0];
     let extension = file[1];
-    
+
     if (extension !== "ical" &amp;&amp; extension !== "ics" &amp;&amp; extension !== "ifb" &amp;&amp; extension !== "icalendar") {
       res.sendStatus(404);
       return;
     }
-    
+
     const sql = await sqlPromise;
-    
+
     if ((await sql.execute(`SELECT * FROM user WHERE userID = ${userID}`))[0].length === 0) {
       res.sendStatus(404);
       return;
     }
-    
+
     const attributes = "eventName, eventID, eventDate, eventAddress, eventPostcode";
     const query = `(SELECT ${attributes} FROM event, guestEvent WHERE eventID = guestEventID AND guestUserID = ${userID}) UNION (SELECT ${attributes} FROM event WHERE eventHost = ${userID})`;
     let rows = (await sql.execute(query))[0];
-    
+
     function dateToString(date) {
       return date.toISOString().replace(/(-|:|\..+)/g, "");
     }
-    
+
     let lines = [
       "BEGIN:VCALENDAR",
       "PRODID:EventZ",
       "VERSION:2.0",
       "CALSCALE:GREGORIAN",
     ];
-        
+
     for (let event of rows) {
       lines.push("BEGIN:VEVENT");
       lines.push("UID:" + event.eventID);
@@ -441,12 +592,12 @@ async function getTimetable(req, res, next) {
       lines.push("LOCATION:" + event.eventAddress + ", " + event.eventPostcode);
       lines.push("END:VEVENT");
     }
-    
+
     lines.push("END:VCALENDAR");
-    
+
     res.setHeader("content-type", "text/plain");
     res.send(lines.join("\n"));
-    
+
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
@@ -470,7 +621,6 @@ async function getUserEvents(req, res, next) {
         eventName: row.eventName
       };
     });
-    console.log(eventList);
     res.send({
       eventList
     });
@@ -516,6 +666,27 @@ async function unbringItem(req, res, next) {
   }
 }
 
+/**
+ * Saves values of a user identified by the JSON body attribute `email`
+ * with the other values contained within the JSON body.
+ */
+async function saveSettings(req, res, next){
+  try {
+    const sql = await sqlPromise;
+    const query = `UPDATE user SET
+    FName = '${req.body.FName}',
+    LName = '${req.body.LName}',
+    Age = '${req.body.Age}',
+    ContactNumber = '${req.body.ContactNumber}'
+    WHERE email = '${req.body.email}'`;
+    sql.execute(query);
+    res.sendStatus(200);
+  } catch (e) {
+   res.sendStatus(500);
+    return;
+  }
+}
+
 module.exports = router;
 </code></pre>
         </article>
@@ -527,13 +698,13 @@ module.exports = router;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-public_scripts_common.html">public/scripts/common</a></li><li><a href="module-public_scripts_createEvent.html">public/scripts/createEvent</a></li><li><a href="module-public_scripts_index.html">public/scripts/index</a></li><li><a href="module-public_scripts_manageEvents.html">public/scripts/manageEvents</a></li><li><a href="module-public_scripts_util.html">public/scripts/util</a></li><li><a href="module-server_apiv1.html">server/apiv1</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-public_scripts_common.html">public/scripts/common</a></li><li><a href="module-public_scripts_createEvent.html">public/scripts/createEvent</a></li><li><a href="module-public_scripts_index.html">public/scripts/index</a></li><li><a href="module-public_scripts_manageEvents.html">public/scripts/manageEvents</a></li><li><a href="module-public_scripts_messaging.html">public/scripts/messaging</a></li><li><a href="module-public_scripts_timetable.html">public/scripts/timetable</a></li><li><a href="module-public_scripts_util.html">public/scripts/util</a></li><li><a href="module-server_apiv1.html">server/apiv1</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Apr 02 2019 18:11:54 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 04 2019 14:02:25 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -1,5 +1,13 @@
+/**
+ * Provides functionality for `timetable.html`.
+ * @module public/scripts/timetable
+ */
+
 const host = window.location.href.replace(/\/[^\/]+$/, "");
 
+/**
+ * Gets the URL of the generated ical file on the server.
+ */
 function getCalendarURL() {
   return host + "/timetables/" + currentUser.user.userID + ".ics";
 }
